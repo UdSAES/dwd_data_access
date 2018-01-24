@@ -1,0 +1,108 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "udsaes/forecast",
+    "version": "0.1.0",
+    "contact": {
+      "name": "Moritz Stüber (UdS AES)",
+      "email": "moritz.stueber@aut.uni-saarland.de"
+    }
+  },
+  "paths": {
+    "/forecast": {
+      "post": {
+        "summary": "Look up the values of the specified variable for the given time frame",
+        "consumes": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "",
+          "required": true,
+          "description": "The necessary query parameters. From the requirements: 'The consumer shall provide position (longitude/[decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees), latitude/([decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees), height above sea level/m), start/epoch, duration/s, output interval/s and the variable of interest.'",
+          "schema": {
+            "$ref": "#/definitions/QueryParameters"
+          }
+        }],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "The requested data",
+            "schema": {
+              "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/master/schemata/forecast/schema_v0.2.2-oas3.json#/forecastResult"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Position": {
+      "type": "object",
+      "required": [
+        "longitude",
+        "latitude",
+        "elevation"
+      ],
+      "properties": {
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "description": "Longitude in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)"
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90,
+          "description": "Latitude in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)"
+        },
+        "elevation": {
+          "type": "number",
+          "description": "Height above sea level in metres"
+        }
+      }
+    },
+    "QueryParameters": {
+      "type": "object",
+      "required": [
+        "position",
+        "time_start",
+        "duration",
+        "interval_output",
+        "voi"
+      ],
+      "properties": {
+        "position": {
+          "$ref": "#/definitions/Position"
+        },
+        "time_start": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The time at the start of the relevant time frame as EPOCH"
+        },
+        "duration": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The duration of the time frame in seconds"
+        },
+        "interval_output": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The output interval of the result in seconds"
+        },
+        "voi": {
+          "type": "string",
+          "enum": [
+            "solar position",
+            "wind speed",
+            "wind direction",
+            "diffuse irradiance",
+            "global irradiance",
+            "temperature",
+            "relative humidity"
+          ],
+          "description": "The name of the requested variable (__v__ariable __o__f __i__nterest)"
+        }
+      }
+    }
+  }
+}

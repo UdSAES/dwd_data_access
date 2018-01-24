@@ -1,0 +1,26 @@
+{
+  "temperature": {
+    "grib_label": "t_2m",
+    "grib_unit": "K",
+    "result_unit": "K"
+  },
+  "wind speed": {
+    "result_unit": "m/s"
+  },
+  "direct irradiance": {
+    "grib_label": "aswdir_s",
+    "grib_unit": "W/m2",
+    "result_unit": "W/m2"
+  },
+  "diffuse irradiance": {
+    "grib_label": "aswdifd_s",
+    "grib_unit": "W/m2",
+    "result_unit": "W/m2"
+  },
+  "relative humidity": {
+    "grib_label": "relhum_2m",
+    "grib_unit": "%",
+    "result_unit": "1",
+    "scalingFactor": 0.01
+  }
+}

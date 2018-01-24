@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "unit": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "aggregationMethod": {
+      "type": "string",
+      "enum": ["sampled", "max", "min", "average", "median"]
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}
