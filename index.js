@@ -94,7 +94,7 @@ async function init() {
       })
 
       if (_.isNil(mapping)) {
-        console.log('no fitting mapping found for method ' + method + ' and path ' + path)
+        console.console.error();('no fitting mapping found for method ' + method + ' and path ' + path)
         return
       }
 

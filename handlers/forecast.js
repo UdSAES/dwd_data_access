@@ -83,7 +83,7 @@ async function getWindDirection(time_start, {longitude: longitude, latitude: lat
 }
 
 
-function postForecast(dataRootPath, stationCatalog) {
+function postForecast(dataRootPath, voisConfiguration) {
   return async function (req, res, next) {
     const body = req.body
     const time_start = body.time_start
@@ -91,6 +91,13 @@ function postForecast(dataRootPath, stationCatalog) {
     const latitude = body.position.latitude
     var voi = body.voi
 
+    const voiConfiguration = voisConfiguration[voi]
+
+    if (_.isNil(voiConfiguration)) {
+      res.status(404).send(error)
+      res.end()
+      return
+    }
     if (voi === 'temperature') {
       var gribName = 't_2m'
       var unit = 'K'
