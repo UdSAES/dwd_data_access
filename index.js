@@ -64,10 +64,13 @@ async function init() {
   const stationCatalog = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
 
   const endPointMapping = [
-    {method: 'post', path: '/forecast', handler: hfc.postForecast(DATA_ROOT_PATH, stationCatalog)}
+    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi}
+    {method: 'post', openapiPath: '/forecast', path: '/forecast', handler: hfc.postForecast(DATA_ROOT_PATH, stationCatalog)},
+    {method: 'get', openapiPath: '/forecasts/cosme/27/newestForecast/{stationId}', path: '/forecasts/cosme/27/newestForecast/:stationId', handler: hfc.getForecastsComplete(DATA_ROOT_PATH, stationCatalog)},
+    {method: 'get', openapiPath: '/forecasts/cosme/27/{lon}/{lat}', path: '/forecasts/cosme/27/:lon/:lat', handler: hfc.getForecastsComplete(DATA_ROOT_PATH, stationCatalog)}
   ]
 
-  var api = await fs.readJson('./docs/openapi_oas2.json')
+  var api = await fs.readJson('./docs/openapi_oas2_new.json')
   api = await $RefParser.dereference(api)
 
   const models = _.get(api, ['definitions'])
@@ -84,21 +87,23 @@ async function init() {
     app.use(middleware.swaggerUi())
 
     //console.log(app._router.stack)
-  })
 
-  const paths = _.get(api, ['paths'])
-  _.forEach(paths, (pathDefinition, path) => {
-    _.forEach(pathDefinition, (spec, method) => {
-      const mapping = _.find(endPointMapping, (mapping) => {
-        return _.lowerCase(mapping.method) === _.lowerCase(method) && _.lowerCase(mapping.path) === _.lowerCase(path)
+    const paths = _.get(api, ['paths'])
+    _.forEach(paths, (pathDefinition, path) => {
+      _.forEach(pathDefinition, (spec, method) => {
+        const mapping = _.find(endPointMapping, (mapping) => {
+          return _.lowerCase(mapping.method) === _.lowerCase(method) && _.lowerCase(mapping.openapiPath) === _.lowerCase(path)
+        })
+
+        if (_.isNil(mapping)) {
+          console.error('no fitting mapping found for method ' + method + ' and path ' + path)
+          return
+        }
+
+        app[method](mapping.path, mapping.handler)
       })
-
-      if (_.isNil(mapping)) {
-        console.console.error();('no fitting mapping found for method ' + method + ' and path ' + path)
-        return
-      }
-
-      app[method](path, mapping.handler)
     })
   })
+
+
 }

@@ -82,9 +82,21 @@ async function getWindDirection(time_start, {longitude: longitude, latitude: lat
   return result
 }
 
-
-function postForecast(dataRootPath, voisConfiguration) {
+function getForecasts27(dataRootPath, voisConfiguration) {
   return async function (req, res, next) {
+    // ToDo: return real world
+    return
+  }
+}
+
+function getForecastsComplete(dataRootPath, voisConfiguration) {
+  return async function (req, res, next) {
+    console.log('req.params')
+    console.log(req.params)
+    console.log('...')
+    res.end()
+    return
+
     const body = req.body
     const time_start = body.time_start
     const longitude = body.position.longitude
@@ -98,23 +110,10 @@ function postForecast(dataRootPath, voisConfiguration) {
       res.end()
       return
     }
-    if (voi === 'temperature') {
-      var gribName = 't_2m'
-      var unit = 'K'
-    } else if (voi === 'wind speed') {
-      var unit = 'm/s'
-    } else if (voi === 'direct irradiance') {
-      var gribName = 'aswdir_s'
-      var unit = 'W/m2'
-    } else if (voi === 'diffuse irradiance') {
-      var gribName = 'aswdifd_s'
-      var unit = 'W/m2'
-    } else if (voi === 'relative humidity') {
-      var gribName = 'relhum_2m'
-      var unit = '1'
-      var scalingFactor = 0.01
-    }
 
+    const gribLabel = voiConfiguration.gribLabel
+    const resultUnit = voiConfiguration.resultUnit
+    const scalingFactor = voiConfiguration.scalingFactor
 
     try {
 
@@ -124,15 +123,13 @@ function postForecast(dataRootPath, voisConfiguration) {
       res.end()
     }
 
-
-
     try {
       if (voi === 'wind speed') {
         var gribResults = await getWindSpeed(time_start, {longitude: longitude, latitude: latitude}, path.join(dataRootPath, 'grib'))
       } else if (voi === 'wind direction') {
         var gribResults = await getWindDirection(time_start, {longitude: longitude, latitude: latitude}, path.join(dataRootPath, 'grib'))
       } else  {
-        var gribResults = await grib2.readTimeSeriesFromGribFiles(time_start, {longitude: longitude, latitude: latitude}, gribName, path.join(dataRootPath, 'grib'))
+        var gribResults = await grib2.readTimeSeriesFromGribFiles(time_start, {longitude: longitude, latitude: latitude}, gribLabel, path.join(dataRootPath, 'grib'))
       }
     } catch (error) {
       res.status(404).send(error)
@@ -141,7 +138,7 @@ function postForecast(dataRootPath, voisConfiguration) {
     }
 
     const resultObject = {
-      unit: unit,
+      unit: resultUnit,
       label: voi,
       aggregationMethod: 'sampled',
       data: []
@@ -164,4 +161,72 @@ function postForecast(dataRootPath, voisConfiguration) {
   }
 }
 
+function postForecast(dataRootPath, voisConfiguration) {
+  return async function (req, res, next) {
+    const body = req.body
+    const time_start = body.time_start
+    const longitude = body.position.longitude
+    const latitude = body.position.latitude
+    var voi = body.voi
+
+    const voiConfiguration = voisConfiguration[voi]
+
+    if (_.isNil(voiConfiguration)) {
+      res.status(404).send(error)
+      res.end()
+      return
+    }
+
+    const gribLabel = voiConfiguration.gribLabel
+    const resultUnit = voiConfiguration.resultUnit
+    const scalingFactor = voiConfiguration.scalingFactor
+
+    try {
+
+    } catch (error) {
+      res.status(404)
+      res.send('no prognosis data available')
+      res.end()
+    }
+
+    try {
+      if (voi === 'wind speed') {
+        var gribResults = await getWindSpeed(time_start, {longitude: longitude, latitude: latitude}, path.join(dataRootPath, 'grib'))
+      } else if (voi === 'wind direction') {
+        var gribResults = await getWindDirection(time_start, {longitude: longitude, latitude: latitude}, path.join(dataRootPath, 'grib'))
+      } else  {
+        var gribResults = await grib2.readTimeSeriesFromGribFiles(time_start, {longitude: longitude, latitude: latitude}, gribLabel, path.join(dataRootPath, 'grib'))
+      }
+    } catch (error) {
+      res.status(404).send(error)
+      res.end()
+      return
+    }
+
+    const resultObject = {
+      unit: resultUnit,
+      label: voi,
+      aggregationMethod: 'sampled',
+      data: []
+    }
+
+    _.forEach(gribResults, (gribItem) => {
+      if (_.isNil(scalingFactor)) {
+        scalingFactor = 1
+      }
+
+      resultObject.data.push({
+        timestamp: gribItem.referenceTime + 3600 * gribItem.forecastHour,
+        value: gribItem.value * scalingFactor
+      })
+    })
+
+    res.status(200).send(resultObject)
+    res.end()
+    return
+  }
+}
+
+exports.getForecastsComplete = getForecastsComplete
 exports.postForecast = postForecast
+exports.getPoiForecastsCosmeDe27Poi = getPoiForecastsCosmeDe27Poi
