@@ -2,26 +2,36 @@
   "temperature": {
     "gribLabel": "t_2m",
     "grib_unit": "K",
-    "resultUnit": "K"
+    "resultUnit": "K",
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000
   },
   "wind speed": {
     "result_unit": "m/s",
-    "isCustomCalculation": true    
+    "isCustomCalculation": true,
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000
   },
   "direct irradiance": {
     "gribLabel": "aswdir_s",
     "grib_unit": "W/m2",
-    "resultUnit": "W/m2"
+    "resultUnit": "W/m2",
+    "27hForecastLength": 112,
+    "27hForecastdt": 900000
   },
   "diffuse irradiance": {
     "gribLabel": "aswdifd_s",
     "grib_unit": "W/m2",
-    "resultUnit": "W/m2"
+    "resultUnit": "W/m2",
+    "27hForecastLength": 112,
+    "27hForecastdt": 900000
   },
   "relative humidity": {
     "gribLabel": "relhum_2m",
     "grib_unit": "%",
     "resultUnit": "1",
-    "scalingFactor": 0.01
+    "scalingFactor": 0.01,
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000
   }
 }

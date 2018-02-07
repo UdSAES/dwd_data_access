@@ -227,6 +227,26 @@ function postForecast(dataRootPath, voisConfiguration) {
   }
 }
 
+function getPoiForecastsCosmeDe27Poi (dataRootPath, voisConfiguration) {
+  return async function (req, res, next) {
+    console.log('request1')
+    console.log(JSON.stringify(req.params))
+
+    const fileContent = await fs.readFile('/tmp/forecast_result.json', {encoding: 'utf8'})
+
+    res.status(200).send(JSON.parse(fileContent))
+    res.end()
+    return
+
+    /*const voiConfiguration = voisConfiguration[voi]
+
+    if (_.isNil(voiConfiguration)) {
+      res.status(404).send(error)
+      res.end()
+      return
+    }*/
+  }
+}
 exports.getForecastsComplete = getForecastsComplete
 exports.postForecast = postForecast
 exports.getPoiForecastsCosmeDe27Poi = getPoiForecastsCosmeDe27Poi

@@ -215,7 +215,6 @@
         },
         "unit": {
           "type": "string",
-          "required": true,
           "description": "Unit of the data, formatted as defined in the [Modelica Specification v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf), Chapter 19."
         },
         "values": {

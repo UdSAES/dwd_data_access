@@ -57,7 +57,7 @@ describe('./lib/grib2.js', () => {
       assert(result.length === 46)
       _.forEach(result, (item) => {
         const keys = _.keys(item)
-        assert(_.isEqual(keys.sort(), ['referenceTime', 'verificationTime', 'value', 'forecastHour'].sort()))
+        assert(_.isEqual(keys.sort(), ['referenceTimestamp', 'forecastTimestamp', 'value', 'lon', 'lat'].sort()))
       })
     }).timeout(0)
 
@@ -75,8 +75,10 @@ describe('./lib/grib2.js', () => {
 
   describe('readValueFromGrib2BzFile()', () => {
     it('should return the value from a grib file for the given position', async () => {
-      const result = await grib2.readValueFromGrib2BzFile(path.join(tmpDirPath, 'sample_data', 'grib', GRIB_TEST_FILE_PATH), GRIB_TEST_POSITION)
-      assert(_.isEqual(_.keys(result).sort(),['referenceTime', 'forecastHour', 'verificationTime', 'value'].sort()))
+      const result = await grib2.readValuesFromGrib2BzFile(path.join(tmpDirPath, 'sample_data', 'grib', GRIB_TEST_FILE_PATH), GRIB_TEST_POSITION)
+      _.forEach(result, (item) => {
+        assert(_.isEqual(_.keys(item).sort(),['referenceTimestamp', 'forecastTimestamp', 'value', 'lon', 'lat'].sort()))
+      })
     })
 
     it('should return an error when the file does not exist', async () => {

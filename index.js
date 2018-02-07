@@ -64,7 +64,7 @@ async function init() {
   const stationCatalog = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
 
   const endPointMapping = [
-    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi}
+    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi(DATA_ROOT_PATH, stationCatalog)},
     {method: 'post', openapiPath: '/forecast', path: '/forecast', handler: hfc.postForecast(DATA_ROOT_PATH, stationCatalog)},
     {method: 'get', openapiPath: '/forecasts/cosme/27/newestForecast/{stationId}', path: '/forecasts/cosme/27/newestForecast/:stationId', handler: hfc.getForecastsComplete(DATA_ROOT_PATH, stationCatalog)},
     {method: 'get', openapiPath: '/forecasts/cosme/27/{lon}/{lat}', path: '/forecasts/cosme/27/:lon/:lat', handler: hfc.getForecastsComplete(DATA_ROOT_PATH, stationCatalog)}
@@ -100,6 +100,7 @@ async function init() {
           return
         }
 
+        console.log(method, mapping.path)
         app[method](mapping.path, mapping.handler)
       })
     })
