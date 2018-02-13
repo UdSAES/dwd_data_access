@@ -2,32 +2,64 @@
   "swagger": "2.0",
   "info": {
     "title": "udsaes/forecast",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "contact": {
-      "name": "Moritz Stüber (UdS AES)",
-      "email": "moritz.stueber@aut.uni-saarland.de"
+      "name": "Florian Wagner (UdS AES)",
+      "email": "florian.wagner@aut.uni-saarland.de"
     }
   },
   "paths": {
-    "/forecast": {
-      "post": {
-        "summary": "Look up the values of the specified variable for the given time frame",
-        "consumes": ["application/json"],
+    "/poi_forecasts/cosmo_de_27/{poi_id}": {
+      "get": {
+        "summary": "Get the newest 27 h forecast for the given point of interest",
         "parameters": [{
-          "in": "body",
-          "name": "",
+          "in": "path",
+          "name": "poi_id",
           "required": true,
-          "description": "The necessary query parameters. From the requirements: 'The consumer shall provide position (longitude/[decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees), latitude/([decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees), height above sea level/m), start/epoch, duration/s, output interval/s and the variable of interest.'",
-          "schema": {
-            "$ref": "#/definitions/QueryParameters"
-          }
+          "description": "The id of the point of interest for which the forecast shall be provided.",
+          "type": "string"
         }],
-        "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "The requested data",
+            "description": "The requested forecast data",
             "schema": {
-              "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/master/schemata/forecast/schema_v0.2.2-oas3.json#/forecastResult"
+              "$ref": "#/definitions/ForecastResult"
+            }
+          }
+        }
+      }
+    },
+    "/poi_forecasts/cosmo_de_45/{poi_id}": {
+      "get": {
+        "summary": "Get the newest 45 h forecast for the given point of interest",
+        "parameters": [{
+          "in": "path",
+          "name": "poi_id",
+          "required": true,
+          "description": "The id of the point of interest for which the forecast shall be provided.",
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "$ref": "#/definitions/ForecastResult"
+            }
+          }
+        }
+      }
+    },
+    "/pois": {
+      "get": {
+        "summary": "Get the list of defined points of interest",
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/POI"
+              }
             }
           }
         }
@@ -35,6 +67,110 @@
     }
   },
   "definitions": {
+    "POI": {
+      "type": "object",
+      "required": [
+        "id",
+        "lon",
+        "lat",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The identifier of the point of interest (uuid v4 string)"
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "description": "The longitude of the point of interest in °"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90,
+          "description": "The latitude of the point of interest in °"
+        },
+        "name": {
+          "type": "string",
+          "description": "The clear text name of the point of interest (should NOT be used as identifier)"
+        }
+      }
+    },
+    "ForecastResult": {
+      "type": "object",
+      "required": [
+        "forecastModelType",
+        "location",
+        "referenceTimestamp",
+        "forecasts"
+      ],
+      "properties": {
+        "forecastModelType": {
+          "type": "string",
+          "enum": ["COSMO_DE", "MOSMIX_DE"],
+          "description": "the model which has been been used as basis for the forecast"
+        },
+        "location": {
+          "$ref": "#/definitions/Position",
+          "description": "the location the forecast refers to"
+        },
+        "poi": {
+          "type": "string",
+          "pattern": "/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i",
+          "description": "the identifier of the point of interest"
+        },
+        "referenceTimestamp": {
+          "type": "integer",
+          "description": "the unix timestamp (in ms resolution) which is the reference of the forecast"
+        },
+        "forecasts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Timeseries"
+          },
+          "description": "the actual forecasts as an array of timeseries"
+        }
+      }
+    },
+    "Timeseries": {
+      "type": "object",
+      "required": [
+        "unit",
+        "timeseries"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "label of the timeseries"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Unit of the data, formatted as defined in the [Modelica Specification v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf), Chapter 19."
+        },
+        "timeseries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "timestamp",
+              "value"
+            ],
+            "properties": {
+              "timestamp": {
+                "type": "number",
+                "description": "the timestamp (as unix timestamp in ms resolution) of the timeseries to which the value refers to"
+              },
+              "value": {
+                "type": "number",
+                "description": "the value of the timeseries at the timestamp (unit as specified above)"
+              }
+            }
+          }
+        }
+      }
+    },
     "Position": {
       "type": "object",
       "required": [
@@ -58,49 +194,6 @@
         "elevation": {
           "type": "number",
           "description": "Height above sea level in metres"
-        }
-      }
-    },
-    "QueryParameters": {
-      "type": "object",
-      "required": [
-        "position",
-        "time_start",
-        "duration",
-        "interval_output",
-        "voi"
-      ],
-      "properties": {
-        "position": {
-          "$ref": "#/definitions/Position"
-        },
-        "time_start": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "The time at the start of the relevant time frame as EPOCH"
-        },
-        "duration": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "The duration of the time frame in seconds"
-        },
-        "interval_output": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "The output interval of the result in seconds"
-        },
-        "voi": {
-          "type": "string",
-          "enum": [
-            "solar position",
-            "wind speed",
-            "wind direction",
-            "diffuse irradiance",
-            "global irradiance",
-            "temperature",
-            "relative humidity"
-          ],
-          "description": "The name of the requested variable (__v__ariable __o__f __i__nterest)"
         }
       }
     }

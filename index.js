@@ -4,6 +4,9 @@ const express = require('express')
 const _ = require('lodash')
 const processenv = require('processenv')
 const hfc = require('./handlers/forecast')
+const hpoi = require('./handlers/poi')
+const poifce = require('./lib/poi_forecast_engine')
+const path = require('path')
 const swaggerTools = require('swagger-tools')
 const fs = require('fs-extra')
 const {promisify} = require('util')
@@ -15,10 +18,14 @@ const mmsc = require('./lib/mosmix_station_catalog')
 
 const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
+const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
+
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
 const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
-const EXIT_CODE_SERVER_ERROR = 1
+const EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING = 3
+const EXIT_CODE_SERVER_ERROR = 4
+
 
 const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
 
@@ -32,6 +39,13 @@ if (!_.isString(DATA_ROOT_PATH)) {
   process.exit(EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING)
 }
 
+if (!_.isString(NEWEST_FORECAST_ROOT_PATH)) {
+  console.error('NEWEST_FORECAST_ROOT_PATH must be a string: ' + NEWEST_FORECAST_ROOT_PATH)
+  process.exit(EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING)
+}
+
+
+
 console.log('LISTEN_PORT: ' + LISTEN_PORT)
 console.log('DATA_ROOT_PATH: ' + DATA_ROOT_PATH)
 
@@ -41,19 +55,11 @@ app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.static('./docs'))
 
-app.use(function(req, res, next) {
-  console.log(req.method)
-  console.log(req.headers)
-  next()
-})
-
 app.on('error', (error) => {
   console.error('got an server error')
   console.error(error)
   process.exit(EXIT_CODE_SERVER_ERROR)
 })
-
-
 
 app.listen(LISTEN_PORT, () => {
   console.log('Listening on port ' + LISTEN_PORT)
@@ -64,13 +70,12 @@ async function init() {
   const stationCatalog = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
 
   const endPointMapping = [
-    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi(DATA_ROOT_PATH, stationCatalog)},
-    {method: 'post', openapiPath: '/forecast', path: '/forecast', handler: hfc.postForecast(DATA_ROOT_PATH, stationCatalog)},
-    {method: 'get', openapiPath: '/forecasts/cosme/27/newestForecast/{stationId}', path: '/forecasts/cosme/27/newestForecast/:stationId', handler: hfc.getForecastsComplete(DATA_ROOT_PATH, stationCatalog)},
-    {method: 'get', openapiPath: '/forecasts/cosme/27/{lon}/{lat}', path: '/forecasts/cosme/27/:lon/:lat', handler: hfc.getForecastsComplete(DATA_ROOT_PATH, stationCatalog)}
+    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi('/tmp/poi_forecasts', stationCatalog)},
+    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}', path: '/poi_forecasts/cosmo_de_45/:poi_id', handler: hfc.getPoiForecastsCosmeDe45Poi('/tmp/poi_forecasts', stationCatalog)},
+    {method: 'get', openapiPath: '/pois', path: '/pois', handler: hpoi.getPois('./configuration/pois.json')}
   ]
 
-  var api = await fs.readJson('./docs/openapi_oas2_new.json')
+  var api = await fs.readJson('./docs/openapi_oas2.json')
   api = await $RefParser.dereference(api)
 
   const models = _.get(api, ['definitions'])
@@ -105,6 +110,6 @@ async function init() {
       })
     })
   })
-
-
 }
+
+poifce.run(60, path.join(DATA_ROOT_PATH, 'cosmo', 'de', 'grib'), NEWEST_FORECAST_ROOT_PATH)

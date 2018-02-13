@@ -1,37 +1,85 @@
 {
-  "temperature": {
-    "gribLabel": "t_2m",
-    "grib_unit": "K",
-    "resultUnit": "K",
-    "27hForecastLength": 28,
-    "27hForecastdt": 3600000
-  },
-  "wind speed": {
-    "result_unit": "m/s",
-    "isCustomCalculation": true,
-    "27hForecastLength": 28,
-    "27hForecastdt": 3600000
-  },
-  "direct irradiance": {
-    "gribLabel": "aswdir_s",
-    "grib_unit": "W/m2",
-    "resultUnit": "W/m2",
-    "27hForecastLength": 112,
-    "27hForecastdt": 900000
-  },
-  "diffuse irradiance": {
-    "gribLabel": "aswdifd_s",
-    "grib_unit": "W/m2",
-    "resultUnit": "W/m2",
-    "27hForecastLength": 112,
-    "27hForecastdt": 900000
-  },
-  "relative humidity": {
-    "gribLabel": "relhum_2m",
-    "grib_unit": "%",
+  "diffuse_radiation": {
+    "gribLabel": "alb_rad",
+    "gribUnit": "%",
     "resultUnit": "1",
     "scalingFactor": 0.01,
     "27hForecastLength": 28,
-    "27hForecastdt": 3600000
+    "27hForecastdt": 3600000,
+    "45hForecastLength": 45,
+    "45hForecastdt": 3600000
+  },
+  "temperature_2m_ag": {
+    "gribLabel": "t_2m",
+    "gribUnit": "K",
+    "resultUnit": "K",
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000,
+    "45hForecastLength": 45,
+    "45hForecastdt": 3600000
+  },
+  "zonal_wind_10m_ag": {
+    "gribLabel": "u_10m",
+    "gribUnit": "m/s",
+    "resultUnit": "m/s",
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000,
+    "45hForecastLength": 45,
+    "45hForecastdt": 3600000
+  },
+  "meridional_wind_10m_ag": {
+    "gribLabel": "v_10m",
+    "gribUnit": "m/s",
+    "resultUnit": "m/s",
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000,
+    "45hForecastLength": 45,
+    "45hForecastdt": 3600000
+  },
+  "wind_speed_10m_ag": {
+    "resultUnit": "m/s",
+    "baseQuantities": ["zonal_wind_10m_ag", "meridional_wind_10m_ag"],
+    "isCustomCalculation": true,
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000,
+    "45hForecastLength": 45,
+    "45hForecastdt": 3600000
+  },
+  "wind_direction_10m_ag": {
+    "resultUnit": "°",
+    "baseQuantities": ["zonal_wind_10m_ag", "meridional_wind_10m_ag"],
+    "isCustomCalculation": true,
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000,
+    "45hForecastLength": 45,
+    "45hForecastdt": 3600000
+  },
+  "down_solar_direct_radiation": {
+    "gribLabel": "aswdir_s",
+    "gribUnit": "W/m2",
+    "resultUnit": "W/m2",
+    "27hForecastLength": 109,
+    "27hForecastdt": 900000,
+    "45hForecastLength": 181,
+    "45hForecastdt": 900000
+  },
+  "down_solar_diffuse_radiation": {
+    "gribLabel": "aswdifd_s",
+    "gribUnit": "W/m2",
+    "resultUnit": "W/m2",
+    "27hForecastLength": 109,
+    "27hForecastdt": 900000,
+    "45hForecastLength": 181,
+    "45hForecastdt": 900000
+  },
+  "relative_humidity_2m_ag": {
+    "gribLabel": "relhum_2m",
+    "gribUnit": "%",
+    "resultUnit": "1",
+    "scalingFactor": 0.01,
+    "27hForecastLength": 28,
+    "27hForecastdt": 3600000,
+    "45hForecastLength": 45,
+    "45hForecastdt": 3600000
   }
 }

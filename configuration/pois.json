@@ -1,0 +1,26 @@
+[
+  {
+    "id": "43139dbf-8cd3-4b85-9220-9340a8819ab7",
+    "lon": 6.750410,
+    "lat": 49.316333,
+    "name": "Saarlouis Rathaus"
+  },
+  {
+    "id": "e26ba57d-4cb1-46fd-ab6d-11a9367ab1d7",
+    "lon": 6.996914,
+    "lat": 49.234849,
+    "name": "Saarbrücken Rathaus"
+  },
+  {
+    "id": "e9037e59-042e-4c47-943d-ba38906df5f5",
+    "lon": 7.253283,
+    "lat": 49.546556,
+    "name": "Freisen Rathaus"
+  },
+  {
+    "id": "e7006e07-7362-4f5b-9e1a-0d0333e81772",
+    "lon": 7.144206,
+    "lat": 49.586910,
+    "name": "Freisen Rathaus"
+  }
+]
