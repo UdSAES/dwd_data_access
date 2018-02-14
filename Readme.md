@@ -21,3 +21,6 @@ The basic idea of the micro service `dwd_forecast_service`is to provide weather 
 
 The interaction between `opendata.dwd.de`, `dwd_data_crawler` and `dwd_forecast_service` is shown in the following diagram.
 <img src="./docs/interaction.svg" width="600">
+
+<img src="./docs/poi_query_loop.svg" width="600">
+
