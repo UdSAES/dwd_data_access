@@ -14,3 +14,8 @@ $ LISTEN_PORT=12345 DATA_ROOT_PATH=/home/service/DWD_data_storage \
   node index.js
 ```
 
+## Basic idea
+The basic idea of the micro service `dwd_forecast_service`is to provide weather forecast information based on data previously downloaded by the micro service `dwd_data_crawler` from opendata.dwd.de. Thus, `dwd_forecast_service` itself does not query from opendata.dwd.de directly. This approach has two significant advanteges:
+1. Forecast information can be provided even if a connection to opendata.dwd.de is not available (e.g. due to a connection malfunction or if a connection is not possible due to security reasons).
+2. As `dwd_data_crawler` is storing data from opendata.dwd.de in a file structure which prevents overriding of data (as it is done by opendata.dwd.de) it is possible to provide historical forecasts which might be interesting for research activities.
+
