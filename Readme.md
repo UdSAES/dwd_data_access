@@ -22,5 +22,9 @@ The basic idea of the micro service `dwd_forecast_service`is to provide weather 
 The interaction between `opendata.dwd.de`, `dwd_data_crawler` and `dwd_forecast_service` is shown in the following diagram.
 <img src="./docs/interaction.svg" width="600">
 
+Forecasts are provided for predefined points of interest. The predefined points of interest are stored in a configuration file in the path `./configuration/pois.json`.
+
+For each of the predefined points of interest a newest 27 h and 45 h forecast are cyclically derived by the loop as shown in the following diagram.
+
 <img src="./docs/poi_query_loop.svg" width="600">
 
