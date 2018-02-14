@@ -9,6 +9,8 @@ The micro service is configured via the following environment variables:
 
 Sample call
 ```
-$ LISTEN_PORT=12345 DATA_ROOT_PATH=/home/service/DWD_data_storage NEWEST_FORECAST_ROOT_PATH=/home/service/forecast_storage
+$ LISTEN_PORT=12345 DATA_ROOT_PATH=/home/service/DWD_data_storage \
+  NEWEST_FORECAST_ROOT_PATH=/home/service/forecast_storage \
+  node index.js
 ```
 
