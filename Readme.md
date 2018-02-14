@@ -19,3 +19,5 @@ The basic idea of the micro service `dwd_forecast_service`is to provide weather 
 1. Forecast information can be provided even if a connection to opendata.dwd.de is not available (e.g. due to a connection malfunction or if a connection is not possible due to security reasons).
 2. As `dwd_data_crawler` is storing data from opendata.dwd.de in a file structure which prevents overriding of data (as it is done by opendata.dwd.de) it is possible to provide historical forecasts which might be interesting for research activities.
 
+The interaction between `opendata.dwd.de`, `dwd_data_crawler` and `dwd_forecast_service` is shown in the following diagram.
+<img src="./docs/interaction.svg" width="600">
