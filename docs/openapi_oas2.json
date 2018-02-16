@@ -107,6 +107,23 @@
         "forecasts"
       ],
       "properties": {
+        "sourceReference": {
+          "type": "object",
+          "required": [
+            "name",
+            "url"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": ["Data basis: Deutscher Wetterdienst, own elements added"]
+            },
+            "url": {
+              "type": "string",
+              "enum": ["https://www.dwd.de/EN/ourservices/opendata/opendata.html"]
+            }
+          }
+        },
         "forecastModelType": {
           "type": "string",
           "enum": ["COSMO_DE", "MOSMIX_DE"],
