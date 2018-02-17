@@ -35,12 +35,13 @@ const mmsc = require('./lib/mosmix_station_catalog')
 const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
 const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
-
+const POIS_JSON_FILE_PATH = processenv('POIS_JSON_FILE_PATH')
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
 const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
 const EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING = 3
-const EXIT_CODE_SERVER_ERROR = 4
+const EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING = 4
+const EXIT_CODE_SERVER_ERROR = 5
 
 
 const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
@@ -60,10 +61,16 @@ if (!_.isString(NEWEST_FORECAST_ROOT_PATH)) {
   process.exit(EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING)
 }
 
-
+if (!_.isString(POIS_JSON_FILE_PATH)) {
+  console.error('POIS_JSON_FILE_PATH must be a string: ' + POIS_JSON_FILE_PATH)
+  process.exit(EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING)
+}
 
 console.log('LISTEN_PORT: ' + LISTEN_PORT)
 console.log('DATA_ROOT_PATH: ' + DATA_ROOT_PATH)
+console.log('NEWEST_FORECAST_ROOT_PATH: ' + NEWEST_FORECAST_ROOT_PATH)
+console.log('POIS_JSON_FILE_PATH: ' + POIS_JSON_FILE_PATH)
+
 
 const app = express()
 app.use(cors())
@@ -88,7 +95,7 @@ async function init() {
   const endPointMapping = [
     {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi('/tmp/poi_forecasts', stationCatalog)},
     {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}', path: '/poi_forecasts/cosmo_de_45/:poi_id', handler: hfc.getPoiForecastsCosmeDe45Poi('/tmp/poi_forecasts', stationCatalog)},
-    {method: 'get', openapiPath: '/pois', path: '/pois', handler: hpoi.getPois('./configuration/pois.json')}
+    {method: 'get', openapiPath: '/pois', path: '/pois', handler: hpoi.getPois(POIS_JSON_FILE_PATH)}
   ]
 
   var api = await fs.readJson('./docs/openapi_oas2.json')
