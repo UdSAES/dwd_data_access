@@ -2,12 +2,12 @@
 `dwd_forecast_service` is a micro service that offers a REST-API to query
 weather forecasts based on data that has been downloaded from
 [opendata.dwd.de](http://opendata.dwd.de) by micro service `dwd_data_crawler`
-(https://github.com/UdSAES/dwd_data_crawler]
+([https://github.com/UdSAES/dwd_data_crawler]
   (https://github.com/UdSAES/dwd_data_crawler)).
 
 ## Dependencies
 Part of data on opendata.dwd.de is provided in compressed form. For
-performance reasone `dwd_data_crawler` transforms the compression from `bzip2`
+performance reasons `dwd_data_crawler` transforms the compression from `bzip2`
 to `lz4` during the download and storage procedure.
 
 In order to provide a forecast `dwd_forecast_service` needs to decompress the
