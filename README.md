@@ -1,5 +1,21 @@
 # dwd_forecast_service
-`dwd_forecast_service` is a micro service that offers a REST-API to query weather forecasts based on data that has been downloaded from [opendata.dwd.de](http://opendata.dwd.de) by micro service `dwd_data_crawler`.
+`dwd_forecast_service` is a micro service that offers a REST-API to query
+weather forecasts based on data that has been downloaded from
+[opendata.dwd.de](http://opendata.dwd.de) by micro service `dwd_data_crawler`
+(https://github.com/UdSAES/dwd_data_crawler]
+  (https://github.com/UdSAES/dwd_data_crawler)).
+
+## Dependencies
+Part of data on opendata.dwd.de is provided in compressed form. For
+performance reasone `dwd_data_crawler` transforms the compression from `bzip2`
+to `lz4` during the download and storage procedure.
+
+In order to provide a forecast `dwd_forecast_service` needs to decompress the
+`lz4` files. As of today, we, the authors of `dwd_forecast_service`, are not
+aware of a high performance implementation of `lz4`. Therefore we have decided to
+realize the decompression of `lz4` files by calling `lz4` command via
+`child_process.execFile`. **Thus, the `lz4` command forms a dependency
+of `dwd_forecast_service`.**
 
 ## Usage
 The micro service is configured via the following environment variables:
