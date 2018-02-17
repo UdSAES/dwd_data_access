@@ -6,6 +6,9 @@ weather forecasts based on data that has been downloaded from
 
 ![Set of logos](./docs/logos_uds_aes_designetz_bmwi.png)
 
+## License
+See the [LICENSE](./LICENSE) file for license rights and limitations (MIT).
+
 ## Dependencies
 Part of data on opendata.dwd.de is provided in compressed form. For
 performance reasons `dwd_data_crawler` transforms the compression from `bzip2`
