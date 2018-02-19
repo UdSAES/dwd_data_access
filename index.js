@@ -247,4 +247,4 @@ async function init() {
   })
 }
 
-poifce.run(60, path.join(DATA_ROOT_PATH, 'cosmo', 'de', 'grib'), NEWEST_FORECAST_ROOT_PATH)
+poifce.run(60, path.join(DATA_ROOT_PATH, 'weather', 'cosmo', 'de', 'grib'), NEWEST_FORECAST_ROOT_PATH)
