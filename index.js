@@ -29,6 +29,8 @@ const {promisify} = require('util')
 const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
 const mmsc = require('./lib/mosmix_station_catalog')
+var jwt = require('express-jwt')
+
 
 //const pathToSwaggerUi = require('swagger-ui-dist').absolutePath()
 
@@ -36,12 +38,25 @@ const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
 const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
 const POIS_JSON_FILE_PATH = processenv('POIS_JSON_FILE_PATH')
+const JWT_PUBLIC_KEY_FILE_PATH = processenv('JWT_PUBLIC_KEY_FILE_PATH')
+const AUTHORIZATION_LIMIT_INTERVAL = processenv('AUTHORIZATION_LIMIT_INTERVAL') || 10
+const AUTHORIZATION_LIMIT_VALUE = processenv('AUTHORIZATION_LIMIT_VALUE') || 20
+const ANONYMOUS_LIMIT_INTERVAL = processenv('ANONYMOUS_LIMIT_INTERVAL') || 10
+const ANONYMOUS_LIMIT_VALUE = processenv('ANONYMOUS_LIMIT_VALUE') || 10
+
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
 const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
 const EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING = 3
 const EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING = 4
-const EXIT_CODE_SERVER_ERROR = 5
+const EXIT_CODE_JWT_PUBLIC_KEY_FILE_PATH_NOT_A_STRING = 5
+const EXIT_CODE_AUTHORIZATION_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER = 6
+const EXIT_CODE_AUTHORIZATION_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 7
+const EXIT_CODE_ANONYMOUS_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER = 8
+const EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 9
+
+const EXIT_CODE_SERVER_ERROR = 10
+const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
 
 const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
@@ -66,13 +81,110 @@ if (!_.isString(POIS_JSON_FILE_PATH)) {
   process.exit(EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING)
 }
 
+if (!_.isString(JWT_PUBLIC_KEY_FILE_PATH)) {
+  console.error('JWT_PUBLIC_KEY_FILE_PATH must be a string: ' + JWT_PUBLIC_KEY_FILE_PATH)
+  process.exit(JWT_PUBLIC_KEY_FILE_PATH)
+}
+
+if (!_.isNumber(AUTHORIZATION_LIMIT_INTERVAL) || AUTHORIZATION_LIMIT_INTERVAL <= 0) {
+  console.error('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + AUTHORIZATION_LIMIT_INTERVAL)
+  process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER)
+}
+
+if (!_.isNumber(AUTHORIZATION_LIMIT_VALUE) || AUTHORIZATION_LIMIT_VALUE <= 0) {
+  console.error('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + AUTHORIZATION_LIMIT_VALUE)
+  process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
+}
+
+if (!_.isNumber(ANONYMOUS_LIMIT_INTERVAL) || ANONYMOUS_LIMIT_INTERVAL <= 0) {
+  console.error('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + ANONYMOUS_LIMIT_INTERVAL)
+  process.exit(EXIT_CODE_ANONYMOUS_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER)
+}
+
+if (!_.isNumber(ANONYMOUS_LIMIT_VALUE) || ANONYMOUS_LIMIT_VALUE <= 0) {
+  console.error('ANONYMOUS_LIMIT_VALUE must be a positive number: ' + ANONYMOUS_LIMIT_VALUE)
+  process.exit(EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
+}
+
+console.log()
+console.log('=== PARAMETERS ===')
 console.log('LISTEN_PORT: ' + LISTEN_PORT)
 console.log('DATA_ROOT_PATH: ' + DATA_ROOT_PATH)
 console.log('NEWEST_FORECAST_ROOT_PATH: ' + NEWEST_FORECAST_ROOT_PATH)
 console.log('POIS_JSON_FILE_PATH: ' + POIS_JSON_FILE_PATH)
+console.log('JWT_PUBLIC_KEY_FILE_PATH: ' + JWT_PUBLIC_KEY_FILE_PATH)
+console.log('AUTHORIZATION_LIMIT_INTERVAL: ' + AUTHORIZATION_LIMIT_INTERVAL)
+console.log('AUTHORIZATION_LIMIT_VALUE: ' + AUTHORIZATION_LIMIT_VALUE)
+console.log('ANONYMOUS_LIMIT_INTERVAL: ' + ANONYMOUS_LIMIT_INTERVAL)
+console.log('ANONYMOUS_LIMIT_VALUE: ' + ANONYMOUS_LIMIT_VALUE)
+console.log('=== END PARAMETERS ===')
+console.log()
 
 
+// global variables
 const app = express()
+const authorizedRequestStatisticsMap = {}
+
+var publicKey = null
+try {
+  publicKey = fs.readFileSync(JWT_PUBLIC_KEY_FILE_PATH)
+} catch (error) {
+  console.log('PUBLIC KEY could not be loaded')
+  console.log(error)
+  process.exit(EXIT_CODE_PUBLIC_KEY_LOAD_ERROR)
+}
+
+// verify token
+app.use(jwt({secret: publicKey, credentialsRequired: false}))
+
+// continue if token is invalid
+app.use((error, req, res, next) => {
+  console.log(error)
+  next()
+})
+
+// limit acces base on usage statistic of token
+// if invalid or no token is provided, then request is treated with user
+// 'ANONYMOUS'
+app.use((req, res, next) => {
+
+  var sub = 'ANONYMOUS'
+  if (req.user != null && req.user.sub != null) {
+    sub = req.user.sub
+  }
+
+  console.log('sub: ' + sub)
+
+  var limitInterval = AUTHORIZATION_LIMIT_INTERVAL
+  var limitValue = AUTHORIZATION_LIMIT_VALUE
+
+  if (sub === 'ANONYMOUS') {
+    limitInterval = ANONYMOUS_LIMIT_INTERVAL
+    limitValue = ANONYMOUS_LIMIT_VALUE
+  }
+
+  if (authorizedRequestStatisticsMap[sub] == null) {
+    authorizedRequestStatisticsMap[sub] = []
+  }
+
+  const now = Date.now()
+  _.remove(authorizedRequestStatisticsMap[sub], (timestamp) => {
+    if (Math.abs(now - timestamp) > limitInterval * 1000) {
+      return true
+    }
+  })
+
+  if (authorizedRequestStatisticsMap[sub].length >= limitValue) {
+    res.status(429).send(authorizedRequestStatisticsMap[sub])
+    res.end()
+    return
+  }
+
+  authorizedRequestStatisticsMap[sub].push(now)
+  next()
+  return
+})
+
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
