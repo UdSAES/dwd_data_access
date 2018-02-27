@@ -25,7 +25,6 @@ const poifce = require('./lib/poi_forecast_engine')
 const path = require('path')
 const swaggerTools = require('swagger-tools')
 const fs = require('fs-extra')
-const {promisify} = require('util')
 const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
 const mmsc = require('./lib/mosmix_station_catalog')
@@ -83,7 +82,7 @@ if (!_.isString(POIS_JSON_FILE_PATH)) {
 
 if (!_.isString(JWT_PUBLIC_KEY_FILE_PATH)) {
   console.error('JWT_PUBLIC_KEY_FILE_PATH must be a string: ' + JWT_PUBLIC_KEY_FILE_PATH)
-  process.exit(JWT_PUBLIC_KEY_FILE_PATH)
+  process.exit(EXIT_CODE_JWT_PUBLIC_KEY_FILE_PATH_NOT_A_STRING)
 }
 
 if (!_.isNumber(AUTHORIZATION_LIMIT_INTERVAL) || AUTHORIZATION_LIMIT_INTERVAL <= 0) {
@@ -212,8 +211,6 @@ async function init() {
 
   var api = await fs.readJson('./docs/openapi_oas2.json')
   api = await $RefParser.dereference(api)
-
-  const models = _.get(api, ['definitions'])
 
   swaggerTools.initializeMiddleware(api, function (middleware) {
 
