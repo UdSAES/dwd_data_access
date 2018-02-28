@@ -237,8 +237,8 @@ async function init() {
     // Validate Swagger requests
     app.use(middleware.swaggerValidator())
 
-    // Serve the Swagger documents and Swagger UI
-    app.use(middleware.swaggerUi())
+    // // Serve the Swagger documents and Swagger UI
+    // app.use(middleware.swaggerUi())
 
     //console.log(app._router.stack)
 
