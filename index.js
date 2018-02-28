@@ -31,8 +31,6 @@ const mmsc = require('./lib/mosmix_station_catalog')
 var jwt = require('express-jwt')
 
 
-//const pathToSwaggerUi = require('swagger-ui-dist').absolutePath()
-
 const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
 const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
@@ -42,6 +40,8 @@ const AUTHORIZATION_LIMIT_INTERVAL = processenv('AUTHORIZATION_LIMIT_INTERVAL') 
 const AUTHORIZATION_LIMIT_VALUE = processenv('AUTHORIZATION_LIMIT_VALUE') || 1000
 const ANONYMOUS_LIMIT_INTERVAL = processenv('ANONYMOUS_LIMIT_INTERVAL') || 10
 const ANONYMOUS_LIMIT_VALUE = processenv('ANONYMOUS_LIMIT_VALUE') || 100
+const UI_STATIC_FILES_PATH = String(processenv('UI_STATIC_FILES_PATH') || '')
+const UI_URL_PATH = String(processenv('UI_URL_PATH') || '')
 
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
@@ -116,6 +116,8 @@ console.log('AUTHORIZATION_LIMIT_INTERVAL: ' + AUTHORIZATION_LIMIT_INTERVAL)
 console.log('AUTHORIZATION_LIMIT_VALUE: ' + AUTHORIZATION_LIMIT_VALUE)
 console.log('ANONYMOUS_LIMIT_INTERVAL: ' + ANONYMOUS_LIMIT_INTERVAL)
 console.log('ANONYMOUS_LIMIT_VALUE: ' + ANONYMOUS_LIMIT_VALUE)
+console.log('UI_STATIC_FILES_PATH: ' + UI_STATIC_FILES_PATH)
+console.log('UI_URL_PATH: ' + UI_URL_PATH)
 console.log('=== END PARAMETERS ===')
 console.log()
 
@@ -188,6 +190,21 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.static('./docs'))
+
+// expose UI iff UI_URL_PATH is not empty
+if (UI_URL_PATH !== '') {
+  if (UI_STATIC_FILES_PATH !== '') {
+
+        // expose locally defined UI
+        app.use(UI_URL_PATH, express.static(UI_STATIC_FILES_PATH))
+
+        // register UI in OAS that is provided as a resource
+    }
+    else {
+        // fall back to default-UI
+        console.error('default-UI not implemented')
+    }
+}
 
 app.on('error', (error) => {
   console.error('got an server error')
