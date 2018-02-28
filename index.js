@@ -195,15 +195,15 @@ app.use(express.static('./docs'))
 if (UI_URL_PATH !== '') {
   if (UI_STATIC_FILES_PATH !== '') {
 
-        // expose locally defined UI
-        app.use(UI_URL_PATH, express.static(UI_STATIC_FILES_PATH))
+    // expose locally defined UI
+    app.use(UI_URL_PATH, express.static(UI_STATIC_FILES_PATH))
 
-        // register UI in OAS that is provided as a resource
-    }
-    else {
-        // fall back to default-UI
-        console.error('default-UI not implemented')
-    }
+    // register UI in OAS that is provided as a resource
+  }
+  else {
+    // fall back to default-UI
+    console.error('default-UI not implemented')
+  }
 }
 
 app.on('error', (error) => {
