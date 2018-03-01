@@ -221,8 +221,8 @@ async function init() {
   const stationCatalog = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
 
   const endPointMapping = [
-    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi('/tmp/poi_forecasts', stationCatalog)},
-    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}', path: '/poi_forecasts/cosmo_de_45/:poi_id', handler: hfc.getPoiForecastsCosmeDe45Poi('/tmp/poi_forecasts', stationCatalog)},
+    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
+    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}', path: '/poi_forecasts/cosmo_de_45/:poi_id', handler: hfc.getPoiForecastsCosmeDe45Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
     {method: 'get', openapiPath: '/pois', path: '/pois', handler: hpoi.getPois(POIS_JSON_FILE_PATH)}
   ]
 
