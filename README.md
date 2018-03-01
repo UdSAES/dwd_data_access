@@ -25,7 +25,9 @@ of `dwd_forecast_service`.**
 The micro service is configured via the following environment variables:
 * `LISTEN_PORT`: The TCP port the micro service is listening for incoming requests.
 * `DATA_ROOT_PATH`: The path to the storage directory where `dwd_data_crawler` is storing the files downloaded from opendata.dwd.de.
-* `NEWEST_FORECAST_ROOT_PATH`: The path to the directory where the micro service shall store the newest forecasts for the predefined pois (Points of interest).
+* `NEWEST_FORECAST_ROOT_PATH`: The path to the directory where the micro service shall store the newest forecasts for the predefined pois (points of interest).
+* `POIS_JSON_FILE_PATH`: The path to the JSON file defining pois (points of interest) for which newest forecasts shall be created. An example of such a file can be found in `./configuration/pois.json`.
+* `JWT_PUBLIC_KEY_FILE_PATH`: The path to the public key file to be used to verify JSON web tokens in the authentication header. An example of such a file can be found in `./sample_data/sample_public_key.pem`.
 
 Sample call
 ```
