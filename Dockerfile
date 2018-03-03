@@ -9,6 +9,7 @@ RUN mkdir /mnt/forecast_cache && chown node:node /mnt/forecast_cache
 RUN mkdir /mnt/configuration && chown node:node /mnt/configuration
 RUN mkdir /mnt/keys && chown node:node /mnt/keys
 
+ENV LISTEN_PORT=3000
 ENV DATA_ROOT_PATH=/mnt/dwd_raw_data
 ENV NEWEST_FORECAST_ROOT_PATH=/mnt/forecast_cache
 ENV POIS_JSON_FILE_PATH=/mnt/configuration/pois.json

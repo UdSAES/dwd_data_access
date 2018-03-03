@@ -23,7 +23,7 @@ The micro service is configured via the following environment variables:
 * `POIS_JSON_FILE_PATH`: The path to the JSON file defining pois (points of interest) for which newest forecasts shall be created. An example of such a file can be found in `./configuration/pois.json`.
 * `JWT_PUBLIC_KEY_FILE_PATH`: The path to the public key file to be used to verify JSON web tokens in the authentication header. An example of such a file can be found in `./sample_data/sample_public_key.pem`.
 
-Sample call
+Sample call:
 ```
 $ LISTEN_PORT=12345 DATA_ROOT_PATH=/home/service/DWD_data_storage \
   NEWEST_FORECAST_ROOT_PATH=/home/service/forecast_storage \
@@ -39,14 +39,14 @@ To use dwd_forecast_service with docker, the repository includes a Dockerfile to
 * mount directory of configuration files (i.e. directory where pois.json and vois.json are stored) to `/mnt/configuration`
 * mount file with public keys for verifying JSON web tokens (see env`JWT_PUBLIC_KEY_FILE_PATH`) to `/mnt/keys/public_key.pem`
 
-Sample call to build the image
+Sample call to build the image:
 ```
 $ docker build -t dwd_forecast_service .
 ```
 
-Sample call to run the image
+Sample call to run the image (`LISTEN_PORT` is statically set to `3000` within the image):
 ```
-$ docker run -p 12345:12345 -e LISTEN_PORT=12345 \
+$ docker run -p 12345:3000 \
   -v $DATA_ROOT_PATH:/mnt/dwd_raw_data \
   -v $NEWEST_FORECAST_ROOT_PATH:/mnt/forecast_cache \
   -v $PWD/configuration:/mnt/configuration \
