@@ -42,9 +42,9 @@ $ LISTEN_PORT=12345 DATA_ROOT_PATH=/home/service/DWD_data_storage \
 ### Docker
 To use dwd_forecast_service with docker, the repository includes a Dockerfile to build a docker image based on alpine. To use the docker image the following configuration needs to be done on startup:
 * mount source directory of `dwd_data_crawler` (see env `DATA_ROOT_PATH`) to `/mnt/dwd_raw_data`
-* mount target directory for newest forecasts of points of interests (see env `NEWEST_FORECAST_ROOT_PATH`) to `/mnt/forecast_cache'
+* mount target directory for newest forecasts of points of interests (see env `NEWEST_FORECAST_ROOT_PATH`) to `/mnt/forecast_cache`
 * mount directory of configuration files (i.e. directory where pois.json and vois.json are stored) to `/mnt/configuration`
-* mount file with public keys for verifying JSON web tokens (see env`JWT_PUBLIC_KEY_FILE_PATH`) to `/mnt/keys/public_key.pem'
+* mount file with public keys for verifying JSON web tokens (see env`JWT_PUBLIC_KEY_FILE_PATH`) to `/mnt/keys/public_key.pem`
 
 Sample call to build the image
 ```
