@@ -22,6 +22,7 @@ realize the decompression of `lz4` files by calling `lz4` command via
 of `dwd_forecast_service`.**
 
 ## Usage
+### Standalone application
 The micro service is configured via the following environment variables:
 * `LISTEN_PORT`: The TCP port the micro service is listening for incoming requests.
 * `DATA_ROOT_PATH`: The path to the storage directory where `dwd_data_crawler` is storing the files downloaded from opendata.dwd.de.
@@ -33,7 +34,32 @@ Sample call
 ```
 $ LISTEN_PORT=12345 DATA_ROOT_PATH=/home/service/DWD_data_storage \
   NEWEST_FORECAST_ROOT_PATH=/home/service/forecast_storage \
+  POIS_JSON_FILE_PATH=./configuration/pois.json \
+  JWT_PUBLIC_KEY_FILE_PATH=./sample_data/sample_public_key.pem \
   node index.js
+```
+
+### Docker
+To use dwd_forecast_service with docker, the repository includes a Dockerfile to build a docker image based on alpine. To use the docker image the following configuration needs to be done on startup:
+* mount source directory of `dwd_data_crawler` (see env `DATA_ROOT_PATH`) to `/mnt/dwd_raw_data`
+* mount target directory for newest forecasts of points of interests (see env `NEWEST_FORECAST_ROOT_PATH`) to `/mnt/forecast_cache'
+* mount directory of configuration files (i.e. directory where pois.json and vois.json are stored) to `/mnt/configuration`
+* mount file with public keys for verifying JSON web tokens (see env`JWT_PUBLIC_KEY_FILE_PATH`) to `/mnt/keys/public_key.pem'
+
+Sample call to build the image
+```
+$ docker build -t dwd_forecast_service .
+```
+
+Sample call to run the image
+```
+$ docker run -p 12345:12345 -e LISTEN_PORT=12345 \
+  -v $DATA_ROOT_PATH:/mnt/dwd_raw_data \
+  -v $NEWEST_FORECAST_ROOT_PATH:/mnt/forecast_cache \
+  -v $PWD/configuration:/mnt/configuration \
+  -v $PWD/sample_data/sample_public_key.pem:/mnt/keys/public_key.pem \
+  --name dwd_forecast_service_instance \
+  dwd_forecast_service
 ```
 
 ## Basic idea
