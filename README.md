@@ -10,16 +10,9 @@ weather forecasts based on data that has been downloaded from
 See the [LICENSE](./LICENSE) file for license rights and limitations (MIT).
 
 ## Dependencies
-Part of data on opendata.dwd.de is provided in compressed form. For
-performance reasons `dwd_data_crawler` transforms the compression from `bzip2`
-to `lz4` during the download and storage procedure.
+Part of the data on opendata.dwd.de is provided in compressed form. For performance reasons, `dwd_data_crawler` changes the compression from `bzip2` to `lz4` during the download and storage procedure.
 
-In order to provide a forecast `dwd_forecast_service` needs to decompress the
-`lz4` files. As of today, we, the authors of `dwd_forecast_service`, are not
-aware of a high performance implementation of `lz4`. Therefore we have decided to
-realize the decompression of `lz4` files by calling `lz4` command via
-`child_process.execFile`. **Thus, the `lz4` command forms a dependency
-of `dwd_forecast_service`.**
+In order to provide a forecast, `dwd_forecast_service` needs to decompress the `lz4` files. As of today, we, the authors of `dwd_forecast_service`, are not aware of a high performance implementation of `lz4` in plain JavaScript and/or Node.js. Therefore, we have decided to implement the decompression of `lz4` files by calling `lz4` command via `child_process.execFile`. **Thus, the `lz4` command forms a dependency of `dwd_forecast_service`.**
 
 ## Usage
 ### Standalone application
