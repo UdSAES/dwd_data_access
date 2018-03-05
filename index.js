@@ -20,6 +20,7 @@ const express = require('express')
 const _ = require('lodash')
 const processenv = require('processenv')
 const hfc = require('./handlers/forecast')
+const hm = require('./handlers/measurements')
 const hpoi = require('./handlers/poi')
 const poifce = require('./lib/poi_forecast_engine')
 const path = require('path')
@@ -57,7 +58,7 @@ const EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 9
 const EXIT_CODE_SERVER_ERROR = 10
 const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
-
+const VOIS_JSON_FILE_PATH = "./configuration/vois.json"
 const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
 
 if (!_.isNumber(LISTEN_PORT)) {
@@ -219,10 +220,10 @@ app.listen(LISTEN_PORT, () => {
 
 async function init() {
   const stationCatalog = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
-
   const endPointMapping = [
     {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
     {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}', path: '/poi_forecasts/cosmo_de_45/:poi_id', handler: hfc.getPoiForecastsCosmeDe45Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
+    {method: 'get', openapiPath: '/poi_measurements/{poi_id}', path: '/poi_measurements/:poi_id', handler: hm.getNewestMeasurementDataPoi(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports', 'poi'), POIS_JSON_FILE_PATH, VOIS_JSON_FILE_PATH, stationCatalog)},
     {method: 'get', openapiPath: '/pois', path: '/pois', handler: hpoi.getPois(POIS_JSON_FILE_PATH)}
   ]
 

@@ -50,6 +50,26 @@
         }
       }
     },
+    "/poi_measurements/{poi_id}": {
+      "get": {
+        "summary": "Get the newest 24 h measurement data for point of interest",
+        "parameters": [{
+          "in": "path",
+          "name": "poi_id",
+          "required": true,
+          "description": "The id of the point of interest for which the forecast shall be provided.",
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested measurement data",
+            "schema": {
+              "$ref": "#/definitions/MeasurementResult"
+            }
+          }
+        }
+      }
+    },
     "/pois": {
       "get": {
         "summary": "Get the list of defined points of interest",
@@ -96,6 +116,49 @@
         "name": {
           "type": "string",
           "description": "The clear text name of the point of interest (should NOT be used as identifier)"
+        }
+      }
+    },
+    "MeasurementResult": {
+      "type": "object",
+      "required": [
+        "forecastModelType",
+        "location",
+        "measurements"
+      ],
+      "properties": {
+        "sourceReference": {
+          "type": "object",
+          "required": [
+            "name",
+            "url"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": ["Data basis: Deutscher Wetterdienst, own elements added"]
+            },
+            "url": {
+              "type": "string",
+              "enum": ["https://www.dwd.de/EN/ourservices/opendata/opendata.html"]
+            }
+          }
+        },
+        "location": {
+          "$ref": "#/definitions/Position",
+          "description": "the location the forecast refers to"
+        },
+        "poi": {
+          "type": "string",
+          "pattern": "/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i",
+          "description": "the identifier of the point of interest"
+        },
+        "measurements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Timeseries"
+          },
+          "description": "the actual forecasts as an array of timeseries"
         }
       }
     },
