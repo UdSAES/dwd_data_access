@@ -1,5 +1,5 @@
 {
-  "diffuse_radiation": {
+  "albedo_ground": {
     "gribLabel": "alb_rad",
     "gribUnit": "%",
     "resultUnit": "1",
