@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "udsaes/dwd_forecast_service",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "dwd_forecast_service provides an API to query weather data that has previously been downloaded by dwd_data_crawler from opendata.dwd.de (free service offered by [DWD](https://www.dwd.de/EN/ourservices/opendata/opendata.html)).",
     "contact": {
       "name": "Florian Wagner (UdS AES)",
