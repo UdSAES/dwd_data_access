@@ -86,8 +86,6 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
       return
     }
 
-    
-
     const coordinates = {
       latitude: poi.lat,
       longitude: poi.lon
@@ -96,6 +94,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
     
     const m = moment().tz('UTC').startOf('day').subtract(2, 'days')
     var closestStation = null
+
     try {
       const now = moment().tz('UTC')
 
@@ -106,10 +105,13 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
           const dateDirectoryPath = path.join(measurementDataBaseDirectory, dateDirectoryName)
           const filteredStationIds = await getAvailableStationIDs(dateDirectoryPath)
 
-          const filteredStationCatalog = _.filter(stationCatalog, (item1) => {
-            return _.find(filteredStationIds, (item2) => {
-              return item2 == item1.id
-            }) != null
+          var filteredStationIdsMap = {}
+          _.forEach(filteredStationIds, (item) => {
+            filteredStationIdsMap[item] = item
+          })
+
+          const filteredStationCatalog = _.filter(stationCatalog, (item) => {
+            return !_.isNil(filteredStationIdsMap[item.id])
           })
           closestStation = su.findClosestStation(coordinates, filteredStationCatalog)
           
