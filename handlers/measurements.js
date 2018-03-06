@@ -186,7 +186,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
       _.forEach(resultItems, (resultItem, voiName) => {
         // sort timeseries by increasing timestamp
         resultItems[voiName] = _.sortBy(resultItem, (item) => {
-          return item[0]
+          return item.timestamp
         })
 
         result.measurements.push({
