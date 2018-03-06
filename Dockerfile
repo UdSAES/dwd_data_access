@@ -21,10 +21,10 @@ RUN mkdir /home/node/app
 
 WORKDIR /home/node/app
 
-COPY ./package.json /home/node/app
+COPY --chown=node:node ./package.json /home/node/app
 
 RUN npm install
 
-COPY ./ /home/node/app/
+COPY --chown=node:node ./ /home/node/app/
 
 ENTRYPOINT node index.js
