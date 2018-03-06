@@ -1,0 +1,7 @@
+# Ignore the .git-subdirectory
+.git/
+.gitignore
+.dockerignore
+
+# # Ignore /sample_data
+# sample_data/
