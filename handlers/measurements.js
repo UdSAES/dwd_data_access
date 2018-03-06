@@ -44,6 +44,17 @@ function parseCSV(fileContent) {
   return lines
 }
 
+async function getAvailableStationIDs(searchDirectoryPath) {
+  const directoryContentNames = await fs.readdir(searchDirectoryPath)
+  const ids = []
+  for(let i = 0; i < directoryContentNames.length; i++) {
+    var stationId = directoryContentNames[i].split('-')[0]
+    ids.push(stationId.replace('_', ''))
+  }
+
+  return ids
+}
+
 function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFilePath, voisJSONFilePath, stationCatalog) {
   return async function (req, res, next) {
     const poi_id = req.params.poi_id
@@ -81,10 +92,10 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
       latitude: poi.lat,
       longitude: poi.lon
     }
-    const closestStation = su.findClosestStation(coordinates, stationCatalog)
 
-    console.log('closestStationname: ' + JSON.stringify(closestStation))
+    
     const m = moment().tz('UTC').startOf('day').subtract(2, 'days')
+    var closestStation = null
     try {
       const now = moment().tz('UTC')
 
@@ -92,7 +103,22 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
       while (m.isBefore(now)) {
         try {
           const dateDirectoryName = formatNumber(m.year(), 4) + formatNumber(m.month() + 1, 2) + formatNumber(m.date(), 2)
-          const filePath = path.join(measurementDataBaseDirectory, dateDirectoryName, closestStation.station.id + '-BEOB.csv')
+          const dateDirectoryPath = path.join(measurementDataBaseDirectory, dateDirectoryName)
+          const filteredStationIds = await getAvailableStationIDs(dateDirectoryPath)
+
+          const filteredStationCatalog = _.filter(stationCatalog, (item1) => {
+            return _.find(filteredStationIds, (item2) => {
+              return item2 == item1.id
+            }) != null
+          })
+          closestStation = su.findClosestStation(coordinates, filteredStationCatalog)
+          
+          if (closestStation.station.id.length === 5) {
+            var filePath = path.join(dateDirectoryPath, closestStation.station.id + '-BEOB.csv')
+          } else {
+            var filePath = path.join(dateDirectoryPath, closestStation.station.id + '_-BEOB.csv')            
+          }
+          
           const fileContentString = await fs.readFile(filePath, {encoding: 'utf8'})
           const table = parseCSV(fileContentString)
           
@@ -134,7 +160,12 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
         m.add(1, 'day')
       }
 
-      
+      // if no closest station has been found, then there has been something wrong (we hope on client side ;-))      
+      if (_.isNil(closestStation)) {
+        res.status(404).send({error: "no closest station found"})
+        res.end()
+        return
+      }
 
       const result = {}
       result.poi = poi_id
@@ -167,7 +198,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
       res.end()
       return
     } catch (error) {
-      res.status(404).send(error)
+      res.status(404).send(error.toString())
       res.end()
       return
     }
