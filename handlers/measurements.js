@@ -147,11 +147,19 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
                 continue
               }
 
+              
               if (_.isNil(resultItems[voiName])) {
                 resultItems[voiName] = []
               }
+
+              const timestamp = moment(table[i][0], "DD.MM.YY").add(moment.duration(table[i][1])).valueOf()
+
+              if (timestamp < now.valueOf() - 49 * 3600 * 1000) {
+                continue
+              }
+              
               resultItems[voiName].push({
-                timestamp: moment(table[i][0], "DD.MM.YY").add(moment.duration(table[i][1])).valueOf(),
+                timestamp: timestamp,
                 value: (parseFloat(table[i][columnIndex].replace(',', '.')) + scalingOffset) * scalingFactor
               })
             }
