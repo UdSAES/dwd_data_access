@@ -239,11 +239,6 @@ async function init() {
     // Validate Swagger requests
     app.use(middleware.swaggerValidator())
 
-    // // Serve the Swagger documents and Swagger UI
-    // app.use(middleware.swaggerUi())
-
-    //console.log(app._router.stack)
-
     const paths = _.get(api, ['paths'])
     _.forEach(paths, (pathDefinition, path) => {
       _.forEach(pathDefinition, (spec, method) => {
@@ -263,4 +258,5 @@ async function init() {
   })
 }
 
-poifce.run(60, path.join(DATA_ROOT_PATH, 'weather', 'cosmo', 'de', 'grib'), NEWEST_FORECAST_ROOT_PATH)
+// poifce.run(60, path.join(DATA_ROOT_PATH, 'weather', 'cosmo', 'de', 'grib'), NEWEST_FORECAST_ROOT_PATH)
+poifce.run(60, path.join(DATA_ROOT_PATH, 'weather', 'cosmo-d2', 'grib'), NEWEST_FORECAST_ROOT_PATH)
