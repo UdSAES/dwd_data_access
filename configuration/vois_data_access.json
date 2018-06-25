@@ -1,0 +1,405 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "udsaes/dwd_forecast_service",
+    "version": "1.1.0",
+    "description": "dwd_forecast_service provides an API to query weather data that has previously been downloaded by dwd_data_crawler from opendata.dwd.de (free service offered by [DWD](https://www.dwd.de/EN/ourservices/opendata/opendata.html)).",
+    "contact": {
+      "name": "Florian Wagner (UdS AES)",
+      "email": "florian.wagner@aut.uni-saarland.de"
+    }
+  },
+  "paths": {
+    "/weather/cosmo/d2/{referenceTimestamp}/{voi}": {
+      "get": {
+        "summary": "Get a COSMO-D2 forecast for a given reference timestamp, a given value of interest and a given location",
+        "parameters": [{
+          "in": "path",
+          "name": "referenceTimestamp",
+          "required": true,
+          "description": "The reference timestamp as UNIX EPOCH in ms resolution that shall be provided",
+          "type": "number"
+        }, {
+          "in": "path",
+          "name": "voi",
+          "required": true,
+          "description": "The value of interest for which the forecast shall be provided",
+          "type": "string",
+          "enum": ['t_2m', 'pmsl', 'relhum_2m', 'aswdifd_s', 'aswdir_s', 'td_2m', 'ws_10m', 'wd_10m']
+        }, {
+          "in": "query",
+          "name": "lat",
+          "required": true,
+          "description": "The latitude of the location in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
+          "type": "number"
+        }, {
+          "in": "query",
+          "name": "lon",
+          "required": true,
+          "description": "The longitude of the location in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
+          "type": "number"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested forecast data which is based on the closest grid point in the COSMIX model for the given location (latitude and longitude",
+            "schema": {
+              "$ref": "#/definitions/LocationTimeseries"
+            }
+          }
+        }
+      }
+    },
+    "/weather/local_forecasts/poi/{referenceTimestamp}/{sid}/{voi}": {
+      "get": {
+        "summary": "Get a MOSMIX forecast for a given reference timestamp, at a given station for a given value of interest",
+        "parameters": [{
+          "in": "path",
+          "name": "referenceTimestamp",
+          "required": true,
+          "description": "The reference timestamp as UNIX EPOCH in ms resolution that shall be provided",
+          "type": "number"
+        }, {
+          "in": "path",
+          "name": "sid",
+          "required": true,
+          "description": "The id of the weather station",
+          "type": "string"
+        }, {
+          "in": "path",
+          "name": "voi",
+          "required": true,
+          "description": "The value of interest for which the forecast shall be provided",
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "$ref": "#/definitions/LocationTimeseries"
+            }
+          }
+        }
+      }
+    },
+    "/poi_forecasts/cosmo_de_27/{poi_id}": {
+      "get": {
+        "summary": "Get the newest 27 h forecast for the given point of interest",
+        "parameters": [{
+          "in": "path",
+          "name": "poi_id",
+          "required": true,
+          "description": "The id of the point of interest for which the forecast shall be provided.",
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "$ref": "#/definitions/ForecastResult"
+            }
+          }
+        }
+      }
+    },
+    "/poi_forecasts/cosmo_de_45/{poi_id}": {
+      "get": {
+        "summary": "Get the newest 45 h forecast for the given point of interest",
+        "parameters": [{
+          "in": "path",
+          "name": "poi_id",
+          "required": true,
+          "description": "The id of the point of interest for which the forecast shall be provided.",
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "$ref": "#/definitions/ForecastResult"
+            }
+          }
+        }
+      }
+    },
+    "/poi_measurements/{poi_id}": {
+      "get": {
+        "summary": "Get the newest 24 h measurement data for point of interest",
+        "parameters": [{
+          "in": "path",
+          "name": "poi_id",
+          "required": true,
+          "description": "The id of the point of interest for which the forecast shall be provided.",
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested measurement data",
+            "schema": {
+              "$ref": "#/definitions/MeasurementResult"
+            }
+          }
+        }
+      }
+    },
+    "/pois": {
+      "get": {
+        "summary": "Get the list of defined points of interest",
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/POI"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "POI": {
+      "type": "object",
+      "required": [
+        "id",
+        "lon",
+        "lat",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The identifier of the point of interest (uuid v4 string)"
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "description": "Longitude in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90,
+          "description": "Latitude in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The clear text name of the point of interest (should NOT be used as identifier)"
+        }
+      }
+    },
+    "MeasurementResult": {
+      "type": "object",
+      "required": [
+        "location",
+        "measurements"
+      ],
+      "properties": {
+        "sourceReference": {
+          "type": "object",
+          "required": [
+            "name",
+            "url"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": ["Data basis: Deutscher Wetterdienst, own elements added"]
+            },
+            "url": {
+              "type": "string",
+              "enum": ["https://www.dwd.de/EN/ourservices/opendata/opendata.html"]
+            }
+          }
+        },
+        "location": {
+          "$ref": "#/definitions/Position",
+          "description": "the location the measurements refer to"
+        },
+        "poi": {
+          "type": "string",
+          "pattern": "/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i",
+          "description": "the identifier of the point of interest"
+        },
+        "measurements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Timeseries"
+          },
+          "description": "the actual measurement values as an array of timeseries"
+        }
+      }
+    },
+    "ForecastResult": {
+      "type": "object",
+      "required": [
+        "forecastModelType",
+        "location",
+        "referenceTimestamp",
+        "forecasts"
+      ],
+      "properties": {
+        "sourceReference": {
+          "type": "object",
+          "required": [
+            "name",
+            "url"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": ["Data basis: Deutscher Wetterdienst, own elements added"]
+            },
+            "url": {
+              "type": "string",
+              "enum": ["https://www.dwd.de/EN/ourservices/opendata/opendata.html"]
+            }
+          }
+        },
+        "forecastModelType": {
+          "type": "string",
+          "enum": ["COSMO_DE", "MOSMIX_DE"],
+          "description": "the model which has been been used as basis for the forecast"
+        },
+        "location": {
+          "$ref": "#/definitions/Position",
+          "description": "the location the forecast refers to"
+        },
+        "poi": {
+          "type": "string",
+          "pattern": "/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i",
+          "description": "the identifier of the point of interest"
+        },
+        "referenceTimestamp": {
+          "type": "integer",
+          "description": "the unix timestamp (in ms resolution) which is the reference of the forecast"
+        },
+        "forecasts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Timeseries"
+          },
+          "description": "the actual forecasts as an array of timeseries"
+        }
+      }
+    },
+    "Timeseries": {
+      "type": "object",
+      "required": [
+        "unit",
+        "timeseries"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "label of the timeseries"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Unit of the data, formatted as defined in the [Modelica Specification v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf), Chapter 19."
+        },
+        "timeseries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "timestamp",
+              "value"
+            ],
+            "properties": {
+              "timestamp": {
+                "type": "number",
+                "description": "the timestamp (as unix timestamp in ms resolution) of the timeseries to which the value refers to"
+              },
+              "value": {
+                "type": "number",
+                "description": "the value of the timeseries at the timestamp (unit as specified above)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "LocationTimeseries": {
+      "type": "object",
+      "required": [
+        "unit",
+        "data",
+        "location",
+        "label"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "label of the timeseries"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Unit of the data, formatted as defined in the [Modelica Specification v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf), Chapter 19."
+        },
+        "location": {
+          "$ref": "#/definitions/Position",
+          "description": "the location the forecast refers to"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "timestamp",
+              "value"
+            ],
+            "properties": {
+              "timestamp": {
+                "type": "number",
+                "description": "the timestamp (as unix timestamp in ms resolution) of the timeseries to which the value refers to"
+              },
+              "value": {
+                "type": "number",
+                "description": "the value of the timeseries at the timestamp (unit as specified above)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Position": {
+      "type": "object",
+      "required": [
+        "longitude",
+        "latitude",
+        "elevation"
+      ],
+      "properties": {
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "description": "Longitude in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)"
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90,
+          "description": "Latitude in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)"
+        },
+        "elevation": {
+          "type": "number",
+          "description": "Height above sea level in metres"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [{
+    "Bearer": []
+  }]
+}
