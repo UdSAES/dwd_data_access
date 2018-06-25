@@ -10,6 +10,115 @@
     }
   },
   "paths": {
+    "/weather/cosmo/d2/{referenceTimestamp}/{voi}": {
+      "get": {
+        "summary": "Get a COSMO-D2 forecast for a given reference timestamp, a given value of interest and a given location",
+        "parameters": [{
+          "in": "path",
+          "name": "referenceTimestamp",
+          "required": true,
+          "description": "The reference timestamp as UNIX EPOCH in ms resolution that shall be provided",
+          "type": "number"
+        }, {
+          "in": "path",
+          "name": "voi",
+          "required": true,
+          "description": "The value of interest for which the forecast shall be provided",
+          "type": "string",
+          "enum": ['t_2m', 'pmsl', 'relhum_2m', 'aswdifd_s', 'aswdir_s', 'td_2m', 'ws_10m', 'wd_10m']
+        }, {
+          "in": "query",
+          "name": "lat",
+          "required": true,
+          "description": "The latitude of the location in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
+          "type": "number"
+        }, {
+          "in": "query",
+          "name": "lon",
+          "required": true,
+          "description": "The longitude of the location in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
+          "type": "number"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested forecast data which is based on the closest grid point in the COSMIX model for the given location (latitude and longitude",
+            "schema": {
+              "$ref": "#/definitions/LocationTimeseries"
+            }
+          }
+        }
+      }
+    },
+    "/weather/local_forecasts/poi/{referenceTimestamp}/{sid}/{voi}": {
+      "get": {
+        "summary": "Get a MOSMIX forecast for a given reference timestamp, at a given station for a given value of interest",
+        "parameters": [{
+          "in": "path",
+          "name": "referenceTimestamp",
+          "required": true,
+          "description": "The reference timestamp as UNIX EPOCH in ms resolution that shall be provided",
+          "type": "number"
+        }, {
+          "in": "path",
+          "name": "sid",
+          "required": true,
+          "description": "The id of the weather station",
+          "type": "string"
+        }, {
+          "in": "path",
+          "name": "voi",
+          "required": true,
+          "description": "The value of interest for which the forecast shall be provided",
+          "type": "string"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "$ref": "#/definitions/LocationTimeseries"
+            }
+          }
+        }
+      }
+    },
+    "/weather/weather_reports/poi/{sid}/{voi}": {
+      "get": {
+        "summary": "Get actual reported weather data at a given station for, for given value of interest within a given time interval",
+        "parameters": [{
+          "in": "path",
+          "name": "sid",
+          "required": true,
+          "description": "The id of the weather station",
+          "type": "string"
+        }, {
+          "in": "path",
+          "name": "voi",
+          "required": true,
+          "description": "The value of interest for which the forecast shall be provided",
+          "type": "string"
+        }, {
+          "in": "query",
+          "name": "startTimestamp",
+          "required": false,
+          "description": "The inclusive start timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If not value is given, the current timestamp minus 25 hours is used.",
+          "type": "number"
+        }, {
+          "in": "query",
+          "name": "endTimestamp",
+          "required": false,
+          "description": "he exclusive end timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp is used.",
+          "type": "number"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested report data",
+            "schema": {
+              "$ref": "#/definitions/LocationTimeseries"
+            }
+          }
+        }
+      }
+    },
     "/poi_forecasts/cosmo_de_27/{poi_id}": {
       "get": {
         "summary": "Get the newest 27 h forecast for the given point of interest",
@@ -251,6 +360,49 @@
         }
       }
     },
+    "LocationTimeseries": {
+      "type": "object",
+      "required": [
+        "unit",
+        "data",
+        "location",
+        "label"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "label of the timeseries"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Unit of the data, formatted as defined in the [Modelica Specification v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf), Chapter 19."
+        },
+        "location": {
+          "$ref": "#/definitions/Position",
+          "description": "the location the forecast refers to"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "timestamp",
+              "value"
+            ],
+            "properties": {
+              "timestamp": {
+                "type": "number",
+                "description": "the timestamp (as unix timestamp in ms resolution) of the timeseries to which the value refers to"
+              },
+              "value": {
+                "type": "number",
+                "description": "the value of the timeseries at the timestamp (unit as specified above)"
+              }
+            }
+          }
+        }
+      }
+    },
     "Position": {
       "type": "object",
       "required": [
@@ -277,17 +429,15 @@
         }
       }
     }
-},
-  "securityDefinitions": {
-      "Bearer": {
-          "type": "apiKey",
-          "name": "Authorization",
-          "in": "header"
-      }
   },
-  "security": [
-      {
-          "Bearer": []
-      }
-  ]
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [{
+    "Bearer": []
+  }]
 }
