@@ -20,6 +20,7 @@ const express = require('express')
 const _ = require('lodash')
 const processenv = require('processenv')
 const hfc = require('./handlers/forecast')
+const hda = require('./handlers/data_access')
 const hm = require('./handlers/measurements')
 const hpoi = require('./handlers/poi')
 const poifce = require('./lib/poi_forecast_engine')
@@ -60,6 +61,7 @@ const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
 const VOIS_JSON_FILE_PATH = "./configuration/vois.json"
 const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
+const VOIS_DATA_ACCESS_CONFIGS_PATH = './configuration/vois_data_access.json'
 
 if (!_.isNumber(LISTEN_PORT)) {
   console.error('LISTEN_PORT must be a number: ' + LISTEN_PORT)
@@ -221,7 +223,28 @@ app.listen(LISTEN_PORT, () => {
 
 async function init() {
   const stationCatalog = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
+  const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
+    encoding: 'utf8'
+  })
   const endPointMapping = [
+    {
+      method: 'get',
+      openapiPath: '/weather/cosmo/d2/{referenceTimestamp}/{voi}',
+      path: '/weather/cosmo/d2/:referenceTimestamp/:voi',
+      handler: hda.getWeatherCosmoD2(DATA_ROOT_PATH, voisDataAccessConfigs)
+    },
+    {
+      method: 'get',
+      openapiPath: '/weather/local_forecasts/poi/{referenceTimestamp}/{sid}/{voi}',
+      path: '/weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi',
+      handler: hda.getWeatherMosmix(DATA_ROOT_PATH, voisDataAccessConfigs)
+    },
+    {
+      method: 'get',
+      openapiPath: '/weather/weather_reports/poi/{sid}/{voi}',
+      path: '/weather/weather_reports/poi/:sid/:voi',
+      handler: hda.getWeatherReport(DATA_ROOT_PATH, voisDataAccessConfigs)
+    },
     {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
     {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}', path: '/poi_forecasts/cosmo_de_45/:poi_id', handler: hfc.getPoiForecastsCosmeDe45Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
     {method: 'get', openapiPath: '/poi_measurements/{poi_id}', path: '/poi_measurements/:poi_id', handler: hm.getNewestMeasurementDataPoi(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports', 'poi'), POIS_JSON_FILE_PATH, VOIS_JSON_FILE_PATH, stationCatalog)},
