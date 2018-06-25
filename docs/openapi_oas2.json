@@ -25,7 +25,7 @@
           "required": true,
           "description": "The value of interest for which the forecast shall be provided",
           "type": "string",
-          "enum": ['t_2m', 'pmsl', 'relhum_2m', 'aswdifd_s', 'aswdir_s', 'td_2m', 'ws_10m', 'wd_10m']
+          "enum": ["t_2m", "pmsl", "relhum_2m", "aswdifd_s", "aswdir_s", "td_2m", "ws_10m", "wd_10m"]
         }, {
           "in": "query",
           "name": "lat",

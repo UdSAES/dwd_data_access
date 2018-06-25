@@ -1,5 +1,14 @@
 'use strict'
 
+const path = require('path')
+const moment = require('moment')
+const csv = require('dwd-csv-helper')
+const _ = require('lodash')
+const {
+  convertUnit
+} = require('../lib/unit_conversion.js')
+const gf = require('../lib/grib_functions')
+
 // GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
 function getWeatherCosmoD2(WEATHER_DATA_BASE_PATH, voisConfigs) {
   return async function (req, res, next) {
@@ -76,8 +85,6 @@ function getWeatherCosmoD2(WEATHER_DATA_BASE_PATH, voisConfigs) {
         data: timeseriesData.timeseriesData,
         location: timeseriesData.location
       }
-
-      console.log('handleWeatherCosmoD2', result)
       res.status(200).send(result)
     } catch (error) {
       console.log(error)
@@ -91,9 +98,6 @@ function getWeatherMosmix(WEATHER_DATA_BASE_PATH, voisConfigs) {
   const MOSMIX_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather/local_forecasts/poi')
 
   return async function (req, res, next) {
-    console.log('req.params', req.params)
-    console.log('req.query', req.query)
-
     const referenceTimestamp = parseInt(req.params.referenceTimestamp)
     const sid = req.params.sid
     const voi = req.params.voi
@@ -131,9 +135,6 @@ function getWeatherReport(WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather/weather_reports/poi')
 
   return async function (req, res, next) {
-    console.log('req.params', req.params)
-    console.log('req.query', req.query)
-
     let startTimestamp = parseInt(req.query.startTimestamp)
     let endTimestamp = parseInt(req.query.endTimestamp)
     const sid = req.params.sid
@@ -147,8 +148,6 @@ function getWeatherReport(WEATHER_DATA_BASE_PATH, voisConfigs) {
       endTimestamp = moment.utc().valueOf()
     }
 
-    console.log('startTimestamp', startTimestamp)
-    console.log('endTimestamp', endTimestamp)
     try {
       const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
       const voiConfig = _.find(voisConfigs, (item) => {
