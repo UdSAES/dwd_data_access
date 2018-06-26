@@ -208,6 +208,11 @@ if (UI_URL_PATH !== '') {
     // fall back to default-UI
     console.error('default-UI not implemented')
   }
+
+  // redirect GET-request on origin to UI iff UI is exposed
+  app.get('', async (req, res) => {
+    res.redirect(UI_URL_PATH)
+  })
 }
 
 app.on('error', (error) => {
@@ -245,10 +250,29 @@ async function init() {
       path: '/weather/weather_reports/poi/:sid/:voi',
       handler: hda.getWeatherReport(DATA_ROOT_PATH, voisDataAccessConfigs)
     },
-    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}', path: '/poi_forecasts/cosmo_de_27/:poi_id', handler: hfc.getPoiForecastsCosmeDe27Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
-    {method: 'get', openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}', path: '/poi_forecasts/cosmo_de_45/:poi_id', handler: hfc.getPoiForecastsCosmeDe45Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)},
-    {method: 'get', openapiPath: '/poi_measurements/{poi_id}', path: '/poi_measurements/:poi_id', handler: hm.getNewestMeasurementDataPoi(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports', 'poi'), POIS_JSON_FILE_PATH, VOIS_JSON_FILE_PATH, stationCatalog)},
-    {method: 'get', openapiPath: '/pois', path: '/pois', handler: hpoi.getPois(POIS_JSON_FILE_PATH)}
+    {
+      method: 'get',
+      openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}',
+      path: '/poi_forecasts/cosmo_de_27/:poi_id',
+      handler: hfc.getPoiForecastsCosmeDe27Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)
+    },
+    {
+      method: 'get',
+      openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}',
+      path: '/poi_forecasts/cosmo_de_45/:poi_id',
+      handler: hfc.getPoiForecastsCosmeDe45Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)
+    },
+    {
+      method: 'get',
+      openapiPath: '/poi_measurements/{poi_id}',
+      path: '/poi_measurements/:poi_id',
+      handler: hm.getNewestMeasurementDataPoi(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports', 'poi'), POIS_JSON_FILE_PATH, VOIS_JSON_FILE_PATH, stationCatalog)
+    }, {
+      method: 'get',
+      openapiPath: '/pois',
+      path: '/pois',
+      handler: hpoi.getPois(POIS_JSON_FILE_PATH)
+    }
   ]
 
   var api = await fs.readJson('./docs/openapi_oas2.json')
