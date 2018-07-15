@@ -108,14 +108,17 @@ function getWeatherMosmix(WEATHER_DATA_BASE_PATH, voisConfigs) {
         return item.target.key === voi
       })
 
-      let timeseriesData = timeseriesDataCollection[voiConfig.mosmix.key]
-      if (!_.isNil(voiConfig)) {
+      let timeseriesData
+      if (!_.isNil(_.get(voiConfig, ['mosmix', 'key']))) {
+        timeseriesData = timeseriesDataCollection[voiConfig.mosmix.key]
         timeseriesData = _.map(timeseriesData, (item) => {
           return {
             timestamp: item.timestamp,
             value: convertUnit(item.value, voiConfig.mosmix.unit, voiConfig.target.unit)
           }
         })
+      } else {
+        res.status(500).send()
       }
 
       const result = {
