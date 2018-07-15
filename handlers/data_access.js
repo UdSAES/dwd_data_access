@@ -157,6 +157,11 @@ function getWeatherReport(WEATHER_DATA_BASE_PATH, voisConfigs) {
         return item.target.key === voi
       })
 
+      if (_.isNil(_.get(voiConfig, ['report', 'key']))) {
+        res.status(500).send('voi config undefined')
+        return
+      }
+      
       let timeseriesData = timeseriesDataCollection[voiConfig.report.key]
 
       const timestampsToRemove = []
