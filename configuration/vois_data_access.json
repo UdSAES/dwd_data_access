@@ -55,10 +55,6 @@
     "report": {
       "key": "relative_humidity",
       "unit": "%"
-    },
-    "mosmix": {
-      "key": "PPPP",
-      "unit": "hPa"
     }
   },
   {
