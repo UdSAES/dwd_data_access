@@ -1,5 +1,5 @@
 {
-  "name": "dwd_forecast_service",
+  "name": "dwd_data_access",
   "version": "2.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "async-parallel": "^1.2.3",
     "await-delay": "^1.0.0",
