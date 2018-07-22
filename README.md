@@ -61,7 +61,7 @@ The basic idea of the micro service `dwd_data_access`is to provide weather forec
 2. As `dwd_data_crawler` is storing data from opendata.dwd.de in a file structure which prevents overriding of data (as it is done by opendata.dwd.de) it is possible to provide historical forecasts which might be interesting for research activities.
 
 The interaction between `opendata.dwd.de`, `dwd_data_crawler` and `dwd_data_access` is shown in the following diagram.
-<img src="./docs/interaction.svg" width="600">
+<img src="./docs/interaction.png" width="600">
 
 Forecasts are provided for predefined points of interest. The predefined points of interest are stored in a configuration file in the path `./configuration/pois.json`.
 
