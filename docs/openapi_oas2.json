@@ -10,8 +10,48 @@
     }
   },
   "paths": {
+    "/weather/weather_reports/poi/{sid}/{voi}": {
+      "get": {
+          "tags": ["General"],
+        "summary": "Get the actual reported weather data at a given station for a given value of interest within a given time interval",
+        "parameters": [{
+          "in": "path",
+          "name": "sid",
+          "required": true,
+          "description": "The id of the weather station",
+          "type": "string"
+        }, {
+          "in": "path",
+          "name": "voi",
+          "required": true,
+          "description": "The value of interest for which the forecast shall be provided",
+          "type": "string"
+        }, {
+          "in": "query",
+          "name": "startTimestamp",
+          "required": false,
+          "description": "The inclusive start timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp minus 25 hours is used.",
+          "type": "number"
+        }, {
+          "in": "query",
+          "name": "endTimestamp",
+          "required": false,
+          "description": "The exclusive end timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp is used.",
+          "type": "number"
+        }],
+        "responses": {
+          "200": {
+            "description": "The requested report data",
+            "schema": {
+              "$ref": "#/definitions/LocationTimeseries"
+            }
+          }
+        }
+      }
+    },
     "/weather/cosmo/d2/{referenceTimestamp}/{voi}": {
       "get": {
+          "tags": ["General"],
         "summary": "Get a COSMO-D2 forecast for a given reference timestamp, a given value of interest and a given location",
         "parameters": [{
           "in": "path",
@@ -51,6 +91,7 @@
     },
     "/weather/local_forecasts/poi/{referenceTimestamp}/{sid}/{voi}": {
       "get": {
+          "tags": ["General"],
         "summary": "Get a MOSMIX forecast created at a given reference timestamp, for a given station and value of interest",
         "parameters": [{
           "in": "path",
@@ -81,39 +122,39 @@
         }
       }
     },
-    "/weather/weather_reports/poi/{sid}/{voi}": {
+    "/pois": {
       "get": {
-        "summary": "Get the actual reported weather data at a given station for a given value of interest within a given time interval",
+          "tags": ["POI-based"],
+        "summary": "Get the list of defined points of interest",
+        "responses": {
+          "200": {
+            "description": "The requested forecast data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/POI"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/poi_measurements/{poi_id}": {
+      "get": {
+          "tags": ["POI-based"],
+        "summary": "Get the newest 24 h measurement data for point of interest",
         "parameters": [{
           "in": "path",
-          "name": "sid",
+          "name": "poi_id",
           "required": true,
-          "description": "The id of the weather station",
+          "description": "The id of the point of interest for which the forecast shall be provided.",
           "type": "string"
-        }, {
-          "in": "path",
-          "name": "voi",
-          "required": true,
-          "description": "The value of interest for which the forecast shall be provided",
-          "type": "string"
-        }, {
-          "in": "query",
-          "name": "startTimestamp",
-          "required": false,
-          "description": "The inclusive start timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp minus 25 hours is used.",
-          "type": "number"
-        }, {
-          "in": "query",
-          "name": "endTimestamp",
-          "required": false,
-          "description": "The exclusive end timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp is used.",
-          "type": "number"
         }],
         "responses": {
           "200": {
-            "description": "The requested report data",
+            "description": "The requested measurement data",
             "schema": {
-              "$ref": "#/definitions/LocationTimeseries"
+              "$ref": "#/definitions/MeasurementResult"
             }
           }
         }
@@ -121,6 +162,7 @@
     },
     "/poi_forecasts/cosmo_de_27/{poi_id}": {
       "get": {
+          "tags": ["POI-based"],
         "summary": "Get the newest 27 h forecast for the given point of interest",
         "parameters": [{
           "in": "path",
@@ -141,6 +183,7 @@
     },
     "/poi_forecasts/cosmo_de_45/{poi_id}": {
       "get": {
+          "tags": ["POI-based"],
         "summary": "Get the newest 45 h forecast for the given point of interest",
         "parameters": [{
           "in": "path",
@@ -154,42 +197,6 @@
             "description": "The requested forecast data",
             "schema": {
               "$ref": "#/definitions/ForecastResult"
-            }
-          }
-        }
-      }
-    },
-    "/poi_measurements/{poi_id}": {
-      "get": {
-        "summary": "Get the newest 24 h measurement data for point of interest",
-        "parameters": [{
-          "in": "path",
-          "name": "poi_id",
-          "required": true,
-          "description": "The id of the point of interest for which the forecast shall be provided.",
-          "type": "string"
-        }],
-        "responses": {
-          "200": {
-            "description": "The requested measurement data",
-            "schema": {
-              "$ref": "#/definitions/MeasurementResult"
-            }
-          }
-        }
-      }
-    },
-    "/pois": {
-      "get": {
-        "summary": "Get the list of defined points of interest",
-        "responses": {
-          "200": {
-            "description": "The requested forecast data",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/POI"
-              }
             }
           }
         }
@@ -414,5 +421,15 @@
   },
   "security": [{
     "Bearer": []
-  }]
+  }],
+  "tags": [
+      {
+          "name": "POI-based",
+          "description": "Access to the latest forecasts and measurements for pre-defined POIs (cached)"
+      },
+      {
+          "name": "General",
+          "description": "Access to specific values of interest (VOIs) for specific time frames at a specific location within the entire data set available on the server (not cached)"
+      }
+  ]
 }
