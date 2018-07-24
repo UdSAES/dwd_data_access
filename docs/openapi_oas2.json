@@ -372,7 +372,7 @@
               ],
               "properties": {
                   "location": {
-                    "$ref": "#/definitions/Position",
+                    "$ref": "#/definitions/Position"
                   }
               }
           }
