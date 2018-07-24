@@ -327,7 +327,7 @@
       "type": "object",
       "required": [
         "unit",
-        "timeseries"
+        "data"
       ],
       "properties": {
         "label": {
@@ -338,7 +338,7 @@
           "type": "string",
           "description": "Unit of the data, formatted as defined in the [Modelica Specification v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf), Chapter 19."
         },
-        "timeseries": {
+        "data": {
           "type": "array",
           "items": {
             "type": "object",
@@ -361,47 +361,22 @@
       }
     },
     "LocationTimeseries": {
-      "type": "object",
-      "required": [
-        "unit",
-        "data",
-        "location",
-        "label"
-      ],
-      "properties": {
-        "label": {
-          "type": "string",
-          "description": "label of the timeseries"
-        },
-        "unit": {
-          "type": "string",
-          "description": "Unit of the data, formatted as defined in the [Modelica Specification v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf), Chapter 19."
-        },
-        "location": {
-          "$ref": "#/definitions/Position",
-          "description": "the location the forecast refers to"
-        },
-        "data": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "timestamp",
-              "value"
-            ],
-            "properties": {
-              "timestamp": {
-                "type": "number",
-                "description": "the timestamp (as unix timestamp in ms resolution) of the timeseries to which the value refers to"
-              },
-              "value": {
-                "type": "number",
-                "description": "the value of the timeseries at the timestamp (unit as specified above)"
+      "allOf": [
+          {
+              "$ref": "#/definitions/Timeseries"
+          },
+          {
+              "type": "object",
+              "required": [
+                  "location"
+              ],
+              "properties": {
+                  "location": {
+                    "$ref": "#/definitions/Position",
+                  }
               }
-            }
           }
-        }
-      }
+      ]
     },
     "Position": {
       "type": "object",

@@ -200,7 +200,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
         result.measurements.push({
           label: voiName,
           unit: voisConfig[voiName].resultUnit,
-          timeseries: resultItems[voiName]
+          data: resultItems[voiName]
         })
       })
 
