@@ -1,8 +1,8 @@
-// dwd_forecast_service
+// dwd_data_access
 //
-// Copyright 2018 The dwd_forecast_service Developers. See the LICENSE file at
+// Copyright 2018 The dwd_data_access Developers. See the LICENSE file at
 // the top-level directory of this distribution and at
-// https://github.com/UdSAES/dwd_forecast_service/LICENSE
+// https://github.com/UdSAES/dwd_data_access/LICENSE
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,7 +12,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-// dwd_forecast_service may be freely used and distributed under the MIT license
+// dwd_data_access may be freely used and distributed under the MIT license
 
 'use strict'
 
@@ -78,7 +78,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
     }
 
     try {
-      var voisConfig = await fs.readJson(voisJSONFilePath, {encoding: 'utf8'})      
+      var voisConfig = await fs.readJson(voisJSONFilePath, {encoding: 'utf8'})
     } catch (error) {
       console.log(error)
       res.status(500).send(error)
@@ -91,7 +91,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
       longitude: poi.lon
     }
 
-    
+
     const m = moment().tz('UTC').startOf('day').subtract(2, 'days')
     var closestStation = null
 
@@ -114,16 +114,16 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
             return !_.isNil(filteredStationIdsMap[item.id])
           })
           closestStation = su.findClosestStation(coordinates, filteredStationCatalog)
-          
+
           if (closestStation.station.id.length === 5) {
             var filePath = path.join(dateDirectoryPath, closestStation.station.id + '-BEOB.csv')
           } else {
-            var filePath = path.join(dateDirectoryPath, closestStation.station.id + '_-BEOB.csv')            
+            var filePath = path.join(dateDirectoryPath, closestStation.station.id + '_-BEOB.csv')
           }
-          
+
           const fileContentString = await fs.readFile(filePath, {encoding: 'utf8'})
           const table = parseCSV(fileContentString)
-          
+
           _.forEach(voisConfig, (voiConfig, voiName) => {
             var columnIndex = null
             _.forEach(table[0], (column, index) => {
@@ -137,17 +137,17 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
               return
             }
 
-            
+
             var scalingOffset = voiConfig.csvScalingOffset || 0
             var scalingFactor = voiConfig.csvScalingFactor || 1
-            
+
             for (let i = 3; i < table.length; i++) {
               // we don't handle invalid values (--> marked as '---' in CSV files)
               if (table[i][columnIndex] === '---') {
                 continue
               }
 
-              
+
               if (_.isNil(resultItems[voiName])) {
                 resultItems[voiName] = []
               }
@@ -157,7 +157,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
               if (timestamp < now.valueOf() - 49 * 3600 * 1000) {
                 continue
               }
-              
+
               resultItems[voiName].push({
                 timestamp: timestamp,
                 value: (parseFloat(table[i][columnIndex].replace(',', '.')) + scalingOffset) * scalingFactor
@@ -170,7 +170,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
         m.add(1, 'day')
       }
 
-      // if no closest station has been found, then there has been something wrong (we hope on client side ;-))      
+      // if no closest station has been found, then there has been something wrong (we hope on client side ;-))
       if (_.isNil(closestStation)) {
         res.status(404).send({error: "no closest station found"})
         res.end()
@@ -183,14 +183,14 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
         name: 'data basis: Deutscher Wetterdienst, own elements added',
         url: 'https://www.dwd.de/EN/ourservices/opendata/opendata.html'
       }
-      
+
       result.location = {
         longitude: closestStation.station.longitude,
         latitude: closestStation.station.latitude
       }
 
       result.measurements = []
-      
+
       _.forEach(resultItems, (resultItem, voiName) => {
         // sort timeseries by increasing timestamp
         resultItems[voiName] = _.sortBy(resultItem, (item) => {

@@ -1,8 +1,8 @@
-// dwd_forecast_service
+// dwd_data_access
 //
-// Copyright 2018 The dwd_forecast_service Developers. See the LICENSE file at
+// Copyright 2018 The dwd_data_access Developers. See the LICENSE file at
 // the top-level directory of this distribution and at
-// https://github.com/UdSAES/dwd_forecast_service/LICENSE
+// https://github.com/UdSAES/dwd_data_access/LICENSE
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,7 +12,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-// dwd_forecast_service may be freely used and distributed under the MIT license
+// dwd_data_access may be freely used and distributed under the MIT license
 
 'use strict'
 const su = require('../lib/station_utils')
