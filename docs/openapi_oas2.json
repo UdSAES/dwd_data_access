@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "udsaes/dwd_forecast_service",
-    "version": "1.1.0",
-    "description": "dwd_forecast_service provides an API to query weather data that has previously been downloaded by dwd_data_crawler from opendata.dwd.de (free service offered by [DWD](https://www.dwd.de/EN/ourservices/opendata/opendata.html)).",
+    "title": "udsaes/dwd_data_access",
+    "version": "1.2.1",
+    "description": "dwd_data_access provides an API to query weather data that has previously been downloaded by dwd_data_crawler from opendata.dwd.de (free service offered by [DWD](https://www.dwd.de/EN/ourservices/opendata/opendata.html)).",
     "contact": {
       "name": "Florian Wagner (UdS AES)",
       "email": "florian.wagner@aut.uni-saarland.de"
@@ -41,7 +41,7 @@
         }],
         "responses": {
           "200": {
-            "description": "The requested forecast data which is based on the closest grid point in the COSMIX model for the given location (latitude and longitude",
+            "description": "The requested forecast data which is based on the closest grid point in the COSMO-D2 model for the given location (latitude and longitude)",
             "schema": {
               "$ref": "#/definitions/LocationTimeseries"
             }
@@ -51,7 +51,7 @@
     },
     "/weather/local_forecasts/poi/{referenceTimestamp}/{sid}/{voi}": {
       "get": {
-        "summary": "Get a MOSMIX forecast for a given reference timestamp, at a given station for a given value of interest",
+        "summary": "Get a MOSMIX forecast created at a given reference timestamp, for a given station and value of interest",
         "parameters": [{
           "in": "path",
           "name": "referenceTimestamp",
@@ -83,7 +83,7 @@
     },
     "/weather/weather_reports/poi/{sid}/{voi}": {
       "get": {
-        "summary": "Get actual reported weather data at a given station for, for given value of interest within a given time interval",
+        "summary": "Get the actual reported weather data at a given station for a given value of interest within a given time interval",
         "parameters": [{
           "in": "path",
           "name": "sid",
@@ -100,13 +100,13 @@
           "in": "query",
           "name": "startTimestamp",
           "required": false,
-          "description": "The inclusive start timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If not value is given, the current timestamp minus 25 hours is used.",
+          "description": "The inclusive start timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp minus 25 hours is used.",
           "type": "number"
         }, {
           "in": "query",
           "name": "endTimestamp",
           "required": false,
-          "description": "he exclusive end timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp is used.",
+          "description": "The exclusive end timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp is used.",
           "type": "number"
         }],
         "responses": {
@@ -254,19 +254,19 @@
         },
         "location": {
           "$ref": "#/definitions/Position",
-          "description": "the location the measurements refer to"
+          "description": "The location the measurements refer to"
         },
         "poi": {
           "type": "string",
           "pattern": "/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i",
-          "description": "the identifier of the point of interest"
+          "description": "The identifier of the point of interest"
         },
         "measurements": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Timeseries"
           },
-          "description": "the actual measurement values as an array of timeseries"
+          "description": "The actual measurement values as an array of timeseries"
         }
       }
     },
@@ -299,27 +299,27 @@
         "forecastModelType": {
           "type": "string",
           "enum": ["COSMO_DE", "MOSMIX_DE"],
-          "description": "the model which has been been used as basis for the forecast"
+          "description": "The model which has been been used as basis for the forecast"
         },
         "location": {
           "$ref": "#/definitions/Position",
-          "description": "the location the forecast refers to"
+          "description": "The location the forecast refers to"
         },
         "poi": {
           "type": "string",
           "pattern": "/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i",
-          "description": "the identifier of the point of interest"
+          "description": "The identifier of the point of interest"
         },
         "referenceTimestamp": {
           "type": "integer",
-          "description": "the unix timestamp (in ms resolution) which is the reference of the forecast"
+          "description": "The unix timestamp (in ms resolution) which is the reference of the forecast"
         },
         "forecasts": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Timeseries"
           },
-          "description": "the actual forecasts as an array of timeseries"
+          "description": "The actual forecasts as an array of timeseries"
         }
       }
     },
@@ -332,7 +332,7 @@
       "properties": {
         "label": {
           "type": "string",
-          "description": "label of the timeseries"
+          "description": "Label of the timeseries"
         },
         "unit": {
           "type": "string",
@@ -349,11 +349,11 @@
             "properties": {
               "timestamp": {
                 "type": "number",
-                "description": "the timestamp (as unix timestamp in ms resolution) of the timeseries to which the value refers to"
+                "description": "The timestamp (as unix timestamp in ms resolution) of the timeseries to which the value refers to"
               },
               "value": {
                 "type": "number",
-                "description": "the value of the timeseries at the timestamp (unit as specified above)"
+                "description": "The value of the timeseries at the timestamp (unit as specified above)"
               }
             }
           }
