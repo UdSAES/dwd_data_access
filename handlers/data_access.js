@@ -111,7 +111,7 @@ function getWeatherCosmoD2(WEATHER_DATA_BASE_PATH, voisConfigs) {
 
 // GET /weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi
 function getWeatherMosmix(WEATHER_DATA_BASE_PATH, voisConfigs) {
-  const MOSMIX_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather/local_forecasts/poi')
+  const MOSMIX_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'local_forecasts')
 
   return async function (req, res, next) {
     const referenceTimestamp = parseInt(req.params.referenceTimestamp)
