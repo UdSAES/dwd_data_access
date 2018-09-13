@@ -14,9 +14,13 @@
       "key": "dry_bulb_temperature_at_2_meter_above_ground",
       "unit": "°C"
     },
-    "mosmix": {
+    "mosmix_csv": {
       "key": "TT",
       "unit": "°C"
+    },
+    "mosmix": {
+      "key": "TTT",
+      "unit": "K"
     }
   },
   {
@@ -35,9 +39,13 @@
       "key": "pressure_reduced_to_mean_sea_level",
       "unit": "hPa"
     },
-    "mosmix": {
+    "mosmix_csv": {
       "key": "PPPP",
       "unit": "hPa"
+    },
+    "mosmix": {
+      "key": "PPPP",
+      "unit": "Pa"
     }
   },
   {
@@ -107,9 +115,13 @@
       "key": "dew_point_temperature_at_2_meter_above_ground",
       "unit": "°C"
     },
-    "mosmix": {
+    "mosmix_csv": {
       "key": "Td",
       "unit": "°C"
+    },
+    "mosmix": {
+      "key": "Td",
+      "unit": "K"
     }
   },
   {
@@ -130,9 +142,13 @@
       "key": "mean_wind_speed_during last_10_min_at_10_meters_above_ground",
       "unit": "km/h"
     },
-    "mosmix": {
+    "mosmix_csv": {
       "key": "ff",
       "unit": "km/h"
+    },
+    "mosmix": {
+      "key": "FF",
+      "unit": "m/s"
     }
   },
   {
@@ -153,8 +169,12 @@
       "key": "mean_wind_direction_during_last_10 min_at_10_meters_above_ground",
       "unit": "°"
     },
-    "mosmix": {
+    "mosmix_csv": {
       "key": "dd",
+      "unit": "°"
+    },
+    "mosmix": {
+      "key": "DD",
       "unit": "°"
     }
   }
