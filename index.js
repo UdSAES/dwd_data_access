@@ -55,7 +55,6 @@ const EXIT_CODE_AUTHORIZATION_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER = 6
 const EXIT_CODE_AUTHORIZATION_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 7
 const EXIT_CODE_ANONYMOUS_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER = 8
 const EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 9
-
 const EXIT_CODE_SERVER_ERROR = 10
 const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
@@ -135,12 +134,12 @@ function checkIfConfigIsValid () {
     log.debug('ANONYMOUS_LIMIT_VALUE is set to ' + ANONYMOUS_LIMIT_VALUE)
   }
 
-  log.info('configuration validated successfully')
+  log.info('configuration is formally correct')
 }
 
 checkIfConfigIsValid()
 
-// Global variables
+// Instantiate express-app
 const app = express()
 const authorizedRequestStatisticsMap = {}
 
@@ -148,30 +147,29 @@ var publicKey = null
 try {
   publicKey = fs.readFileSync(JWT_PUBLIC_KEY_FILE_PATH)
 } catch (error) {
-  console.log('PUBLIC KEY could not be loaded')
-  console.log(error)
+  log.fatal('PUBLIC KEY could not be loaded')
+  log.fatal(error)
   process.exit(EXIT_CODE_PUBLIC_KEY_LOAD_ERROR)
 }
 
-// verify token
+// Verify token
 app.use(jwt({ secret: publicKey, credentialsRequired: false }))
 
-// continue if token is invalid
+// Continue if token is invalid
 app.use((error, req, res, next) => {
-  console.log(error)
+  log.warn(error)
   next()
 })
 
-// limit acces base on usage statistic of token
-// if invalid or no token is provided, then request is treated with user
-// 'ANONYMOUS'
+// Limit access based on subject-claim of JWT -- if invalid or no token is
+// provided, then the request is treated with user 'ANONYMOUS'
 app.use((req, res, next) => {
   var sub = 'ANONYMOUS'
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
+    log.info('received request with subject-claim of JWT set to ' + sub)
   }
 
-  console.log('sub: ' + sub)
 
   var limitInterval = AUTHORIZATION_LIMIT_INTERVAL
   var limitValue = AUTHORIZATION_LIMIT_VALUE
@@ -179,6 +177,7 @@ app.use((req, res, next) => {
   if (sub === 'ANONYMOUS') {
     limitInterval = ANONYMOUS_LIMIT_INTERVAL
     limitValue = ANONYMOUS_LIMIT_VALUE
+    log.info('received request from ' + sub + ' user')
   }
 
   if (authorizedRequestStatisticsMap[sub] == null) {
@@ -208,7 +207,7 @@ app.use(express.urlencoded())
 app.use(express.static('./docs'))
 app.use('/oas', express.static('./docs/openapi_oas2.json'))
 
-// expose UI iff UI_URL_PATH is not empty
+// Expose UI iff UI_URL_PATH is not empty
 if (UI_URL_PATH !== '') {
   if (UI_STATIC_FILES_PATH !== '') {
     // expose locally defined UI
@@ -217,7 +216,7 @@ if (UI_URL_PATH !== '') {
     // register UI in OAS that is provided as a resource
   } else {
     // fall back to default-UI
-    console.error('default-UI not implemented')
+    log.error('default-UI not implemented')
   }
 
   // redirect GET-request on origin to UI iff UI is exposed
@@ -227,13 +226,12 @@ if (UI_URL_PATH !== '') {
 }
 
 app.on('error', (error) => {
-  console.error('got an server error')
-  console.error(error)
+  log.fatal(error)
   process.exit(EXIT_CODE_SERVER_ERROR)
 })
 
 app.listen(LISTEN_PORT, () => {
-  console.log('Listening on port ' + LISTEN_PORT)
+  log.info('now listening on port ' + LISTEN_PORT)
   init()
 })
 
@@ -304,15 +302,17 @@ async function init () {
         })
 
         if (_.isNil(mapping)) {
-          console.error('no fitting mapping found for method ' + method + ' and path ' + path)
+          log.error('no fitting mapping found for method ' + _.toUpper(method) + ' and resource ' + path)
           return
         }
 
-        console.log(method, mapping.path)
+        log.info('created mapping for method %s on resource %s', _.toUpper(method), mapping.path)
         app[method](mapping.path, mapping.handler)
       })
     })
   })
+
+  log.info('configuration of service instance completed successfully')
 }
 
 // poifce.run(60, path.join(DATA_ROOT_PATH, 'weather', 'cosmo', 'de', 'grib'), NEWEST_FORECAST_ROOT_PATH)
