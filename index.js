@@ -170,7 +170,6 @@ app.use((req, res, next) => {
     log.info('received request with subject-claim of JWT set to ' + sub)
   }
 
-
   var limitInterval = AUTHORIZATION_LIMIT_INTERVAL
   var limitValue = AUTHORIZATION_LIMIT_VALUE
 
