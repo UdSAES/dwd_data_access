@@ -32,7 +32,6 @@ const cors = require('cors')
 const mmsc = require('./lib/mosmix_station_catalog')
 var jwt = require('express-jwt')
 
-
 const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
 const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
@@ -44,7 +43,6 @@ const ANONYMOUS_LIMIT_INTERVAL = processenv('ANONYMOUS_LIMIT_INTERVAL') || 10
 const ANONYMOUS_LIMIT_VALUE = processenv('ANONYMOUS_LIMIT_VALUE') || 100
 const UI_STATIC_FILES_PATH = String(processenv('UI_STATIC_FILES_PATH') || '')
 const UI_URL_PATH = String(processenv('UI_URL_PATH') || '')
-
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
 const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
@@ -59,7 +57,7 @@ const EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 9
 const EXIT_CODE_SERVER_ERROR = 10
 const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
-const VOIS_JSON_FILE_PATH = "./configuration/vois.json"
+const VOIS_JSON_FILE_PATH = './configuration/vois.json'
 const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
 const VOIS_DATA_ACCESS_CONFIGS_PATH = './configuration/vois_data_access.json'
 
@@ -124,7 +122,6 @@ console.log('UI_URL_PATH: ' + UI_URL_PATH)
 console.log('=== END PARAMETERS ===')
 console.log()
 
-
 // global variables
 const app = express()
 const authorizedRequestStatisticsMap = {}
@@ -139,7 +136,7 @@ try {
 }
 
 // verify token
-app.use(jwt({secret: publicKey, credentialsRequired: false}))
+app.use(jwt({ secret: publicKey, credentialsRequired: false }))
 
 // continue if token is invalid
 app.use((error, req, res, next) => {
@@ -151,7 +148,6 @@ app.use((error, req, res, next) => {
 // if invalid or no token is provided, then request is treated with user
 // 'ANONYMOUS'
 app.use((req, res, next) => {
-
   var sub = 'ANONYMOUS'
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
@@ -186,7 +182,6 @@ app.use((req, res, next) => {
 
   authorizedRequestStatisticsMap[sub].push(now)
   next()
-  return
 })
 
 app.use(cors())
@@ -198,13 +193,11 @@ app.use('/oas', express.static('./docs/openapi_oas2.json'))
 // expose UI iff UI_URL_PATH is not empty
 if (UI_URL_PATH !== '') {
   if (UI_STATIC_FILES_PATH !== '') {
-
     // expose locally defined UI
     app.use(UI_URL_PATH, express.static(UI_STATIC_FILES_PATH))
 
     // register UI in OAS that is provided as a resource
-  }
-  else {
+  } else {
     // fall back to default-UI
     console.error('default-UI not implemented')
   }
@@ -226,7 +219,7 @@ app.listen(LISTEN_PORT, () => {
   init()
 })
 
-async function init() {
+async function init () {
   const stationCatalog = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
@@ -279,7 +272,6 @@ async function init() {
   api = await $RefParser.dereference(api)
 
   swaggerTools.initializeMiddleware(api, function (middleware) {
-
     // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
     app.use(middleware.swaggerMetadata())
 

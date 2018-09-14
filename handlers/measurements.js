@@ -23,17 +23,17 @@ const fs = require('fs-extra')
 const su = require('../lib/station_utils')
 const assert = require('assert')
 
-function formatNumber(number, overAllDigits) {
+function formatNumber (number, overAllDigits) {
   var result = String(number)
 
-  while(result.length < overAllDigits) {
-    result = "0" + result
+  while (result.length < overAllDigits) {
+    result = '0' + result
   }
 
   return result
 }
 
-function parseCSV(fileContent) {
+function parseCSV (fileContent) {
   assert(_.isString(fileContent))
   fileContent = fileContent.replace(/\r\n/g, '\n')
   const lineStrings = fileContent.split('\n')
@@ -44,10 +44,10 @@ function parseCSV(fileContent) {
   return lines
 }
 
-async function getAvailableStationIDs(searchDirectoryPath) {
+async function getAvailableStationIDs (searchDirectoryPath) {
   const directoryContentNames = await fs.readdir(searchDirectoryPath)
   const ids = []
-  for(let i = 0; i < directoryContentNames.length; i++) {
+  for (let i = 0; i < directoryContentNames.length; i++) {
     var stationId = directoryContentNames[i].split('-')[0]
     ids.push(stationId.replace('_', ''))
   }
@@ -55,12 +55,12 @@ async function getAvailableStationIDs(searchDirectoryPath) {
   return ids
 }
 
-function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFilePath, voisJSONFilePath, stationCatalog) {
+function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFilePath, voisJSONFilePath, stationCatalog) {
   return async function (req, res, next) {
     const poi_id = req.params.poi_id
 
     try {
-      const poisConfig = await fs.readJson(poisJSONFilePath, {encoding: 'utf8'})
+      const poisConfig = await fs.readJson(poisJSONFilePath, { encoding: 'utf8' })
       var poi = _.find(poisConfig, (item) => {
         return item.id === poi_id
       })
@@ -72,13 +72,13 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
     }
 
     if (_.isNil(poi)) {
-      res.status(404).send("poi " + poi_id + " no known!")
+      res.status(404).send('poi ' + poi_id + ' no known!')
       res.end()
       return
     }
 
     try {
-      var voisConfig = await fs.readJson(voisJSONFilePath, {encoding: 'utf8'})
+      var voisConfig = await fs.readJson(voisJSONFilePath, { encoding: 'utf8' })
     } catch (error) {
       console.log(error)
       res.status(500).send(error)
@@ -90,7 +90,6 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
       latitude: poi.lat,
       longitude: poi.lon
     }
-
 
     const m = moment().tz('UTC').startOf('day').subtract(2, 'days')
     var closestStation = null
@@ -121,7 +120,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
             var filePath = path.join(dateDirectoryPath, closestStation.station.id + '_-BEOB.csv')
           }
 
-          const fileContentString = await fs.readFile(filePath, {encoding: 'utf8'})
+          const fileContentString = await fs.readFile(filePath, { encoding: 'utf8' })
           const table = parseCSV(fileContentString)
 
           _.forEach(voisConfig, (voiConfig, voiName) => {
@@ -137,7 +136,6 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
               return
             }
 
-
             var scalingOffset = voiConfig.csvScalingOffset || 0
             var scalingFactor = voiConfig.csvScalingFactor || 1
 
@@ -147,12 +145,11 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
                 continue
               }
 
-
               if (_.isNil(resultItems[voiName])) {
                 resultItems[voiName] = []
               }
 
-              const timestamp = moment(table[i][0], "DD.MM.YY").add(moment.duration(table[i][1])).valueOf()
+              const timestamp = moment(table[i][0], 'DD.MM.YY').add(moment.duration(table[i][1])).valueOf()
 
               if (timestamp < now.valueOf() - 49 * 3600 * 1000) {
                 continue
@@ -172,7 +169,7 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
 
       // if no closest station has been found, then there has been something wrong (we hope on client side ;-))
       if (_.isNil(closestStation)) {
-        res.status(404).send({error: "no closest station found"})
+        res.status(404).send({ error: 'no closest station found' })
         res.end()
         return
       }
@@ -210,7 +207,6 @@ function getNewestMeasurementDataPoi(measurementDataBaseDirectory, poisJSONFileP
     } catch (error) {
       res.status(404).send(error.toString())
       res.end()
-      return
     }
   }
 }

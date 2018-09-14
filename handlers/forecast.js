@@ -30,14 +30,13 @@ function getPoiForecastsCosmeDe27Poi (poiForecastsBaseDirectory, voisConfigurati
     try {
       const filePath = path.join(poiForecastsBaseDirectory, poi_id, '27h_forecast.json')
       console.log(filePath)
-      const fileContent = await fs.readJson(path.join(poiForecastsBaseDirectory, poi_id, '27h_forecast.json'), {encoding: 'utf8'})
+      const fileContent = await fs.readJson(path.join(poiForecastsBaseDirectory, poi_id, '27h_forecast.json'), { encoding: 'utf8' })
       res.status(200).send(fileContent)
       res.end()
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
-      return
     }
   }
 }
@@ -46,14 +45,13 @@ function getPoiForecastsCosmeDe45Poi (poiForecastsBaseDirectory, voisConfigurati
   return async function (req, res, next) {
     const poi_id = req.params.poi_id
     try {
-      const fileContent = await fs.readJson(path.join(poiForecastsBaseDirectory, poi_id, '45h_forecast.json'), {encoding: 'utf8'})
+      const fileContent = await fs.readJson(path.join(poiForecastsBaseDirectory, poi_id, '45h_forecast.json'), { encoding: 'utf8' })
       res.status(200).send(fileContent)
       res.end()
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
-      return
     }
   }
 }

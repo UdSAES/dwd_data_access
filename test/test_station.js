@@ -27,7 +27,7 @@ describe('./lib/station_utils', () => {
 
   describe('findClosestStation()', () => {
     it('should return a list of stations', async () => {
-      const closestStation = await su.findClosestStation({longitude: 11.11, latitude: 60.19}, stations)
+      const closestStation = await su.findClosestStation({ longitude: 11.11, latitude: 60.19 }, stations)
       console.log(closestStation)
     }).timeout(0)
   })

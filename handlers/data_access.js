@@ -26,7 +26,7 @@ const {
 const gf = require('../lib/grib_functions')
 
 // GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
-function getWeatherCosmoD2(WEATHER_DATA_BASE_PATH, voisConfigs) {
+function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
   return async function (req, res, next) {
     const referenceTimestamp = parseInt(req.params.referenceTimestamp)
     const voi = req.params.voi
@@ -110,7 +110,7 @@ function getWeatherCosmoD2(WEATHER_DATA_BASE_PATH, voisConfigs) {
 }
 
 // GET /weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi
-function getWeatherMosmix(WEATHER_DATA_BASE_PATH, voisConfigs) {
+function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const MOSMIX_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'local_forecasts')
 
   return async function (req, res, next) {
@@ -150,7 +150,7 @@ function getWeatherMosmix(WEATHER_DATA_BASE_PATH, voisConfigs) {
 }
 
 // GET /weather/weather_reports/poi/:sid/:voi?startTimestamp=...&endTimestamp=...
-function getWeatherReport(WEATHER_DATA_BASE_PATH, voisConfigs) {
+function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather/weather_reports/poi')
 
   return async function (req, res, next) {
