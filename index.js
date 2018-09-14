@@ -31,6 +31,7 @@ const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
 const mmsc = require('./lib/mosmix_station_catalog')
 var jwt = require('express-jwt')
+var bunyan = require('bunyan')
 
 const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
@@ -43,6 +44,7 @@ const ANONYMOUS_LIMIT_INTERVAL = processenv('ANONYMOUS_LIMIT_INTERVAL') || 10
 const ANONYMOUS_LIMIT_VALUE = processenv('ANONYMOUS_LIMIT_VALUE') || 100
 const UI_STATIC_FILES_PATH = String(processenv('UI_STATIC_FILES_PATH') || '')
 const UI_URL_PATH = String(processenv('UI_URL_PATH') || '')
+const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
 const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
@@ -61,68 +63,84 @@ const VOIS_JSON_FILE_PATH = './configuration/vois.json'
 const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
 const VOIS_DATA_ACCESS_CONFIGS_PATH = './configuration/vois_data_access.json'
 
-if (!_.isNumber(LISTEN_PORT)) {
-  console.error('LISTEN_PORT must be a number: ' + LISTEN_PORT)
-  process.exit(EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER)
+// Instantiate logger
+var log = bunyan.createLogger({
+  name: 'dwd_data_access',
+  serializers: bunyan.stdSerializers,
+  level: LOG_LEVEL
+})
+log.info('instantiation of service initiated')
+
+function checkIfConfigIsValid () {
+  if (!(_.isNumber(LISTEN_PORT) && LISTEN_PORT > 0 && LISTEN_PORT < 65535)) {
+    log.fatal('LISTEN_PORT is ' + LISTEN_PORT + ' but must be an integer number larger than 0 and smaller than 65535')
+    process.exit(EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER)
+  } else {
+    log.debug('LISTEN_PORT is set to ' + LISTEN_PORT)
+  }
+
+  if (!_.isString(DATA_ROOT_PATH)) {
+    log.fatal('DATA_ROOT_PATH must be a string: ' + DATA_ROOT_PATH)
+    process.exit(EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING)
+  } else {
+    log.debug('DATA_ROOT_PATH is set to ' + DATA_ROOT_PATH)
+  }
+
+  if (!_.isString(NEWEST_FORECAST_ROOT_PATH)) {
+    log.fatal('NEWEST_FORECAST_ROOT_PATH must be a string: ' + NEWEST_FORECAST_ROOT_PATH)
+    process.exit(EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING)
+  } else {
+    log.debug('NEWEST_FORECAST_ROOT_PATH is set to ' + NEWEST_FORECAST_ROOT_PATH)
+  }
+
+  if (!_.isString(POIS_JSON_FILE_PATH)) {
+    log.fatal('POIS_JSON_FILE_PATH must be a string: ' + POIS_JSON_FILE_PATH)
+    process.exit(EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING)
+  } else {
+    log.debug('POIS_JSON_FILE_PATH is set to ' + POIS_JSON_FILE_PATH)
+  }
+
+  if (!_.isString(JWT_PUBLIC_KEY_FILE_PATH)) {
+    log.fatal('JWT_PUBLIC_KEY_FILE_PATH must be a string: ' + JWT_PUBLIC_KEY_FILE_PATH)
+    process.exit(EXIT_CODE_JWT_PUBLIC_KEY_FILE_PATH_NOT_A_STRING)
+  } else {
+    log.debug('JWT_PUBLIC_KEY_FILE_PATH is set to ' + JWT_PUBLIC_KEY_FILE_PATH)
+  }
+
+  if (!_.isNumber(AUTHORIZATION_LIMIT_INTERVAL) || AUTHORIZATION_LIMIT_INTERVAL <= 0) {
+    log.fatal('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + AUTHORIZATION_LIMIT_INTERVAL)
+    process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER)
+  } else {
+    log.debug('AUTHORIZATION_LIMIT_INTERVAL is set to ' + AUTHORIZATION_LIMIT_INTERVAL)
+  }
+
+  if (!_.isNumber(AUTHORIZATION_LIMIT_VALUE) || AUTHORIZATION_LIMIT_VALUE <= 0) {
+    log.fatal('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + AUTHORIZATION_LIMIT_VALUE)
+    process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
+  } else {
+    log.debug('AUTHORIZATION_LIMIT_VALUE is set to ' + AUTHORIZATION_LIMIT_VALUE)
+  }
+
+  if (!_.isNumber(ANONYMOUS_LIMIT_INTERVAL) || ANONYMOUS_LIMIT_INTERVAL <= 0) {
+    log.fatal('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + ANONYMOUS_LIMIT_INTERVAL)
+    process.exit(EXIT_CODE_ANONYMOUS_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER)
+  } else {
+    log.debug('ANONYMOUS_LIMIT_INTERVAL is set to ' + ANONYMOUS_LIMIT_INTERVAL)
+  }
+
+  if (!_.isNumber(ANONYMOUS_LIMIT_VALUE) || ANONYMOUS_LIMIT_VALUE <= 0) {
+    log.fatal('ANONYMOUS_LIMIT_VALUE must be a positive number: ' + ANONYMOUS_LIMIT_VALUE)
+    process.exit(EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
+  } else {
+    log.debug('ANONYMOUS_LIMIT_VALUE is set to ' + ANONYMOUS_LIMIT_VALUE)
+  }
+
+  log.info('configuration validated successfully')
 }
 
-if (!_.isString(DATA_ROOT_PATH)) {
-  console.error('DATA_ROOT_PATH must be a string: ' + DATA_ROOT_PATH)
-  process.exit(EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING)
-}
+checkIfConfigIsValid()
 
-if (!_.isString(NEWEST_FORECAST_ROOT_PATH)) {
-  console.error('NEWEST_FORECAST_ROOT_PATH must be a string: ' + NEWEST_FORECAST_ROOT_PATH)
-  process.exit(EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING)
-}
-
-if (!_.isString(POIS_JSON_FILE_PATH)) {
-  console.error('POIS_JSON_FILE_PATH must be a string: ' + POIS_JSON_FILE_PATH)
-  process.exit(EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING)
-}
-
-if (!_.isString(JWT_PUBLIC_KEY_FILE_PATH)) {
-  console.error('JWT_PUBLIC_KEY_FILE_PATH must be a string: ' + JWT_PUBLIC_KEY_FILE_PATH)
-  process.exit(EXIT_CODE_JWT_PUBLIC_KEY_FILE_PATH_NOT_A_STRING)
-}
-
-if (!_.isNumber(AUTHORIZATION_LIMIT_INTERVAL) || AUTHORIZATION_LIMIT_INTERVAL <= 0) {
-  console.error('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + AUTHORIZATION_LIMIT_INTERVAL)
-  process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER)
-}
-
-if (!_.isNumber(AUTHORIZATION_LIMIT_VALUE) || AUTHORIZATION_LIMIT_VALUE <= 0) {
-  console.error('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + AUTHORIZATION_LIMIT_VALUE)
-  process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
-}
-
-if (!_.isNumber(ANONYMOUS_LIMIT_INTERVAL) || ANONYMOUS_LIMIT_INTERVAL <= 0) {
-  console.error('AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' + ANONYMOUS_LIMIT_INTERVAL)
-  process.exit(EXIT_CODE_ANONYMOUS_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER)
-}
-
-if (!_.isNumber(ANONYMOUS_LIMIT_VALUE) || ANONYMOUS_LIMIT_VALUE <= 0) {
-  console.error('ANONYMOUS_LIMIT_VALUE must be a positive number: ' + ANONYMOUS_LIMIT_VALUE)
-  process.exit(EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
-}
-
-console.log()
-console.log('=== PARAMETERS ===')
-console.log('LISTEN_PORT: ' + LISTEN_PORT)
-console.log('DATA_ROOT_PATH: ' + DATA_ROOT_PATH)
-console.log('NEWEST_FORECAST_ROOT_PATH: ' + NEWEST_FORECAST_ROOT_PATH)
-console.log('POIS_JSON_FILE_PATH: ' + POIS_JSON_FILE_PATH)
-console.log('JWT_PUBLIC_KEY_FILE_PATH: ' + JWT_PUBLIC_KEY_FILE_PATH)
-console.log('AUTHORIZATION_LIMIT_INTERVAL: ' + AUTHORIZATION_LIMIT_INTERVAL)
-console.log('AUTHORIZATION_LIMIT_VALUE: ' + AUTHORIZATION_LIMIT_VALUE)
-console.log('ANONYMOUS_LIMIT_INTERVAL: ' + ANONYMOUS_LIMIT_INTERVAL)
-console.log('ANONYMOUS_LIMIT_VALUE: ' + ANONYMOUS_LIMIT_VALUE)
-console.log('UI_STATIC_FILES_PATH: ' + UI_STATIC_FILES_PATH)
-console.log('UI_URL_PATH: ' + UI_URL_PATH)
-console.log('=== END PARAMETERS ===')
-console.log()
-
-// global variables
+// Global variables
 const app = express()
 const authorizedRequestStatisticsMap = {}
 

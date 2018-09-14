@@ -22,6 +22,7 @@ The micro service is configured via the following environment variables:
 * `NEWEST_FORECAST_ROOT_PATH`: The path to the directory where the micro service shall store the newest forecasts for the predefined pois (points of interest).
 * `POIS_JSON_FILE_PATH`: The path to the JSON file defining pois (points of interest) for which newest forecasts shall be created. An example of such a file can be found in `./configuration/pois.json`.
 * `JWT_PUBLIC_KEY_FILE_PATH`: The path to the public key file to be used to verify JSON web tokens in the authentication header. An example of such a file can be found in `./sample_data/sample_public_key.pem`.
+* `LOG_LEVEL`: The [log level](https://github.com/trentm/node-bunyan#levels) to be used for this service instance (defaults to `info`).
 
 Sample call:
 ```

@@ -12,6 +12,7 @@
     "async-parallel": "^1.2.3",
     "await-delay": "^1.0.0",
     "buffer-replace": "^1.0.0",
+    "bunyan": "^1.8.12",
     "child-process-promise": "^2.2.1",
     "compressjs": "^1.0.3",
     "cors": "^2.8.4",
