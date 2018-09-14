@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/standard/bin/cmd.js"
   },
   "author": "",
   "license": "MIT",
@@ -47,6 +47,6 @@
     "weacast-grib2json": "^0.2.3"
   },
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "standard": "^12.0.1"
   }
 }
