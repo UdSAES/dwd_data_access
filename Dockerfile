@@ -23,7 +23,7 @@ WORKDIR /home/node/app
 
 COPY --chown=node:node ./package.json /home/node/app
 
-RUN npm install
+RUN npm install --production
 
 COPY --chown=node:node ./ /home/node/app/
 
