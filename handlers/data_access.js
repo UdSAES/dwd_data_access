@@ -25,6 +25,18 @@ const {
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 
+// Instantiate logger
+const processenv = require('processenv')
+const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
+
+var bunyan = require('bunyan')
+var log = bunyan.createLogger({
+  name: 'handler_non-cached_data_access',
+  level: LOG_LEVEL,
+  serializers: bunyan.stdSerializers
+})
+log.info('loaded module for handling requests for non-cached data')
+
 // GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
 function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
   return async function (req, res, next) {
@@ -102,8 +114,9 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
         location: timeseriesData.location
       }
       res.status(200).send(result)
+      log.info('successfully handled request for COSMO-D2-forecast')
     } catch (error) {
-      console.log(error)
+      log.warn(error)
       res.status(500).send()
     }
   }
@@ -143,7 +156,9 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
         data: timeseriesData
       }
       res.status(200).send(result)
+      log.info('successfully handled request for MOSMIX-forecast')
     } catch (error) {
+      log.warn(error)
       res.status(500).send()
     }
   }
@@ -214,8 +229,9 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
         data: timeseriesData
       }
       res.status(200).send(result)
+      log.info('successfully handled request for measurement data')
     } catch (error) {
-      console.log(error)
+      log.warn(error)
       res.status(500).send()
     }
   }
