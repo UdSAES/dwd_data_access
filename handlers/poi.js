@@ -17,17 +17,31 @@
 'use strict'
 
 const fs = require('fs-extra')
+const processenv = require('processenv')
+var bunyan = require('bunyan')
+
+// Instantiate logger
+const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
+var log = bunyan.createLogger({
+  name: 'handler_list_of_POIs',
+  serializers: bunyan.stdSerializers,
+  level: LOG_LEVEL
+})
+log.info('loaded module for handling requests for list of POIs')
+
+
 function getPois (pathToPoisJsonFile) {
   return async function (req, res, next) {
     try {
       const fileContent = await fs.readJson(pathToPoisJsonFile, { encoding: 'utf8' })
       res.status(200).send(fileContent)
       res.end()
+      log.info('successfully handled ' + req.method + '-request on ' + req.path)
       return
     } catch (error) {
-      console.log(error)
       res.status(404).send(error)
       res.end()
+      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
     }
   }
 }
