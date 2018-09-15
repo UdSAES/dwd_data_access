@@ -16,42 +16,52 @@
 
 'use strict'
 
-const _ = require('lodash')
-const su = require('../lib/station_utils')
-const moment = require('moment')
-const grib2 = require('../lib/grib2')
-
 const path = require('path')
 const fs = require('fs-extra')
+const processenv = require('processenv')
+var bunyan = require('bunyan')
+
+// Instantiate logger
+const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
+var log = bunyan.createLogger({
+  name: 'handler_cached_data_access',
+  serializers: bunyan.stdSerializers,
+  level: LOG_LEVEL
+})
+log.info('loaded module for handling requests for pre-calculated/cached data')
 
 function getPoiForecastsCosmeDe27Poi (poiForecastsBaseDirectory, voisConfiguration) {
   return async function (req, res, next) {
-    const poi_id = req.params.poi_id
+    const poiID = req.params.poi_id
     try {
-      const filePath = path.join(poiForecastsBaseDirectory, poi_id, '27h_forecast.json')
-      console.log(filePath)
-      const fileContent = await fs.readJson(path.join(poiForecastsBaseDirectory, poi_id, '27h_forecast.json'), { encoding: 'utf8' })
+      const filePath = path.join(poiForecastsBaseDirectory, poiID, '27h_forecast.json')
+      const fileContent = await fs.readJson(filePath, { encoding: 'utf8' })
       res.status(200).send(fileContent)
       res.end()
+      log.info('successfully handled ' + req.method + '-request on ' + req.path)
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
+      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
     }
   }
 }
 
 function getPoiForecastsCosmeDe45Poi (poiForecastsBaseDirectory, voisConfiguration) {
   return async function (req, res, next) {
-    const poi_id = req.params.poi_id
+    const poiID = req.params.poi_id
     try {
-      const fileContent = await fs.readJson(path.join(poiForecastsBaseDirectory, poi_id, '45h_forecast.json'), { encoding: 'utf8' })
+      const filePath = path.join(poiForecastsBaseDirectory, poiID, '45h_forecast.json')
+      const fileContent = await fs.readJson(filePath, { encoding: 'utf8' })
       res.status(200).send(fileContent)
       res.end()
+      log.info('successfully handled ' + req.method + '-request on ' + req.path)
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
+      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
     }
   }
 }
