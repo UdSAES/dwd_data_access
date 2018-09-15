@@ -166,7 +166,7 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
 // GET /weather/weather_reports/poi/:sid/:voi?startTimestamp=...&endTimestamp=...
 function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather/weather_reports/poi')
+  const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
   return async function (req, res, next) {
     let startTimestamp = parseInt(req.query.startTimestamp)
