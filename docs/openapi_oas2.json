@@ -175,7 +175,7 @@
         "tags":[
           "POI-based"
         ],
-        "summary":"Get the newest 24 h measurement data for point of interest",
+        "summary":"Get the latest measurement data for the chosen point of interest (48 h)",
         "parameters":[
           {
             "in":"path",

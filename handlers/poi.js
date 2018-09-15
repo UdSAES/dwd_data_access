@@ -29,7 +29,6 @@ var log = bunyan.createLogger({
 })
 log.info('loaded module for handling requests for list of POIs')
 
-
 function getPois (pathToPoisJsonFile) {
   return async function (req, res, next) {
     try {
