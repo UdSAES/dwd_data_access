@@ -1,12 +1,19 @@
 {
   "name": "dwd_data_access",
   "version": "2.0.0",
-  "description": "",
+  "description": "Microservice providing weather forecasts and -data based on raw files downloaded from DWD by dwd_data_crawler",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/standard/bin/cmd.js; ./node_modules/mocha/bin/mocha"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UdSAES/dwd_data_access.git"
+  },
+  "author": "Florian Wagner <florian.wagner@aut.uni-saarland.de>",
+  "contributors": [
+    "Moritz Stüber <moritz.stueber@aut.uni-saarland.de>"
+  ],
   "license": "MIT",
   "dependencies": {
     "async-parallel": "^1.2.3",
