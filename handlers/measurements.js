@@ -22,6 +22,17 @@ const moment = require('moment')
 const fs = require('fs-extra')
 const su = require('../lib/station_utils')
 const assert = require('assert')
+const processenv = require('processenv')
+var bunyan = require('bunyan')
+
+// Instantiate logger
+const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
+var log = bunyan.createLogger({
+  name: 'handler_measurement_data_access',
+  serializers: bunyan.stdSerializers,
+  level: LOG_LEVEL
+})
+log.info('loaded module for handling requests for measurement data')
 
 function formatNumber (number, overAllDigits) {
   var result = String(number)
@@ -57,30 +68,31 @@ async function getAvailableStationIDs (searchDirectoryPath) {
 
 function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFilePath, voisJSONFilePath, stationCatalog) {
   return async function (req, res, next) {
-    const poi_id = req.params.poi_id
+    const poiID = req.params.poi_id
 
     try {
       const poisConfig = await fs.readJson(poisJSONFilePath, { encoding: 'utf8' })
       var poi = _.find(poisConfig, (item) => {
-        return item.id === poi_id
+        return item.id === poiID
       })
     } catch (error) {
-      console.log(error)
+      log.error(error)
       res.status(500).send(error)
       res.end()
       return
     }
 
     if (_.isNil(poi)) {
-      res.status(404).send('poi ' + poi_id + ' no known!')
+      res.status(404).send('POI ' + poiID + ' is not known')
       res.end()
+      log.warn('received request for POI that does not exist')
       return
     }
 
     try {
       var voisConfig = await fs.readJson(voisJSONFilePath, { encoding: 'utf8' })
     } catch (error) {
-      console.log(error)
+      log.error(error)
       res.status(500).send(error)
       res.end()
       return
@@ -114,10 +126,11 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
           })
           closestStation = su.findClosestStation(coordinates, filteredStationCatalog)
 
+          var filePath = null
           if (closestStation.station.id.length === 5) {
-            var filePath = path.join(dateDirectoryPath, closestStation.station.id + '-BEOB.csv')
+            filePath = path.join(dateDirectoryPath, closestStation.station.id + '-BEOB.csv')
           } else {
-            var filePath = path.join(dateDirectoryPath, closestStation.station.id + '_-BEOB.csv')
+            filePath = path.join(dateDirectoryPath, closestStation.station.id + '_-BEOB.csv')
           }
 
           const fileContentString = await fs.readFile(filePath, { encoding: 'utf8' })
@@ -162,7 +175,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
             }
           })
         } catch (error) {
-
+          log.error(error)
         }
         m.add(1, 'day')
       }
@@ -171,11 +184,12 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
       if (_.isNil(closestStation)) {
         res.status(404).send({ error: 'no closest station found' })
         res.end()
+        log.error('unable to find station closest to POI')
         return
       }
 
       const result = {}
-      result.poi = poi_id
+      result.poi = poiID
       result.sourceReference = {
         name: 'data basis: Deutscher Wetterdienst, own elements added',
         url: 'https://www.dwd.de/EN/ourservices/opendata/opendata.html'
@@ -203,10 +217,12 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
 
       res.status(200).send(result)
       res.end()
+      log.info('successfully handled ' + req.method + '-request on ' + req.path)
       return
     } catch (error) {
       res.status(404).send(error.toString())
       res.end()
+      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
     }
   }
 }
