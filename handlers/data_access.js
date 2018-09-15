@@ -189,29 +189,38 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
       })
 
       if (_.isNil(_.get(voiConfig, ['report', 'key']))) {
-        res.status(500).send('voi config undefined')
+        res.status(500).send('received request for REPORT for unconfigured VOI')
+        log.warn('received request for REPORT for unconfigured VOI')
         return
       }
 
       let timeseriesData = timeseriesDataCollection[voiConfig.report.key]
 
+      // Find timestamps for which at least one value is null and attempt to
+      // find a timestamp for which the value is not null
       const timestampsToRemove = []
       _.forEach(timeseriesData, (item) => {
+        // Skip item if value is not null
         if (!_.isNil(item.value)) {
           return
         }
 
+        // If value is null, check if there exists another item with the same
+        // timestamp which has a value that is not null; return true xor false
         const betterItem = _.find(timeseriesData, (item2) => {
-          return item2.timestamp === item.stamp && !_.isNil(items.value)
+          return item2.timestamp === item.timestamp && !_.isNil(item2.value)
         })
 
+        // If betterItem is true, keep the timestamp; nominate timestamp
+        // for removal otherwise
         if (!_.isNil(betterItem)) {
           timestampsToRemove.push(item.timestamp)
         }
       })
 
+      // Remove items for which no value exists at timestamp
       _.remove(timeseriesData, (item) => {
-        return _.includes(timestampsToRemove, item.timestamp) && _.isNil(item)
+        return _.includes(timestampsToRemove, item.timestamp) && _.isNil(item.value)
       })
 
       if (!_.isNil(voiConfig)) {
