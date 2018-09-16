@@ -2,7 +2,7 @@ FROM node:9.6.1-alpine
 
 MAINTAINER Florian Wagner
 
-RUN apk add --no-cache make gcc g++ python lz4
+RUN apk add --no-cache make gcc g++ python lz4 unzip
 
 RUN mkdir /mnt/dwd_raw_data && chown node:node /mnt/dwd_raw_data
 RUN mkdir /mnt/forecast_cache && chown node:node /mnt/forecast_cache
