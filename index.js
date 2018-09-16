@@ -167,8 +167,8 @@ app.use((req, res, next) => {
   var sub = 'ANONYMOUS'
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
-    log.info('received request with subject-claim of JWT set to ' + sub)
   }
+  log.info('received ' + req.method + '-request on ' + req.path + ' from user ' + sub)
 
   var limitInterval = AUTHORIZATION_LIMIT_INTERVAL
   var limitValue = AUTHORIZATION_LIMIT_VALUE
@@ -176,7 +176,6 @@ app.use((req, res, next) => {
   if (sub === 'ANONYMOUS') {
     limitInterval = ANONYMOUS_LIMIT_INTERVAL
     limitValue = ANONYMOUS_LIMIT_VALUE
-    log.info('received request from ' + sub + ' user')
   }
 
   if (authorizedRequestStatisticsMap[sub] == null) {
