@@ -21,7 +21,7 @@
     "child-process-promise": "^2.2.1",
     "cors": "^2.8.4",
     "delay": "^2.0.0",
-    "dwd-csv-helper": "^0.2.1",
+    "dwd-csv-helper": "^0.2.2",
     "dwd-grib-helper": "^0.3.2",
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
