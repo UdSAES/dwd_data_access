@@ -1,6 +1,8 @@
-FROM node:9.6.1-alpine
+FROM node:10-alpine
 
-MAINTAINER Florian Wagner
+LABEL me.msaas.vendor="UdS AES"
+LABEL me.msaas.maintainer="moritz.stueber@aut.uni-saarland.de"
+LABEL me.msaas.subject="Access to forecast/measurement data copied from DWD"
 
 RUN apk add --no-cache make gcc g++ python lz4
 
