@@ -147,8 +147,7 @@ var publicKey = null
 try {
   publicKey = fs.readFileSync(JWT_PUBLIC_KEY_FILE_PATH)
 } catch (error) {
-  log.fatal('PUBLIC KEY could not be loaded')
-  log.fatal(error)
+  log.fatal(error, 'PUBLIC KEY could not be loaded')
   process.exit(EXIT_CODE_PUBLIC_KEY_LOAD_ERROR)
 }
 
@@ -157,7 +156,7 @@ app.use(jwt({ secret: publicKey, credentialsRequired: false }))
 
 // Continue if token is invalid
 app.use((error, req, res, next) => {
-  log.warn(error)
+  log.warn(error, 'caught some error')
   next()
 })
 
@@ -168,7 +167,7 @@ app.use((req, res, next) => {
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
   }
-  log.info('received ' + req.method + '-request on ' + req.path + ' from user ' + sub)
+  log.info(`received ${req.method}-request on ${req.path} from user ${sub}`)
 
   var limitInterval = AUTHORIZATION_LIMIT_INTERVAL
   var limitValue = AUTHORIZATION_LIMIT_VALUE

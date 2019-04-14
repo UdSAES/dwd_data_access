@@ -114,9 +114,9 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
         location: timeseriesData.location
       }
       res.status(200).send(result)
-      log.info('successfully handled ' + req.method + '-request on ' + req.path)
+      log.info(`successfully handled ${req.method}-request on ${req.path}`)
     } catch (error) {
-      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
+      log.warn(error, `error while handling ${req.method}-request on ${req.path}`)
       res.status(500).send()
     }
   }
@@ -156,9 +156,9 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
         data: timeseriesData
       }
       res.status(200).send(result)
-      log.info('successfully handled ' + req.method + '-request on ' + req.path)
+      log.info(`successfully handled ${req.method}-request on ${req.path}`)
     } catch (error) {
-      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
+      log.warn(error, `error while handling ${req.method}-request on ${req.path}`)
       res.status(500).send()
     }
   }
@@ -238,9 +238,9 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
         data: timeseriesData
       }
       res.status(200).send(result)
-      log.info('successfully handled ' + req.method + '-request on ' + req.path)
+      log.info(`successfully handled ${req.method}-request on ${req.path}`)
     } catch (error) {
-      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
+      log.warn(error, `error while handling ${req.method}-request on ${req.path}`)
       res.status(500).send()
     }
   }

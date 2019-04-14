@@ -76,7 +76,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
         return item.id === poiID
       })
     } catch (error) {
-      log.error(error)
+      log.error(error, `failed to read file ${poisJSONFilePath}`)
       res.status(500).send(error)
       res.end()
       return
@@ -92,7 +92,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
     try {
       var voisConfig = await fs.readJson(voisJSONFilePath, { encoding: 'utf8' })
     } catch (error) {
-      log.error(error)
+      log.error(error, `failed to read file ${voisJSONFilePath}`)
       res.status(500).send(error)
       res.end()
       return
@@ -175,7 +175,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
             }
           })
         } catch (error) {
-          log.error(error)
+          log.error(error, `failed to get newest measurement data for POI ${poiID}`)
         }
         m.add(1, 'day')
       }
@@ -184,7 +184,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
       if (_.isNil(closestStation)) {
         res.status(404).send({ error: 'no closest station found' })
         res.end()
-        log.error('unable to find station closest to POI')
+        log.warn('unable to find station closest to POI')
         return
       }
 
@@ -217,12 +217,12 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
 
       res.status(200).send(result)
       res.end()
-      log.info('successfully handled ' + req.method + '-request on ' + req.path)
+      log.info(`successfully handled ${req.method}-request on ${req.path}`)
       return
     } catch (error) {
       res.status(404).send(error.toString())
       res.end()
-      log.warn(error, 'error while handling ' + req.method + '-request on ' + req.path)
+      log.warn(error, `error while handling ${req.method}-request on ${req.path}`)
     }
   }
 }
