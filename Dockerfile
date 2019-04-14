@@ -1,8 +1,11 @@
 FROM node:10-alpine
 
-LABEL me.msaas.vendor="UdS AES"
-LABEL me.msaas.maintainer="moritz.stueber@aut.uni-saarland.de"
-LABEL me.msaas.subject="Access to forecast/measurement data copied from DWD"
+# Provide metadata according to namespace suggested by http://label-schema.org/
+LABEL org.label-schema.schema-version="1.0.0-rc.1"
+LABEL org.label-schema.name="dwd_data_access"
+LABEL org.label-schema.description="Access to forecast/measurement data copied from DWD"
+LABEL org.label-schema.vendor="UdS AES"
+LABEL org.label-schema.vcs-url="https://github.com/UdSAES/dwd_data_access"
 
 RUN apk add --no-cache make gcc g++ python lz4
 
