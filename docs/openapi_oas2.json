@@ -2,12 +2,8 @@
   "swagger":"2.0",
   "info":{
     "title":"udsaes/dwd_data_access",
-    "version":"1.2.1",
-    "description":"dwd_data_access provides an API to query weather data that has previously been downloaded by dwd_data_crawler from opendata.dwd.de (free service offered by [DWD](https://www.dwd.de/EN/ourservices/opendata/opendata.html)).",
-    "contact":{
-      "name":"Florian Wagner (UdS AES)",
-      "email":"florian.wagner@aut.uni-saarland.de"
-    }
+    "version":"1.2.2",
+    "description":"[dwd_data_access](https://github.com/UdSAES/dwd_data_access) provides an API to query weather data that has previously been downloaded by [dwd_data_crawler](https://github.com/UdSAES/dwd_data_crawler) from opendata.dwd.de (free service offered by [DWD](https://www.dwd.de/EN/ourservices/opendata/opendata.html))."
   },
   "paths":{
     "/weather/weather_reports/poi/{sid}/{voi}":{
@@ -482,12 +478,12 @@
   ],
   "tags":[
     {
-      "name":"POI-based",
-      "description":"Access to the latest forecasts and measurements for pre-defined POIs (cached)"
-    },
-    {
       "name":"General",
       "description":"Access to specific values of interest (VOIs) for specific time frames at a specific location within the entire data set available on the server (not cached)"
+    },
+    {
+      "name":"POI-based",
+      "description":"Access to the latest forecasts and measurements for pre-defined POIs (cached)"
     }
   ]
 }
