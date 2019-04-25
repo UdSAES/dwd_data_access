@@ -44,8 +44,14 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
     const voi = req.params.voi
     const lat = parseFloat(req.query.lat)
     const lon = parseFloat(req.query.lon)
+    const cosmoD2AvailableFrom = moment.utc('2018051509', 'YYYYMMDDHH')
 
-    const gribBaseDirectory = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'cosmo-d2', 'grib')
+    let gribBaseDirectory = null
+    if (moment.utc(referenceTimestamp).isBefore(cosmoD2AvailableFrom)) {
+      gribBaseDirectory = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'cosmo', 'de', 'grib')
+    } else {
+      gribBaseDirectory = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'cosmo-d2', 'grib')
+    }
 
     try {
       const voiConfig = _.find(voisConfigs, (item) => {
