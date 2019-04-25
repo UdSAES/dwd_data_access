@@ -4,6 +4,8 @@
   "description": "Microservice providing weather forecasts and -data based on raw files downloaded from DWD by dwd_data_crawler",
   "main": "index.js",
   "scripts": {
+    "lint": "standard",
+    "lint-fix": "standard --fix",
     "test": "./node_modules/standard/bin/cmd.js; ./node_modules/mocha/bin/mocha"
   },
   "repository": {
