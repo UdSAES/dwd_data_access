@@ -2,7 +2,7 @@
   "swagger":"2.0",
   "info":{
     "title":"udsaes/dwd_data_access",
-    "version":"1.2.2",
+    "version":"1.2.3",
     "description":"[dwd_data_access](https://github.com/UdSAES/dwd_data_access) provides an API to query weather data that has previously been downloaded by [dwd_data_crawler](https://github.com/UdSAES/dwd_data_crawler) from opendata.dwd.de (free service offered by [DWD](https://www.dwd.de/EN/ourservices/opendata/opendata.html))."
   },
   "paths":{
@@ -14,18 +14,10 @@
         "summary":"Get the actual reported weather data at a given station for a given value of interest within a given time interval",
         "parameters":[
           {
-            "in":"path",
-            "name":"sid",
-            "required":true,
-            "description":"The id of the weather station",
-            "type":"string"
+            "$ref": "#/parameters/sid"
           },
           {
-            "in":"path",
-            "name":"voi",
-            "required":true,
-            "description":"The value of interest for which the forecast shall be provided",
-            "type":"string"
+            "$ref": "#/parameters/voi"
           },
           {
             "in":"query",
@@ -69,21 +61,7 @@
             "minimum": 1522854000000
           },
           {
-            "in":"path",
-            "name":"voi",
-            "required":true,
-            "description":"The value of interest for which the forecast shall be provided",
-            "type":"string",
-            "enum":[
-              "t_2m",
-              "pmsl",
-              "relhum_2m",
-              "aswdifd_s",
-              "aswdir_s",
-              "td_2m",
-              "ws_10m",
-              "wd_10m"
-            ]
+            "$ref": "#/parameters/voi"
           },
           {
             "in":"query",
@@ -126,18 +104,10 @@
             "minimum": 1522562400000
           },
           {
-            "in":"path",
-            "name":"sid",
-            "required":true,
-            "description":"The id of the weather station",
-            "type":"string"
+            "$ref": "#/parameters/sid"
           },
           {
-            "in":"path",
-            "name":"voi",
-            "required":true,
-            "description":"The value of interest for which the forecast shall be provided",
-            "type":"string"
+            "$ref": "#/parameters/voi"
           }
         ],
         "responses":{
@@ -463,6 +433,32 @@
           "description":"Height above sea level in metres"
         }
       }
+    }
+  },
+  "parameters": {
+    "sid": {
+      "in":"path",
+      "name":"sid",
+      "required":true,
+      "description":"The id of the weather station",
+      "type":"string"
+    },
+    "voi": {
+      "in":"path",
+      "name":"voi",
+      "required":true,
+      "description":"The value of interest for which the forecast shall be provided",
+      "type":"string",
+      "enum":[
+        "t_2m",
+        "pmsl",
+        "relhum_2m",
+        "aswdifd_s",
+        "aswdir_s",
+        "td_2m",
+        "ws_10m",
+        "wd_10m"
+      ]
     }
   },
   "securityDefinitions":{
