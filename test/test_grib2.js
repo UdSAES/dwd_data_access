@@ -55,7 +55,7 @@ describe('./lib/grib2.js', () => {
     } catch (error) {
       throw error
     } finally {
-      tmpFileObject.cleanup()
+      await tmpFileObject.cleanup()
     }
 
     const unzippedFiles = await fs.readdir(tmpDirPath)
