@@ -35,12 +35,12 @@ function getPois (pathToPoisJsonFile) {
       const fileContent = await fs.readJson(pathToPoisJsonFile, { encoding: 'utf8' })
       res.status(200).send(fileContent)
       res.end()
-      log.info(`successfully handled ${req.method}-request on ${req.path}`)
+      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
-      log.warn(error, `error while handling ${req.method}-request on ${req.path}`)
+      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
     }
   }
 }

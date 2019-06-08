@@ -32,6 +32,7 @@ const cors = require('cors')
 const mmsc = require('./lib/mosmix_station_catalog')
 var jwt = require('express-jwt')
 var bunyan = require('bunyan')
+const addRequestId = require('express-request-id')()
 
 const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
@@ -63,10 +64,21 @@ const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
 const VOIS_DATA_ACCESS_CONFIGS_PATH = './configuration/vois_data_access.json'
 
 // Instantiate logger
-var log = bunyan.createLogger({
-  name: 'dwd_data_access',
-  serializers: bunyan.stdSerializers,
-  level: LOG_LEVEL
+const log = bunyan.createLogger({
+  name: 'dwd_data_access', // TODO make configurable?
+  stream: process.stdout,
+  level: LOG_LEVEL,
+  serializers: {
+    err: bunyan.stdSerializers.err,
+    req: bunyan.stdSerializers.req,
+    res: function (res) {
+      if (!res || !res.statusCode) { return res }
+      return {
+        statusCode: res.statusCode,
+        headers: res._headers
+      }
+    }
+  }
 })
 log.info('instantiation of service initiated')
 
@@ -141,7 +153,14 @@ checkIfConfigIsValid()
 
 // Instantiate express-app
 const app = express()
+app.use(addRequestId)
 const authorizedRequestStatisticsMap = {}
+
+// Create child logger including req_id to be used in handlers
+app.use(function (req, res, next) {
+  req.log = log.child({ req_id: req.id })
+  next()
+})
 
 var publicKey = null
 try {
@@ -156,7 +175,7 @@ app.use(jwt({ secret: publicKey, credentialsRequired: false }))
 
 // Continue if token is invalid
 app.use((error, req, res, next) => {
-  log.warn(error, 'caught some error')
+  req.log.warn(error, 'caught some error')
   next()
 })
 
@@ -167,7 +186,7 @@ app.use((req, res, next) => {
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
   }
-  log.info(`received ${req.method}-request on ${req.path} from user ${sub}`)
+  req.log.info({ req: req }, `received ${req.method}-request on ${req.originalUrl} from user ${sub}`)
 
   var limitInterval = AUTHORIZATION_LIMIT_INTERVAL
   var limitValue = AUTHORIZATION_LIMIT_VALUE
@@ -191,6 +210,7 @@ app.use((req, res, next) => {
   if (authorizedRequestStatisticsMap[sub].length >= limitValue) {
     res.status(429).send(authorizedRequestStatisticsMap[sub])
     res.end()
+    req.log({ res: res }, `user ${sub} is hitting the rate limit`)
     return
   }
 
