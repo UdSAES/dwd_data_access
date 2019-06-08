@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
-    "lint-fix": "standard --fix",
-    "test": "./node_modules/standard/bin/cmd.js; ./node_modules/mocha/bin/mocha"
+    "test": "npm run lint; mocha"
   },
   "repository": {
     "type": "git",
