@@ -243,7 +243,7 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
         unit: voiConfig.target.unit,
         data: timeseriesData
       }
-      res.status(200).send(result)
+      res.status(200).send(result) // FIXME successfull even if data is `[]`
       req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
     } catch (error) {
       res.status(500).send()
