@@ -32,7 +32,7 @@
     "grib2-simple": "^1.1.1",
     "json-schema-ref-parser": "^6.1.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "processenv": "^1.1.0",
     "request": "^2.88.0",
