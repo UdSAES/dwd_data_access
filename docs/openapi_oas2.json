@@ -25,7 +25,7 @@
             "required":false,
             "description":"The inclusive start timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp minus 25 hours is used.",
             "type":"number",
-            "minimum": 1522800000000
+            "minimum": 1518951600000
           },
           {
             "in":"query",
