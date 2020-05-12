@@ -18,7 +18,7 @@
 const su = require('../lib/station_utils')
 const mmsc = require('../lib/mosmix_station_catalog')
 
-const MOSMIX_STATION_CATALOG_PATH = './sample_data/mosmix_pdftotext.txt'
+const MOSMIX_STATION_CATALOG_PATH = './lib/mosmix_station_catalog.txt'
 describe('./lib/station_utils', () => {
   var stations = null
   before(async () => {
