@@ -25,14 +25,16 @@
             "required":false,
             "description":"The inclusive start timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp minus 25 hours is used.",
             "type":"number",
-            "minimum": 1518951600000
+            "minimum": 1518951600000,
+            "x-example": 1588833000000
           },
           {
             "in":"query",
             "name":"endTimestamp",
             "required":false,
             "description":"The exclusive end timestamp for the queried timeseries in UNIX EPOCH in ms resolution. If no value is given, the current timestamp is used.",
-            "type":"number"
+            "type":"number",
+            "x-example": 1588887000000
           }
         ],
         "responses":{
