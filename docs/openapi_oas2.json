@@ -419,18 +419,17 @@
     "Position":{
       "type":"object",
       "required":[
-        "longitude",
-        "latitude",
-        "elevation"
+        "lon",
+        "lat"
       ],
       "properties":{
-        "longitude":{
+        "lon":{
           "type":"number",
           "minimum":-180,
           "maximum":180,
           "description":"Longitude in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)"
         },
-        "latitude":{
+        "lat":{
           "type":"number",
           "minimum":-90,
           "maximum":90,
