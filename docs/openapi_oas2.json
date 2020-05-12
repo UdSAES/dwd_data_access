@@ -59,7 +59,7 @@
             "description":"The reference timestamp as UNIX EPOCH in ms resolution that shall be provided (00/03/06/09/12/15/18/21 UTC)",
             "type":"number",
             "minimum": 1522854000000,
-	    "x-example": 1584094200
+	          "x-example": 1588831200000
           },
           {
             "$ref": "#/parameters/voi"
@@ -70,7 +70,7 @@
             "required":true,
             "description":"The latitude of the location in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
             "type":"number",
-	    "x-example":51.584999
+	          "x-example":51.584999
           },
           {
             "in":"query",
@@ -78,7 +78,7 @@
             "required":true,
             "description":"The longitude of the location in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
             "type":"number",
-	    "x-example":7.161944
+	          "x-example":7.161944
           }
         ],
         "responses":{
@@ -105,7 +105,7 @@
             "description":"The reference timestamp as UNIX EPOCH in ms resolution that shall be provided (06/18 UTC before 2018-09-12, 03/09/15/21 UTC afterwards)",
             "type":"number",
             "minimum": 1522562400000,
-	    "x-example": 1584094200
+	          "x-example": 1588833000000
 
           },
           {
@@ -157,8 +157,7 @@
             "required":true,
             "description":"The id of the point of interest for which the forecast shall be provided.",
             "type":"string",
-	    "x-example":"43139dbf-8cd3-4b85-9220-9340a8819ab7"
-	  
+	          "x-example":"43139dbf-8cd3-4b85-9220-9340a8819ab7"
           }
         ],
         "responses":{
@@ -184,7 +183,7 @@
             "required":true,
             "description":"The id of the point of interest for which the forecast shall be provided.",
             "type":"string",
-	    "x-example":"e26ba57d-4cb1-46fd-ab6d-11a9367ab1d7"
+	          "x-example":"e26ba57d-4cb1-46fd-ab6d-11a9367ab1d7"
           }
         ],
         "responses":{
@@ -210,7 +209,7 @@
             "required":true,
             "description":"The id of the point of interest for which the forecast shall be provided.",
             "type":"string",
-	    "x-example":"082419c8-2339-4284-8267-b33ef3dc43e5"
+	          "x-example":"082419c8-2339-4284-8267-b33ef3dc43e5"
           }
         ],
         "responses":{
