@@ -191,7 +191,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
       const result = {}
       result.poi = poiID
       result.sourceReference = {
-        name: 'data basis: Deutscher Wetterdienst, own elements added',
+        name: 'Data basis: Deutscher Wetterdienst, own elements added',
         url: 'https://www.dwd.de/EN/ourservices/opendata/opendata.html'
       }
 
