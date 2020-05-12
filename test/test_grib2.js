@@ -31,7 +31,7 @@ const GRIB_TEST_FILE_PATH = './2018011803/t_2m/COSMODE_single_level_elements_T_2
 const GRIB_TEST_POSITION = { longitude: 7, latitude: 49 }
 const VALID_GRIB_START_TIMESTAMP = 1516244400
 
-describe('./lib/grib2.js', () => {
+describe.skip('./lib/grib2.js', () => {
   var tmpDirObject
   var tmpDirPath
 
