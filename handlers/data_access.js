@@ -60,7 +60,7 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
       let timeseriesData
       if (voiConfig.cosmo.functionType === 'loadBaseValue') {
-        timeseriesData = await gf['loadBaseValue']({
+        timeseriesData = await gf.loadBaseValue({
           gribBaseDirectory,
           referenceTimestamp,
           voi: voiConfig.cosmo.options.key,
@@ -72,7 +72,7 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
           targetUnit: voiConfig.target.unit
         })
       } else if (voiConfig.cosmo.functionType === 'loadRadiationValue') {
-        timeseriesData = await gf['loadRadiationValue']({
+        timeseriesData = await gf.loadRadiationValue({
           gribBaseDirectory,
           referenceTimestamp,
           voi: voiConfig.cosmo.options.key,
@@ -84,7 +84,7 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
           targetUnit: voiConfig.target.unit
         })
       } else if (voiConfig.cosmo.functionType === 'load2DVectorNorm') {
-        timeseriesData = await gf['load2DVectorNorm']({
+        timeseriesData = await gf.load2DVectorNorm({
           gribBaseDirectory,
           referenceTimestamp,
           voi1: voiConfig.cosmo.options.voi1_key,
@@ -98,7 +98,7 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
           targetUnit: voiConfig.target.unit
         })
       } else if (voiConfig.cosmo.functionType === 'load2DVectorAngle') {
-        timeseriesData = await gf['load2DVectorAngle']({
+        timeseriesData = await gf.load2DVectorAngle({
           gribBaseDirectory,
           referenceTimestamp,
           voi1: voiConfig.cosmo.options.voi1_key,

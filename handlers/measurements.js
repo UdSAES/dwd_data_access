@@ -78,7 +78,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
     } catch (error) {
       res.status(500).send(error)
       res.end()
-      req.log.error({ err: error, res: res}, `failed to read file ${poisJSONFilePath}`)
+      req.log.error({ err: error, res: res }, `failed to read file ${poisJSONFilePath}`)
       return
     }
 
@@ -94,7 +94,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
     } catch (error) {
       res.status(500).send(error)
       res.end()
-      req.log.error({ err: error, res: res}, `failed to read file ${voisJSONFilePath}`)
+      req.log.error({ err: error, res: res }, `failed to read file ${voisJSONFilePath}`)
       return
     }
 
