@@ -59,9 +59,9 @@ const EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 9
 const EXIT_CODE_SERVER_ERROR = 10
 const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
-const VOIS_JSON_FILE_PATH = './configuration/vois.json'
+const VOIS_JSON_FILE_PATH = './config/vois.json'
 const MOSMIX_STATION_CATALOG_PATH = './lib/mosmix_station_catalog.txt'
-const VOIS_DATA_ACCESS_CONFIGS_PATH = './configuration/vois_data_access.json'
+const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
 
 // Instantiate logger
 const log = bunyan.createLogger({
