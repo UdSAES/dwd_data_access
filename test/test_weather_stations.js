@@ -8,14 +8,14 @@ const before = require('mocha').before
 const it = require('mocha').it
 
 const su = require('../lib/station_utils')
-const mmsc = require('../lib/mosmix_station_catalog')
+const sc = require('../lib/weather_stations')
 
-const MOSMIX_STATION_CATALOG_PATH = './lib/mosmix_station_catalog.txt'
+const DWD_STATIONS_MOSMIX_FROM_PDF = './config/dwd2017_stations_mosmix_from_pdf.txt'
 
 describe('Test correct parsing of station catalogue(s)', () => {
   describe('Do not throw upon reading the station catalogue from the .txt file', () => {
     it('should return a list of stations', async () => {
-      const stationData = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
+      const stationData = await sc.readStationsMosmixFromTxt(DWD_STATIONS_MOSMIX_FROM_PDF)
     }).timeout(0)
   })
 })
@@ -23,7 +23,7 @@ describe('Test correct parsing of station catalogue(s)', () => {
 describe('Test correct identification of weather stations in the vicinity of given coordinates', () => {
   var stations = null
   before(async () => {
-    stations = await mmsc.readStationCatalogFromTextFile(MOSMIX_STATION_CATALOG_PATH)
+    stations = await sc.readStationsMosmixFromTxt(DWD_STATIONS_MOSMIX_FROM_PDF)
   })
 
   describe('Find _the_ single closest station', () => {
