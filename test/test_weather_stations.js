@@ -3,9 +3,12 @@
 
 'use strict'
 
+const fs = require('fs-extra')
 const describe = require('mocha').describe
 const before = require('mocha').before
 const it = require('mocha').it
+const assert = require('chai').assert
+const addContext = require('mochawesome/addContext')
 
 const su = require('../lib/station_utils')
 const sc = require('../lib/weather_stations')
@@ -17,6 +20,30 @@ describe('Test correct parsing of station catalogue(s)', function () {
     it('should return a list of stations', async function () {
       const stationData = await sc.readStationsMosmixFromTxt(DWD_STATIONS_MOSMIX_FROM_PDF)
     }).timeout(0)
+  })
+
+  describe('Parse the list of major weather stations used by DWD', async function () {
+    const dwdStationsBeobHaAsCSV = './test/data/dwd2017_stations_beob_ha.csv'
+    const dwdStationsBeobHaAsJSON = './test/data/dwd2017_stations_beob_ha.json'
+
+    it('should return the expected output', async function () {
+      // Read expected result from .json-file
+      const expected = await fs.readJson(dwdStationsBeobHaAsJSON)
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Parse test file (shortened to a few lines)
+      const actual = await sc.readStationsBeobHa(dwdStationsBeobHaAsCSV)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+
+      // Check whether actual result matches expectations
+      assert(actual === expected, 'Result does not match expectations')
+    })
   })
 })
 
