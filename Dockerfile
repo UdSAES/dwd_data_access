@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2018 UdS AES <https://www.uni-saarland.de/lehrstuhl/frey.html>
+# SPDX-License-Identifier: MIT
+
 FROM node:10-alpine
 
 # Provide metadata according to namespace suggested by http://label-schema.org/
