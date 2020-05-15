@@ -153,6 +153,7 @@ checkIfConfigIsValid()
 
 // Instantiate express-app
 const app = express()
+app.use(cors())
 app.use(addRequestId)
 const authorizedRequestStatisticsMap = {}
 
@@ -218,7 +219,6 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.static('./docs'))
