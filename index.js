@@ -140,6 +140,7 @@ checkIfConfigIsValid()
 
 // Instantiate express-app
 const app = express()
+app.use(cors())
 app.use(addRequestId)
 const authorizedRequestStatisticsMap = {}
 
@@ -197,7 +198,7 @@ app.use((req, res, next) => {
   if (authorizedRequestStatisticsMap[sub].length >= limitValue) {
     res.status(429).send(authorizedRequestStatisticsMap[sub])
     res.end()
-    req.log({ res: res }, `user ${sub} is hitting the rate limit`)
+    req.log.warn({ res: res }, `user ${sub} is hitting the rate limit`)
     return
   }
 
@@ -205,7 +206,6 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.static('./docs'))
