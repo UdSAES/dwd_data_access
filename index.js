@@ -211,7 +211,7 @@ app.use((req, res, next) => {
   if (authorizedRequestStatisticsMap[sub].length >= limitValue) {
     res.status(429).send(authorizedRequestStatisticsMap[sub])
     res.end()
-    req.log({ res: res }, `user ${sub} is hitting the rate limit`)
+    req.log.warn({ res: res }, `user ${sub} is hitting the rate limit`)
     return
   }
 
