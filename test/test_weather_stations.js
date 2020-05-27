@@ -45,6 +45,30 @@ describe('Test correct parsing of station catalogue(s)', function () {
       assert(actual === expected, 'Result does not match expectations')
     })
   })
+
+  describe('Parse the list of additional weather stations used by DWD', async function () {
+    const dwdStationsBeobNaAsCSV = './test/data/dwd2018_stations_beob_na.csv'
+    const dwdStationsBeobNaAsJSON = './test/data/dwd2018_stations_beob_na.json'
+
+    it('should return the expected output', async function () {
+      // Read expected result from .json-file
+      const expected = await fs.readJson(dwdStationsBeobNaAsJSON)
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Parse test file (shortened to a few lines)
+      const actual = await sc.readStationsBeobNa(dwdStationsBeobNaAsCSV)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+
+      // Check whether actual result matches expectations
+      assert(actual === expected, 'Result does not match expectations')
+    })
+  })
 })
 
 describe('Test correct identification of weather stations in the vicinity of given coordinates', function () {
