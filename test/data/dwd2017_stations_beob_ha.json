@@ -1,118 +1,119 @@
-[ {
-    "id": 954,
-    "stations-name": "UFS Deutsche Bucht",
-    "wmo-kennung": 10007,
+[
+  {
     "location": {
       "latitude": 54.1667,
       "longitude": 7.45,
       "elevation": 0
     },
-    "betreiber": "DWD",
-    "melde-grp": "AUT",
-    "country": "Germany"
+    "ID": "954",
+    "Stations-Name": "UFS Deutsche Bucht",
+    "WMO-Kennung": "10007",
+    "Betreiber": "DWD",
+    "Melde-Grp": "AUT",
+    "Country": "Germany"
   },
   {
-    "id": 2115,
-    "stations-name": "Helgoland",
-    "wmo-kennung": 10015,
     "location": {
       "latitude": 54.174957,
       "longitude": 7.891954,
       "elevation": 4
     },
-    "betreiber": "DWD",
-    "melde-grp": "AUT",
-    "country": "Germany"
+    "ID": "2115",
+    "Stations-Name": "Helgoland",
+    "WMO-Kennung": "10015",
+    "Betreiber": "DWD",
+    "Melde-Grp": "AUT",
+    "Country": "Germany"
   },
   {
-    "id": 1346,
-    "stations-name": "Feldberg/Schwarzwald",
-    "wmo-kennung": 10908,
     "location": {
       "latitude": 47.874893,
       "longitude": 8.003817,
       "elevation": 1489.6
     },
-    "betreiber": "DWD",
-    "melde-grp": "AUT",
-    "country": "Germany"
+    "ID": "1346",
+    "Stations-Name": "Feldberg/Schwarzwald",
+    "WMO-Kennung": "10908",
+    "Betreiber": "DWD",
+    "Melde-Grp": "AUT",
+    "Country": "Germany"
   },
   {
-    "id": 5792,
-    "stations-name": "Zugspitze",
-    "wmo-kennung": 10961,
     "location": {
       "latitude": 47.420868,
       "longitude": 10.984724,
       "elevation": 2964
     },
-    "betreiber": "DWD",
-    "melde-grp": "I Berg",
-    "country": "Germany"
+    "ID": "5792",
+    "Stations-Name": "Zugspitze",
+    "WMO-Kennung": "10961",
+    "Betreiber": "DWD",
+    "Melde-Grp": "I Berg",
+    "Country": "Germany"
   },
   {
-    "id": 2290,
-    "stations-name": "Hohenpeißenberg",
-    "wmo-kennung": 10962,
     "location": {
       "latitude": 47.800864,
       "longitude": 11.010754,
       "elevation": 977
     },
-    "betreiber": "DWD",
-    "melde-grp": "I",
-    "country": "Germany"
+    "ID": "2290",
+    "Stations-Name": "Hohenpeißenberg",
+    "WMO-Kennung": "10962",
+    "Betreiber": "DWD",
+    "Melde-Grp": "I",
+    "Country": "Germany"
   },
   {
-    "id": 1550,
-    "stations-name": "Garmisch-Partenkirchen",
-    "wmo-kennung": 10963,
     "location": {
       "latitude": 47.48305,
       "longitude": 11.062293,
       "elevation": 719
     },
-    "betreiber": "DWD",
-    "melde-grp": "AUT",
-    "country": "Germany"
+    "ID": "1550",
+    "Stations-Name": "Garmisch-Partenkirchen",
+    "WMO-Kennung": "10963",
+    "Betreiber": "DWD",
+    "Melde-Grp": "AUT",
+    "Country": "Germany"
   },
   {
-    "id": 856,
-    "stations-name": "Chieming",
-    "wmo-kennung": 10982,
     "location": {
       "latitude": 47.884339,
       "longitude": 12.540379,
       "elevation": 551.2
     },
-    "betreiber": "DWD",
-    "melde-grp": "AUT",
-    "country": "Germany"
+    "ID": "856",
+    "Stations-Name": "Chieming",
+    "WMO-Kennung": "10982",
+    "Betreiber": "DWD",
+    "Melde-Grp": "AUT",
+    "Country": "Germany"
   },
   {
-    "id": 3484,
-    "stations-name": "Neuburg/Donau (Flugplatz)",
-    "wmo-kennung": 10853,
     "location": {
       "latitude": 48.709746,
       "longitude": 11.209617,
       "elevation": 380
     },
-    "betreiber": "GeoInfoDBw",
-    "melde-grp": "I G",
-    "country": "Germany"
+    "ID": "3484",
+    "Stations-Name": "Neuburg/Donau (Flugplatz)",
+    "WMO-Kennung": "10853",
+    "Betreiber": "GeoInfoDBw",
+    "Melde-Grp": "I G",
+    "Country": "Germany"
   },
   {
-    "id": 50036456,
-    "stations-name": "GEORG VON NEUMAYER",
-    "wmo-kennung": 89002,
     "location": {
       "latitude": -70.673054,
       "longitude": -8.27498,
       "elevation": 40
     },
-    "betreiber": "AWI",
-    "melde-grp": "oZ",
-    "country": "Antarctica"
+    "ID": "50036456",
+    "Stations-Name": "GEORG VON NEUMAYER",
+    "WMO-Kennung": "89002",
+    "Betreiber": "AWI",
+    "Melde-Grp": "oZ",
+    "Country": "Antarctica"
   }
 ]
