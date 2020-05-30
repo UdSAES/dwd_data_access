@@ -66,7 +66,7 @@ describe('Test correct parsing of station catalogue(s)', function () {
       })
 
       // Check whether actual result matches expectations
-      assert(actual === expected, 'Result does not match expectations')
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
 })
