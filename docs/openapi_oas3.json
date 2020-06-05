@@ -1,0 +1,142 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "dwd-data-access",
+    "version": "2.0.0",
+    "license": {
+      "name": "MIT License",
+      "url": "https://spdx.org/licenses/MIT.html"
+    }
+  },
+  "paths": {
+    "/weather-stations": {
+      "get": {
+        "tags": [ "Weather Stations" ],
+        "summary": "Show list of weather stations that match criteria",
+        "description": "Show the list of available weather stations, possibly limited to those in a specified radius around the given coordinates. If no location is given, the radius is ignored and the full list of stations is returned. In case there is no weather station in the radius of the specified location, an empty list will be returned with status code 200, indicating success. The list is sorted by distance (nearest first) if coordinates are supplied and alphabetically otherwise.",
+        "operationId": "getFilteredListOfStations",
+        "parameters": [ {
+            "name": "in-vicinity-of",
+            "in": "query",
+            "description": "The coordinates at which to search for stations in the vicinity",
+            "schema": {
+              "$ref": "#/components/schemas/LatitudeLongitudePair"
+            }
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "description": "The search radius for the given coordinates in kilometres",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 0,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested list of weather stations (may be empty)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListOfWeatherStationsAsJSON"
+                },
+                "example": [ {
+                  "name": "UFS Deutsche Bucht",
+                  "url": "http://example.com/weather-stations/10007"
+                } ]
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListOfWeatherStationsAsCSV"
+                },
+                "example": "name,url,distance\n\"UFS Deutsche Bucht\",\"http://example.com/weather-stations/10007\",\n"
+              },
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/SchemaValidationFailed"
+          },
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProblemDetail": {
+        "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/dev/schemata/problem-detail/schema_v0.1.0_oas2.json#/ProblemDetail"
+      },
+      "LatitudeLongitudePair": {
+        "description": "Location on earth as latitude/longitude-pair in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
+        "type": "string",
+        "pattern": "^\\d{1,2}.\\d{1,8}\/\\d{1,2}.\\d{1,8}$",
+        "example": "54.1663/7.451"
+      },
+      "ListOfWeatherStationsAsJSON": {
+        "description": "List of weather stations serialized as JSON",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "name",
+            "url"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The human-readable name of the station"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The full URL of the resource describing a specific weather station"
+            },
+            "distance": {
+              "type": "number",
+              "format": "float",
+              "description": "The distance to the specified coordinates in kilometres"
+            }
+          }
+        }
+      },
+      "ListOfWeatherStationsAsCSV": {
+        "description": "List of weather stations serialized as CSV",
+        "externalDocs": {
+          "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
+          "url": "tbd"
+        }
+      }
+    },
+    "responses": {
+      "SchemaValidationFailed": {
+        "description": "The response for requests that were dropped because they were syntactically invalid and failed schema validation",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "allOf": [
+                { "$ref": "#/components/schemas/ProblemDetail" },
+                { "required": [ "title", "status" ] }
+              ]
+            },
+            "examples": {
+              "application/problem+json": {
+                "summary": "...",
+                "value": {
+                  "title": "Schema Validation Failed",
+                  "status": 400,
+                  "detail": "Request validation failed: ..."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [ {
+    "name": "Weather Stations",
+    "description": "All resources relating to specific weather stations."
+  } ]
+}
