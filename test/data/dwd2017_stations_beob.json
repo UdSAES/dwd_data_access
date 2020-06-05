@@ -85,7 +85,7 @@
       "longitude": 8.527128,
       "elevation": 8
     },
-    "stationId": "A112_",
+    "stationId": "A112",
     "name": "Wrixum/Föhr"
   },
   {
@@ -94,7 +94,7 @@
       "longitude": 9.364924,
       "elevation": 17
     },
-    "stationId": "A159_",
+    "stationId": "A159",
     "name": "Eggebek"
   },
   {
@@ -103,7 +103,7 @@
       "longitude": 8.858369,
       "elevation": 3
     },
-    "stationId": "A505_",
+    "stationId": "A505",
     "name": "Büsum"
   },
   {
@@ -112,7 +112,7 @@
       "longitude": 9.925507,
       "elevation": 16.5
     },
-    "stationId": "A653_",
+    "stationId": "A653",
     "name": "Padenstedt (Pony-Park)"
   },
   {
@@ -121,7 +121,7 @@
       "longitude": 10.698267,
       "elevation": 26
     },
-    "stationId": "A791_",
+    "stationId": "A791",
     "name": "Schwartau,Bad -Groß Parin"
   },
   {
@@ -130,7 +130,7 @@
       "longitude": 9.865926,
       "elevation": 666
     },
-    "stationId": "Q999_",
+    "stationId": "Q999",
     "name": "Wangen/Allgäu-Schwaderberg"
   }
 ]
