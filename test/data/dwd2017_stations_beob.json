@@ -5,7 +5,8 @@
       "elevation": 0
     },
     "name": "UFS Deutsche Bucht",
-    "stationId": "10007"
+    "stationId": "10007",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -14,7 +15,8 @@
       "elevation": 4
     },
     "name": "Helgoland",
-    "stationId": "10015"
+    "stationId": "10015",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -23,7 +25,8 @@
       "elevation": 1489.6
     },
     "name": "Feldberg/Schwarzwald",
-    "stationId": "10908"
+    "stationId": "10908",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -32,7 +35,8 @@
       "elevation": 2964
     },
     "name": "Zugspitze",
-    "stationId": "10961"
+    "stationId": "10961",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -41,7 +45,8 @@
       "elevation": 977
     },
     "name": "Hohenpeißenberg",
-    "stationId": "10962"
+    "stationId": "10962",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -50,7 +55,8 @@
       "elevation": 719
     },
     "name": "Garmisch-Partenkirchen",
-    "stationId": "10963"
+    "stationId": "10963",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -59,7 +65,8 @@
       "elevation": 551.2
     },
     "name": "Chieming",
-    "stationId": "10982"
+    "stationId": "10982",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -68,7 +75,8 @@
       "elevation": 380
     },
     "name": "Neuburg/Donau (Flugplatz)",
-    "stationId": "10853"
+    "stationId": "10853",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -77,7 +85,8 @@
       "elevation": 40
     },
     "name": "GEORG VON NEUMAYER",
-    "stationId": "89002"
+    "stationId": "89002",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -86,7 +95,8 @@
       "elevation": 8
     },
     "stationId": "A112",
-    "name": "Wrixum/Föhr"
+    "name": "Wrixum/Föhr",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -95,7 +105,8 @@
       "elevation": 17
     },
     "stationId": "A159",
-    "name": "Eggebek"
+    "name": "Eggebek",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -104,7 +115,8 @@
       "elevation": 3
     },
     "stationId": "A505",
-    "name": "Büsum"
+    "name": "Büsum",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -113,7 +125,8 @@
       "elevation": 16.5
     },
     "stationId": "A653",
-    "name": "Padenstedt (Pony-Park)"
+    "name": "Padenstedt (Pony-Park)",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -122,7 +135,8 @@
       "elevation": 26
     },
     "stationId": "A791",
-    "name": "Schwartau,Bad -Groß Parin"
+    "name": "Schwartau,Bad -Groß Parin",
+    "types": [ "BEOB" ]
   },
   {
     "location": {
@@ -131,6 +145,7 @@
       "elevation": 666
     },
     "stationId": "Q999",
-    "name": "Wangen/Allgäu-Schwaderberg"
+    "name": "Wangen/Allgäu-Schwaderberg",
+    "types": [ "BEOB" ]
   }
 ]
