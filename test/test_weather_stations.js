@@ -99,13 +99,35 @@ describe('Test correct identification of weather stations in the vicinity of giv
   let stations = null
 
   before(async function () {
-    stations = await sc.readStationsMosmixFromTxt(DWD_STATIONS_MOSMIX_FROM_PDF)
+    stations = await sc.getAllStations('./test/data')
   })
 
   describe('Find _the_ single closest station', function () {
-    it('should return a list of stations', async function () {
-      const closestStation = await su.findClosestStation({ longitude: 11.11, latitude: 60.19 }, stations)
-      console.log(closestStation)
-    }).timeout(0)
+    it('should return the expected result', async function () {
+      const expected = {
+        station: {
+          stationId: 'A159',
+          name: 'Eggebek',
+          location: {
+            latitude: 54.62823,
+            longitude: 9.364924,
+            elevation: 17
+          }
+        },
+        distance: 627.855
+      }
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      const actual = await su.findClosestStation({ longitude: 11.11, latitude: 60.19 }, stations)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
   })
 })
