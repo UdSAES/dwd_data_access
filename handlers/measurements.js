@@ -109,16 +109,14 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
           })
 
           const filteredStationCatalog = _.filter(stationCatalog, (item) => {
-            return !_.isNil(filteredStationIdsMap[item.id])
+            return !_.isNil(filteredStationIdsMap[item.stationId])
           })
           closestStation = su.findClosestStation(coordinates, filteredStationCatalog)
 
-          var filePath = null
-          if (closestStation.station.id.length === 5) {
-            filePath = path.join(dateDirectoryPath, closestStation.station.id + '-BEOB.csv')
-          } else {
-            filePath = path.join(dateDirectoryPath, closestStation.station.id + '_-BEOB.csv')
-          }
+          const filePath = path.join(
+            dateDirectoryPath,
+            _.pad(closestStation.station.stationId, 5, '_') + '-BEOB.csv'
+          )
 
           const fileContentString = await fs.readFile(filePath, { encoding: 'utf8' })
           const table = parseCSV(fileContentString)
@@ -182,10 +180,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
         url: 'https://www.dwd.de/EN/ourservices/opendata/opendata.html'
       }
 
-      result.location = {
-        longitude: closestStation.station.longitude,
-        latitude: closestStation.station.latitude
-      }
+      result.location = closestStation.station.location
 
       result.measurements = []
 

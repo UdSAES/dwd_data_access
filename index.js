@@ -47,7 +47,6 @@ const EXIT_CODE_SERVER_ERROR = 10
 const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
 const VOIS_JSON_FILE_PATH = './config/vois.json'
-const MOSMIX_STATION_CATALOG_PATH = './config/dwd2017_stations_mosmix_from_pdf.txt'
 const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
 
 // Instantiate logger
@@ -240,7 +239,7 @@ app.listen(LISTEN_PORT, () => {
 })
 
 async function init () {
-  const stationCatalog = await sc.readStationsMosmixFromTxt(MOSMIX_STATION_CATALOG_PATH)
+  const stationCatalog = await sc.getAllStations('./config/')
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
   })
