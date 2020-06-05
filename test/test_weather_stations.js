@@ -104,7 +104,8 @@ describe('Test correct identification of weather stations in the vicinity of giv
             latitude: 54.62823,
             longitude: 9.364924,
             elevation: 17
-          }
+          },
+          types: ['BEOB']
         },
         distance: 627.855
       }
