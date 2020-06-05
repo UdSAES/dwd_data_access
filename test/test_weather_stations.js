@@ -16,6 +16,9 @@ const sc = require('../lib/weather_stations')
 const DWD_STATIONS_MOSMIX_FROM_PDF = './config/dwd2017_stations_mosmix_from_pdf.txt'
 
 describe('Test correct parsing of station catalogue(s)', function () {
+  const dwdStationsBeobHaAsCSV = './test/data/dwd2017_stations_beob_ha.csv'
+  const dwdStationsBeobNaAsCSV = './test/data/dwd2018_stations_beob_na.csv'
+
   describe('Do not throw upon reading the station catalogue from the old .txt file', function () {
     it('should return a list of stations', async function () {
       const stationData = await sc.readStationsMosmixFromTxt(DWD_STATIONS_MOSMIX_FROM_PDF)
@@ -23,7 +26,6 @@ describe('Test correct parsing of station catalogue(s)', function () {
   })
 
   describe('Parse the list of major weather stations used by DWD', async function () {
-    const dwdStationsBeobHaAsCSV = './test/data/dwd2017_stations_beob_ha.csv'
     const dwdStationsBeobHaAsJSON = './test/data/dwd2017_stations_beob_ha.json'
 
     it('should return the expected output', async function () {
@@ -47,7 +49,6 @@ describe('Test correct parsing of station catalogue(s)', function () {
   })
 
   describe('Parse the list of additional weather stations used by DWD', async function () {
-    const dwdStationsBeobNaAsCSV = './test/data/dwd2018_stations_beob_na.csv'
     const dwdStationsBeobNaAsJSON = './test/data/dwd2018_stations_beob_na.json'
 
     it('should return the expected output', async function () {
@@ -60,6 +61,29 @@ describe('Test correct parsing of station catalogue(s)', function () {
 
       // Parse test file (shortened to a few lines)
       const actual = await sc.readStationsBeobNa(dwdStationsBeobNaAsCSV)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+  describe('Merge all lists of stations into one', async function () {
+    const dwdStationsBeobAsJSON = './test/data/dwd2017_stations_beob.json'
+
+    it('should return the expected output', async function () {
+      // Read expected result from .json-file
+      const expected = await fs.readJson(dwdStationsBeobAsJSON)
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Read stations from files
+      const actual = await sc.getAllStations('./test/data')
       addContext(this, {
         title: 'actual output',
         value: actual
