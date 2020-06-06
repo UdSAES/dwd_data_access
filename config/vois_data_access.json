@@ -101,6 +101,48 @@
   },
   {
     "target": {
+      "key": "asob_s",
+      "unit": "W/m²"
+    },
+    "cosmo": {
+      "functionType": "loadRadiationValue",
+      "options": {
+        "key": "asob_s",
+        "unit": "W/m²"
+      }
+    },
+    "report": {
+      "key": "global_radiation_last_hour",
+      "unit": "W/m²"
+    },
+    "mosmix": {
+      "key": "Rad1h",
+      "unit": "kJ/m²"
+    }
+  },
+  {
+    "target": {
+      "key": "clct",
+      "unit": "1"
+    },
+    "cosmo": {
+      "functionType": "loadBaseValue",
+      "options": {
+        "key": "clct",
+        "unit": "1"
+      }
+    },
+    "report": {
+      "key": "cloud_cover_total",
+      "unit": "%"
+    },
+    "mosmix": {
+      "key": "N",
+      "unit": "%"
+    }
+  },
+  {
+    "target": {
       "key": "td_2m",
       "unit": "K"
     },

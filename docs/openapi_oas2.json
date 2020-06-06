@@ -484,6 +484,8 @@
         "relhum_2m",
         "aswdifd_s",
         "aswdir_s",
+        "asob_s",
+        "clct",
         "td_2m",
         "ws_10m",
         "wd_10m"
