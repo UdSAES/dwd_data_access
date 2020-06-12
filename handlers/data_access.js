@@ -24,6 +24,28 @@ var log = bunyan.createLogger({
 })
 log.info('loaded module for handling requests for non-cached data')
 
+// TODO @Georgii implement handler for `GET /weather-stations` here
+// GET /weather-stations?in-vicinity-of=...&radius=...&limit=...
+function getWeatherStations () {
+  return async function (req, res, next) {
+    // Load internal representation of list of stations
+
+    // Get parameters `in-vicinity-of`, `radius`, `limit` from `req`-object
+    // https://expressjs.com/en/4x/api.html#req.query
+
+    // Filter list according to parameters (if given)
+    // --> call function `findStationsInVicinityOf()` in ./lib/station_utils.js
+
+    // Render external representation according to `Accept`-HTTP header
+    // -- JSON for `application/json`, CSV for `text/csv` -- and
+    // send result with correct HTTP header and -status code
+    // https://expressjs.com/en/4x/api.html#req.accepts
+    // https://expressjs.com/en/4x/api.html#res.set
+    // https://expressjs.com/en/4x/api.html#res.status
+    // https://expressjs.com/en/4x/api.html#res.send
+  }
+}
+
 // GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
 function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
   return async function (req, res, next) {

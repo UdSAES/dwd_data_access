@@ -114,6 +114,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
         value: expected
       })
 
+      // TODO @Georgii replace by `findStationsInVicinityOf()`-- MUST still pass!
       const actual = await su.findClosestStation({ longitude: 11.11, latitude: 60.19 }, stations)
       addContext(this, {
         title: 'actual output',
@@ -123,4 +124,10 @@ describe('Test correct identification of weather stations in the vicinity of giv
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
+
+  // TODO @Georgii add additional tests, for example:
+  // - no parameters, only some parameters, all parameters
+  // - `radius` limits list of stations (to a few stations/to zero stations)
+  // - `limit` limits list of stations
+  // - ... -- choose some that make sense, probably overkill to test all permutations
 })
