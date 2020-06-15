@@ -244,7 +244,12 @@ async function init () {
     encoding: 'utf8'
   })
   const endPointMapping = [
-    // TODO @Georgii register handler for path `/weather-stations` here
+    {
+      method: 'get',
+      openapiPath: '/weather-stations',
+      path: '/weather-stations',
+      handler: hda.getWeatherStations()
+    },
     {
       method: 'get',
       openapiPath: '/weather/cosmo/d2/{referenceTimestamp}/{voi}',

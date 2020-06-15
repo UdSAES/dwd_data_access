@@ -29,7 +29,7 @@ log.info('loaded module for handling requests for non-cached data')
 function getWeatherStations () {
   return async function (req, res, next) {
     // Load internal representation of list of stations
-
+    res.send('')
     // Get parameters `in-vicinity-of`, `radius`, `limit` from `req`-object
     // https://expressjs.com/en/4x/api.html#req.query
 
