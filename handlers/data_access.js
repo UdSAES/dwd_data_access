@@ -261,6 +261,7 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
+exports.getWeatherStations = getWeatherStations
 exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
 exports.getWeatherReport = getWeatherReport
