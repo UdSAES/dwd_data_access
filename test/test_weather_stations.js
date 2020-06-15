@@ -96,7 +96,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
 
   describe('Find _the_ single closest station', function () {
     it('should return the expected result', async function () {
-      const expected = {
+      const expected = [ {
         station: {
           stationId: 'A159',
           name: 'Eggebek',
@@ -107,15 +107,15 @@ describe('Test correct identification of weather stations in the vicinity of giv
           },
           types: ['BEOB']
         },
-        distance: 627.855
-      }
+        distance: 627.856
+      } ]
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
       // TODO @Georgii replace by `findStationsInVicinityOf()`-- MUST still pass!
-      const actual = await su.findClosestStation({ longitude: 11.11, latitude: 60.19 }, stations)
+      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 630000, 1)
       addContext(this, {
         title: 'actual output',
         value: actual
