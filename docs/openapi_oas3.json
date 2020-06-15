@@ -63,12 +63,12 @@
                   "$ref": "#/components/schemas/ListOfWeatherStationsAsCSV"
                 },
                 "example": "name,url,distance\n\"UFS Deutsche Bucht\",\"http://example.com/weather-stations/10007\",\n"
-              },
+              }
             }
           },
           "400": {
             "$ref": "#/components/responses/SchemaValidationFailed"
-          },
+          }
         }
       }
     }
