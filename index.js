@@ -288,33 +288,34 @@ async function init () {
     }
   ]
 
-  var api = await fs.readJson('./docs/openapi_oas2.json')
+  var api = await fs.readJson('./docs/openapi_oas3.json')
   api = await $RefParser.dereference(api)
 
-  swaggerTools.initializeMiddleware(api, function (middleware) {
-    // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
-    app.use(middleware.swaggerMetadata())
+  // TODO @Moritz replace swagger-stuff with up-to-date alternative
+  // swaggerTools.initializeMiddleware(api, function (middleware) {
+  //   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
+  //   app.use(middleware.swaggerMetadata())
+  //
+  //   // Validate Swagger requests
+  //   app.use(middleware.swaggerValidator())
 
-    // Validate Swagger requests
-    app.use(middleware.swaggerValidator())
-
-    const paths = _.get(api, ['paths'])
-    _.forEach(paths, (pathDefinition, path) => {
-      _.forEach(pathDefinition, (spec, method) => {
-        const mapping = _.find(endPointMapping, (mapping) => {
-          return _.lowerCase(mapping.method) === _.lowerCase(method) && _.lowerCase(mapping.openapiPath) === _.lowerCase(path)
-        })
-
-        if (_.isNil(mapping)) {
-          log.error('no fitting mapping found for method ' + _.toUpper(method) + ' and resource ' + path)
-          return
-        }
-
-        log.info('created mapping for method %s on resource %s', _.toUpper(method), mapping.path)
-        app[method](mapping.path, mapping.handler)
+  const paths = _.get(api, ['paths'])
+  _.forEach(paths, (pathDefinition, path) => {
+    _.forEach(pathDefinition, (spec, method) => {
+      const mapping = _.find(endPointMapping, (mapping) => {
+        return _.lowerCase(mapping.method) === _.lowerCase(method) && _.lowerCase(mapping.openapiPath) === _.lowerCase(path)
       })
+
+      if (_.isNil(mapping)) {
+        log.error('no fitting mapping found for method ' + _.toUpper(method) + ' and resource ' + path)
+        return
+      }
+
+      log.info('created mapping for method %s on resource %s', _.toUpper(method), mapping.path)
+      app[method](mapping.path, mapping.handler)
     })
   })
+  // })
 
   log.info('configuration of service instance completed successfully')
 }
