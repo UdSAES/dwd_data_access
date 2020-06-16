@@ -44,7 +44,6 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "request-promise-native": "^1.0.8",
-    "spherical": "^0.2.0",
     "swagger-tools": "^0.10.4",
     "tmp-promise": "^2.1.1",
     "verror": "^1.10.0"
