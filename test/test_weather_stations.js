@@ -89,14 +89,14 @@ describe('Test correct parsing of station catalogue(s)', function () {
 
 describe('Test correct identification of weather stations in the vicinity of given coordinates', function () {
   let stations = null
-
+  // Read expected result from .json-file
   before(async function () {
     stations = await sc.getAllStations('./test/data')
   })
 
   describe('Find _the_ single closest station', function () {
     it('should return the expected result', async function () {
-      const expected = [ {
+      const expected = [{
         station: {
           stationId: 'A159',
           name: 'Eggebek',
@@ -108,13 +108,12 @@ describe('Test correct identification of weather stations in the vicinity of giv
           types: ['BEOB']
         },
         distance: 627.856
-      } ]
+      }]
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      // TODO @Georgii replace by `findStationsInVicinityOf()`-- MUST still pass!
       const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 630000, 1)
       addContext(this, {
         title: 'actual output',
@@ -133,7 +132,6 @@ describe('Test correct identification of weather stations in the vicinity of giv
         value: expected
       })
 
-      // TODO @Georgii replace by `findStationsInVicinityOf()`-- MUST still pass!
       const actual = await su.findStationsInVicinityOf()
       addContext(this, {
         title: 'actual output',
@@ -148,109 +146,175 @@ describe('Test correct identification of weather stations in the vicinity of giv
     it('should return the expected result', async function () {
       const expected = [
         {
-          "station": {
-            "location": {
-              "latitude": 54.62823,
-              "longitude": 9.364924,
-              "elevation": 17
+          station: {
+            location: {
+              latitude: 54.62823,
+              longitude: 9.364924,
+              elevation: 17
             },
-            "name": "Eggebek",
-            "stationId": "A159",
-            "types": [
-              "BEOB"
+            name: 'Eggebek',
+            stationId: 'A159',
+            types: [
+              'BEOB'
             ]
           },
-          "distance": 627.856
+          distance: 627.856
         },
         {
-          "station": {
-            "location": {
-              "latitude": 54.692781,
-              "longitude": 8.527128,
-              "elevation": 8
+          station: {
+            location: {
+              latitude: 54.692781,
+              longitude: 8.527128,
+              elevation: 8
             },
-            "name": "Wrixum/Föhr",
-            "stationId": "A112",
-            "types": [
-              "BEOB"
+            name: 'Wrixum/Föhr',
+            stationId: 'A112',
+            types: [
+              'BEOB'
             ]
           },
-          "distance": 631.083
+          distance: 631.083
         },
         {
-          "station": {
-            "location": {
-              "latitude": 54.119305,
-              "longitude": 8.858369,
-              "elevation": 3
+          station: {
+            location: {
+              latitude: 54.119305,
+              longitude: 8.858369,
+              elevation: 3
             },
-            "name": "Büsum",
-            "stationId": "A505",
-            "types": [
-              "BEOB"
+            name: 'Büsum',
+            stationId: 'A505',
+            types: [
+              'BEOB'
             ]
           },
-          "distance": 689.221
+          distance: 689.221
         },
         {
-          "station": {
-            "location": {
-              "latitude": 54.018844,
-              "longitude": 9.925507,
-              "elevation": 16.5
+          station: {
+            location: {
+              latitude: 54.018844,
+              longitude: 9.925507,
+              elevation: 16.5
             },
-            "name": "Padenstedt (Pony-Park)",
-            "stationId": "A653",
-            "types": [
-              "BEOB"
+            name: 'Padenstedt (Pony-Park)',
+            stationId: 'A653',
+            types: [
+              'BEOB'
             ]
           },
-          "distance": 690.663
+          distance: 690.663
         },
         {
-          "station": {
-            "location": {
-              "latitude": 53.938481,
-              "longitude": 10.698267,
-              "elevation": 26
+          station: {
+            location: {
+              latitude: 53.938481,
+              longitude: 10.698267,
+              elevation: 26
             },
-            "name": "Schwartau,Bad -Groß Parin",
-            "stationId": "A791",
-            "types": [
-              "BEOB"
+            name: 'Schwartau,Bad -Groß Parin',
+            stationId: 'A791',
+            types: [
+              'BEOB'
             ]
           },
-          "distance": 696.358
+          distance: 696.358
         },
         {
-          "station": {
-            "location": {
-              "latitude": 54.174957,
-              "longitude": 7.891954,
-              "elevation": 4
+          station: {
+            location: {
+              latitude: 54.174957,
+              longitude: 7.891954,
+              elevation: 4
             },
-            "name": "Helgoland",
-            "stationId": "10015",
-            "types": [
-              "BEOB"
+            name: 'Helgoland',
+            stationId: '10015',
+            types: [
+              'BEOB'
             ]
           },
-          "distance": 696.961
+          distance: 696.961
         },
         {
-          "station": {
-            "location": {
-              "latitude": 54.1667,
-              "longitude": 7.45,
-              "elevation": 0
+          station: {
+            location: {
+              latitude: 54.1667,
+              longitude: 7.45,
+              elevation: 0
             },
-            "name": "UFS Deutsche Bucht",
-            "stationId": "10007",
-            "types": [
-              "BEOB"
+            name: 'UFS Deutsche Bucht',
+            stationId: '10007',
+            types: [
+              'BEOB'
             ]
           },
-          "distance": 705.672
+          distance: 705.672
+        }
+      ]
+
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // find stations accordingly
+      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 900000)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+  describe('Return empty list limited to 3 stations', function () {
+    it('should return the expected result', async function () {
+      const expected = [
+        {
+          station: {
+            location: {
+              latitude: 54.62823,
+              longitude: 9.364924,
+              elevation: 17
+            },
+            name: 'Eggebek',
+            stationId: 'A159',
+            types: [
+              'BEOB'
+            ]
+          },
+          distance: 627.856
+        },
+        {
+          station: {
+            location: {
+              latitude: 54.692781,
+              longitude: 8.527128,
+              elevation: 8
+            },
+            name: 'Wrixum/Föhr',
+            stationId: 'A112',
+            types: [
+              'BEOB'
+            ]
+          },
+          distance: 631.083
+        },
+        {
+          station: {
+            location: {
+              latitude: 54.119305,
+              longitude: 8.858369,
+              elevation: 3
+            },
+            name: 'Büsum',
+            stationId: 'A505',
+            types: [
+              'BEOB'
+            ]
+          },
+          distance: 689.221
         }
       ]
       addContext(this, {
@@ -258,71 +322,6 @@ describe('Test correct identification of weather stations in the vicinity of giv
         value: expected
       })
 
-      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 900000)
-      addContext(this, {
-        title: 'actual output',
-        value: actual
-      })
-
-      assert.deepEqual(actual, expected, 'Result does not match expectations')
-    })
-  })
-
-    describe('Return empty list limited to 3 stations', function () {
-    it('should return the expected result', async function () {
-      const expected = [
-          {
-            "station": {
-              "location": {
-                "latitude": 54.62823,
-                "longitude": 9.364924,
-                "elevation": 17
-              },
-              "name": "Eggebek",
-              "stationId": "A159",
-              "types": [
-                "BEOB"
-              ]
-            },
-            "distance": 627.856
-          },
-          {
-            "station": {
-              "location": {
-                "latitude": 54.692781,
-                "longitude": 8.527128,
-                "elevation": 8
-              },
-              "name": "Wrixum/Föhr",
-              "stationId": "A112",
-              "types": [
-                "BEOB"
-              ]
-            },
-            "distance": 631.083
-          },
-          {
-            "station": {
-              "location": {
-                "latitude": 54.119305,
-                "longitude": 8.858369,
-                "elevation": 3
-              },
-              "name": "Büsum",
-              "stationId": "A505",
-              "types": [
-                "BEOB"
-              ]
-            },
-            "distance": 689.221
-          }
-        ]
-      addContext(this, {
-        title: 'expected output',
-        value: expected
-      })
-
-      // TODO @Georgii replace by `findStationsInVicinityOf()`-- MUST still pass!
       const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 9000000, 3)
       addContext(this, {
         title: 'actual output',
