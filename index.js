@@ -248,7 +248,7 @@ async function init () {
       method: 'get',
       openapiPath: '/weather-stations',
       path: '/weather-stations',
-      handler: hda.getWeatherStations()
+      handler: hda.getWeatherStations(stationCatalog)
     },
     {
       method: 'get',

@@ -11,6 +11,8 @@ const {
   convertUnit
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
+const wf = require('../lib/weather_stations.js')
+const su = require('../lib/station_utils.js')
 
 // Instantiate logger
 const processenv = require('processenv')
@@ -26,15 +28,24 @@ log.info('loaded module for handling requests for non-cached data')
 
 // TODO @Georgii implement handler for `GET /weather-stations` here
 // GET /weather-stations?in-vicinity-of=...&radius=...&limit=...
-function getWeatherStations () {
+function getWeatherStations (stationCatalog, location, radius, limit) {
   return async function (req, res, next) {
-    // Load internal representation of list of stations
-    res.send('')
-    // Get parameters `in-vicinity-of`, `radius`, `limit` from `req`-object
-    // https://expressjs.com/en/4x/api.html#req.query
 
-    // Filter list according to parameters (if given)
-    // --> call function `findStationsInVicinityOf()` in ./lib/station_utils.js
+    let radius = parseInt(req.query.radius)
+    let limit = parseInt(req.query.limit)
+    let inVicinityOf = req.query["in-vicinity-of"].split('/')
+    let latitude = inVicinityOf[0]
+    let longitude = inVicinityOf[1]
+
+    const stationsInVicinity = su.findStationsInVicinityOf({latitude: latitude, longitude: longitude}, stationCatalog, radius, limit)
+    //res.send(stationsInVicinity)
+    if (req.accepts('json')){
+      res.send(stationsInVicinity)
+    }
+    if (req.accepts('csv')){
+      res.send('Result in csv')
+    }
+
 
     // Render external representation according to `Accept`-HTTP header
     // -- JSON for `application/json`, CSV for `text/csv` -- and
