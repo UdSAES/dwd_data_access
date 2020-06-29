@@ -3,6 +3,7 @@
 
 'use strict'
 
+var url = require('url')
 const path = require('path')
 const moment = require('moment')
 const csv = require('dwd-csv-helper')
@@ -31,20 +32,52 @@ log.info('loaded module for handling requests for non-cached data')
 function getWeatherStations (stationCatalog, location, radius, limit) {
   return async function (req, res, next) {
 
-    let radius = parseInt(req.query.radius)
-    let limit = parseInt(req.query.limit)
-    let inVicinityOf = req.query["in-vicinity-of"].split('/')
-    let latitude = inVicinityOf[0]
-    let longitude = inVicinityOf[1]
 
-    const stationsInVicinity = su.findStationsInVicinityOf({latitude: latitude, longitude: longitude}, stationCatalog, radius, limit)
-    //res.send(stationsInVicinity)
-    if (req.accepts('json')){
-      res.send(stationsInVicinity)
+    function getUrlOfTheStation(station, req) {
+      return url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: "weather-stations/" + station.stationId
+      });
     }
-    if (req.accepts('csv')){
-      res.send('Result in csv')
+
+    function formatStationJSON(item) {
+      const stationName = item.station.name
+      const stationDistance = item.distance
+      if (stationDistance) {
+        return {
+          name: stationName,
+          url: getUrlOfTheStation(item.station, req),
+          distance: stationDistance
+        }
+      } else {
+        return {
+          name: stationName,
+          url: getUrlOfTheStation(item.station, req)
+        }
+      }
     }
+
+    const formattedStationsInCSV = []
+    let stationsToExpose
+
+    if (Object.keys(req.query).length === 0) {
+      stationsToExpose = stationCatalog.map(item => { return {name: item.name, url: getUrlOfTheStation(item, req)} }, [])
+    } else {
+      const radius = parseInt(req.query.radius)
+      const limit = parseInt(req.query.limit)
+      const inVicinityOf = req.query["in-vicinity-of"].split('/')
+      const latitude = inVicinityOf[0]
+      const longitude = inVicinityOf[1]
+      const stationsInVicinity = su.findStationsInVicinityOf({latitude: latitude, longitude: longitude}, stationCatalog, radius, limit)
+
+      stationsToExpose = stationsInVicinity.map(item => formatStationJSON(item), [])
+    }
+
+    if (req.accepts('json')) {
+        res.send(stationsToExpose)
+    }
+
 
 
     // Render external representation according to `Accept`-HTTP header
