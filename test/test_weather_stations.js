@@ -456,13 +456,21 @@ describe('Test correct identification of weather stations in the vicinity of giv
 describe('Return correct distance in kilometers', function () {
     it('should return the expected result', async function () {
 
+      const expected = 930.304
       addContext(this, {
         title: 'expected output',
-        value: 5
+        value: expected
       })
 
-      const actual = await su.findStationsInVicinityOf({latitude: 52.516272, longitude: 13.377722},
-                                                       [{latitude: 51.503333, longitude: -0.119722}], 9000000, 3)
+      const berlinLocation = {latitude: 52.516272, longitude: 13.377722}
+
+      const actual = await su.findStationsInVicinityOf(berlinLocation,
+                                                       [{location: {latitude: 51.503333,
+                                                                    longitude: -0.119722,
+                                                                    elevation: 0},
+                                                                   name: 'London',
+                                                                   stationId: 'TEST',
+                                                                   types: ['TEST']}], 9000000, 3)[0].distance
       addContext(this, {
         title: 'actual output',
         value: actual
