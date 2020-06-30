@@ -21,6 +21,7 @@
   "dependencies": {
     "ajx": "^0.1.0",
     "async-parallel": "^1.2.3",
+    "axios": "^0.19.2",
     "bunyan": "^1.8.12",
     "child-process-promise": "^2.2.1",
     "cors": "^2.8.5",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-openapi-response-validator": "^0.9.4",
     "dredd": "^13.1.1",
     "mocha": "^7.1.2",
     "mochawesome": "^6.1.1",
