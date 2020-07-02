@@ -12,7 +12,6 @@ const {
   convertUnit
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
-const wf = require('../lib/weather_stations.js')
 const su = require('../lib/station_utils.js')
 
 // Instantiate logger
@@ -27,21 +26,32 @@ var log = bunyan.createLogger({
 })
 log.info('loaded module for handling requests for non-cached data')
 
-// TODO @Georgii implement handler for `GET /weather-stations` here
-// GET /weather-stations?in-vicinity-of=...&radius=...&limit=...
 function getWeatherStations (stationCatalog, location, radius, limit) {
   return async function (req, res, next) {
+    res.set('Accept', ['application/json', 'text/csv'])
 
+    function formatStationsCSV (stations) {
+      const csvLabels = 'name, url, distance \n'
+      const resultString = csvLabels
+      return stations.reduce((acc, item) => {
+        if (item.distance) {
+          acc += `${item.name}, ${item.url}, ${item.distance} \n`
+        } else {
+          acc += `${item.name}, ${item.url}, \n`
+        }
+        return acc
+      }, resultString)
+    }
 
-    function getUrlOfTheStation(station, req) {
+    function getUrlOfTheStation (station, req) {
       return url.format({
         protocol: req.protocol,
         host: req.get('host'),
-        pathname: "weather-stations/" + station.stationId
-      });
+        pathname: 'weather-stations/' + station.stationId
+      })
     }
 
-    function formatStationJSON(item) {
+    function formatStationJSON (item) {
       const stationName = item.station.name
       const stationDistance = item.distance
       if (stationDistance) {
@@ -58,35 +68,27 @@ function getWeatherStations (stationCatalog, location, radius, limit) {
       }
     }
 
-    const formattedStationsInCSV = []
     let stationsToExpose
 
     if (Object.keys(req.query).length === 0) {
-      stationsToExpose = stationCatalog.map(item => { return {name: item.name, url: getUrlOfTheStation(item, req)} }, [])
+      stationsToExpose = stationCatalog.map(item => { return { name: item.name, url: getUrlOfTheStation(item, req) } }, [])
     } else {
       const radius = parseInt(req.query.radius)
       const limit = parseInt(req.query.limit)
-      const inVicinityOf = req.query["in-vicinity-of"].split('/')
+      const inVicinityOf = req.query['in-vicinity-of'].split('/')
       const latitude = inVicinityOf[0]
       const longitude = inVicinityOf[1]
-      const stationsInVicinity = su.findStationsInVicinityOf({latitude: latitude, longitude: longitude}, stationCatalog, radius, limit)
+      const stationsInVicinity = su.findStationsInVicinityOf({ latitude: latitude, longitude: longitude }, stationCatalog, radius, limit)
 
       stationsToExpose = stationsInVicinity.map(item => formatStationJSON(item), [])
     }
 
-    if (req.accepts('json')) {
-        res.send(stationsToExpose)
+    if (req.get('Accept') === 'application/json') {
+      res.send(stationsToExpose)
     }
-
-
-
-    // Render external representation according to `Accept`-HTTP header
-    // -- JSON for `application/json`, CSV for `text/csv` -- and
-    // send result with correct HTTP header and -status code
-    // https://expressjs.com/en/4x/api.html#req.accepts
-    // https://expressjs.com/en/4x/api.html#res.set
-    // https://expressjs.com/en/4x/api.html#res.status
-    // https://expressjs.com/en/4x/api.html#res.send
+    if (req.get('Accept') === 'text/csv') {
+      res.send([formatStationsCSV(stationsToExpose)])
+    }
   }
 }
 
