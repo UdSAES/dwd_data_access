@@ -71,6 +71,42 @@
           }
         }
       }
+    },
+    "/weather-stations/{stationId}": {
+      "get": {
+        "tags": [ "Weather Stations" ],
+        "summary": "Show details about a single weather station",
+        "operationId": "getStation",
+        "parameters": [ {
+            "name": "stationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/stationId"
+            }
+        } ],
+        "responses": {
+          "200": {
+            "description": "A representation of a single weather station",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherStationAsJSON"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherStationAsCSV"
+                },
+                "example": "stationId,name,latitude,longitude,elevation\n\"10982\",\"Chieming\",47.884339,12.540379,551.2"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/SchemaValidationFailed"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -113,6 +149,51 @@
       },
       "ListOfWeatherStationsAsCSV": {
         "description": "List of weather stations serialized as CSV",
+        "externalDocs": {
+          "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
+          "url": "tbd"
+        }
+      },
+      "stationId": {
+        "type": "string",
+        "description": "The identifier of the station used by DWD",
+        "pattern": "^[A-Z\\d]{4,5}$",
+        "example": "10708"
+      },
+      "WeatherStationAsJSON": {
+        "type": "object",
+        "required": [
+          "name",
+          "location",
+          "stationId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The human-readable name of the station"
+          },
+          "location": {
+            "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/dev/schemata/location/schema_v0.1.0_oas2.json#/Location"
+          },
+          "stationId": {
+            "$ref": "#/components/schemas/stationId"
+          },
+          "measuredValues": {
+            "type": "string",
+            "format": "uri",
+            "description": "A resource exposing climate data measured at this station",
+            "example": "http://example.com/weather-stations/10708/measured-values"
+          },
+          "forecast": {
+            "type": "string",
+            "format": "uri",
+            "description": "A resource exposing weather forecasts for this station's location",
+            "example": "http://example.com/weather-stations/10708/forecast"
+          }
+        }
+      },
+      "WeatherStationAsCSV": {
+        "description": "Information about a single weather stations serialized as CSV",
         "externalDocs": {
           "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
           "url": "tbd"
