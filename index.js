@@ -208,7 +208,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.static('./docs'))
-app.use('/oas', express.static('./docs/openapi_oas2.json'))
+app.use('/oas', express.static('./docs/openapi_oas3.json'))
 
 // Expose UI iff UI_URL_PATH is not empty
 if (UI_URL_PATH !== '') {
