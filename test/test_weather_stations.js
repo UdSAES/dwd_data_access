@@ -114,7 +114,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
         value: expected
       })
 
-      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 630000, 1)
+      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 630000, 1) // @Review no radius
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -124,6 +124,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
     })
   })
 
+  // @Review Doesn't make sense to me for internal function; if anything, the function should throw, which it would do automatically
   describe('Return empty list if no arguments are passed', function () {
     it('should return the expected result', async function () {
       const expected = []
@@ -144,6 +145,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
 
   describe('Return all stations if limit is 0', function () {
     it('should return the expected result', async function () {
+      // @Review Better to read from file, gets hard to read otherwise
       const expected = [
         {
           station: {
@@ -377,8 +379,9 @@ describe('Test correct identification of weather stations in the vicinity of giv
         value: expected
       })
 
+      // @Review first letter of comment capitalized if on own line (minor style issue)
       // find stations accordingly
-      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 900000)
+      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 900000) // @Review radius should be optional, do not use arbitrary value instead of null-value
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -388,7 +391,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
     })
   })
 
-  describe('Return empty list limited to 3 stations', function () {
+  describe('Return list limited to 3 stations', function () {
     it('should return the expected result', async function () {
       const expected = [
         {
@@ -442,7 +445,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
         value: expected
       })
 
-      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 9000000, 3)
+      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 9000000, 3) // @Review radius should be optional, do not use arbitrary value instead of null-value
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -455,7 +458,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
 
 describe('Return correct distance in kilometers', function () {
   it('should return the expected result', async function () {
-    const expected = 930.304
+    const expected = 930.304 // @Review where from?
     addContext(this, {
       title: 'expected output',
       value: expected
@@ -473,7 +476,7 @@ describe('Return correct distance in kilometers', function () {
         name: 'London',
         stationId: 'TEST',
         types: ['TEST']
-      }], 9000000, 3)[0].distance
+      }], 9000000, 3)[0].distance // @Review radius should be optional, do not use arbitrary value instead of null-value
     addContext(this, {
       title: 'actual output',
       value: actual

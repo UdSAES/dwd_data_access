@@ -3,7 +3,7 @@
 
 'use strict'
 
-var url = require('url')
+var url = require('url') // @Review `var` is deprecated, use `const` unless `let` is necessary
 const path = require('path')
 const moment = require('moment')
 const csv = require('dwd-csv-helper')
@@ -28,8 +28,9 @@ log.info('loaded module for handling requests for non-cached data')
 
 function getWeatherStations (stationCatalog, location, radius, limit) {
   return async function (req, res, next) {
-    res.set('Accept', ['application/json', 'text/csv'])
+    // res.set('Accept', ['application/json', 'text/csv']) // @Review doesn't make sense
 
+    // @Review better name `renderStationListAsCSV`?
     function formatStationsCSV (stations) {
       const csvLabels = 'name, url, distance \n'
       const resultString = csvLabels
@@ -51,6 +52,7 @@ function getWeatherStations (stationCatalog, location, radius, limit) {
       })
     }
 
+    // @Review better name `renderStationListAsJSON`? Should also accept full list
     function formatStationJSON (item) {
       const stationName = item.station.name
       const stationDistance = item.distance
@@ -70,8 +72,9 @@ function getWeatherStations (stationCatalog, location, radius, limit) {
 
     let stationsToExpose
 
-    if (Object.keys(req.query).length === 0) {
-      stationsToExpose = stationCatalog.map(item => { return { name: item.name, url: getUrlOfTheStation(item, req) } }, [])
+    if (Object.keys(req.query).length === 0) { // @Review distinction on `in-vicinity-of`
+      // @Review Just say `stationsToExpose = stationCatalog` here and pass list to render-function later (maybe sort alphabetically)
+      stationsToExpose = stationCatalog.map(item => { return { name: item.name, url: getUrlOfTheStation(item, req) } }, []) // think the last , [] is too much?
     } else {
       const radius = parseInt(req.query.radius)
       const limit = parseInt(req.query.limit)
@@ -80,14 +83,22 @@ function getWeatherStations (stationCatalog, location, radius, limit) {
       const longitude = inVicinityOf[1]
       const stationsInVicinity = su.findStationsInVicinityOf({ latitude: latitude, longitude: longitude }, stationCatalog, radius, limit)
 
+      // @Review Not here, rendering happens below
       stationsToExpose = stationsInVicinity.map(item => formatStationJSON(item), [])
     }
 
+    // @Review ..else, get lost because checking for strict equality is not content negotiation
+    // Use https://expressjs.com/en/4x/api.html#res.format instead!
+    // @Review explicitly set status and type!
+    // https://expressjs.com/en/4x/api.html#res.status
     if (req.get('Accept') === 'application/json') {
+      // @Review Rendering as JSON should happen here
       res.send(stationsToExpose)
     }
     if (req.get('Accept') === 'text/csv') {
-      res.send([formatStationsCSV(stationsToExpose)])
+      res.send([formatStationsCSV(stationsToExpose)]) // @Review not within a list
+    } else {
+      res.send(stationsToExpose)
     }
   }
 }
