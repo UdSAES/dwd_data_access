@@ -6,15 +6,15 @@
 const express = require('express')
 const _ = require('lodash')
 const processenv = require('processenv')
-const hfc = require('./handlers/forecast')
+// const hfc = require('./handlers/forecast')
 const hda = require('./handlers/data_access')
-const hm = require('./handlers/measurements')
-const hpoi = require('./handlers/poi')
-const poifce = require('./lib/poi_forecast_engine')
-const path = require('path')
+// const hm = require('./handlers/measurements')
+// const hpoi = require('./handlers/poi')
+// const poifce = require('./lib/poi_forecast_engine')
+// const path = require('path')
 const { OpenAPIBackend } = require('openapi-backend')
 const fs = require('fs-extra')
-const $RefParser = require('json-schema-ref-parser')
+// const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
 const sc = require('./lib/weather_stations')
 var jwt = require('express-jwt')
@@ -22,9 +22,9 @@ var bunyan = require('bunyan')
 const addRequestId = require('express-request-id')()
 
 const LISTEN_PORT = processenv('LISTEN_PORT')
-const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
-const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
-const POIS_JSON_FILE_PATH = processenv('POIS_JSON_FILE_PATH')
+// const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
+// const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
+// const POIS_JSON_FILE_PATH = processenv('POIS_JSON_FILE_PATH')
 const JWT_PUBLIC_KEY_FILE_PATH = processenv('JWT_PUBLIC_KEY_FILE_PATH')
 const AUTHORIZATION_LIMIT_INTERVAL = processenv('AUTHORIZATION_LIMIT_INTERVAL') || 10
 const AUTHORIZATION_LIMIT_VALUE = processenv('AUTHORIZATION_LIMIT_VALUE') || 1000
@@ -35,9 +35,9 @@ const UI_URL_PATH = String(processenv('UI_URL_PATH') || '')
 const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
-const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
-const EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING = 3
-const EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING = 4
+// const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
+// const EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING = 3
+// const EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING = 4
 const EXIT_CODE_JWT_PUBLIC_KEY_FILE_PATH_NOT_A_STRING = 5
 const EXIT_CODE_AUTHORIZATION_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER = 6
 const EXIT_CODE_AUTHORIZATION_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 7
@@ -46,8 +46,8 @@ const EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 9
 const EXIT_CODE_SERVER_ERROR = 10
 const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
-const VOIS_JSON_FILE_PATH = './config/vois.json'
-const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
+// const VOIS_JSON_FILE_PATH = './config/vois.json'
+// const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
 const API_SPECIFICATION_FILE_PATH = './docs/openapi_oas3.json'
 
 // Instantiate logger
@@ -77,26 +77,26 @@ function checkIfConfigIsValid () {
     log.debug('LISTEN_PORT is set to ' + LISTEN_PORT)
   }
 
-  if (!_.isString(DATA_ROOT_PATH)) {
-    log.fatal('DATA_ROOT_PATH must be a string: ' + DATA_ROOT_PATH)
-    process.exit(EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING)
-  } else {
-    log.debug('DATA_ROOT_PATH is set to ' + DATA_ROOT_PATH)
-  }
+  // if (!_.isString(DATA_ROOT_PATH)) {
+  //   log.fatal('DATA_ROOT_PATH must be a string: ' + DATA_ROOT_PATH)
+  //   process.exit(EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING)
+  // } else {
+  //   log.debug('DATA_ROOT_PATH is set to ' + DATA_ROOT_PATH)
+  // }
 
-  if (!_.isString(NEWEST_FORECAST_ROOT_PATH)) {
-    log.fatal('NEWEST_FORECAST_ROOT_PATH must be a string: ' + NEWEST_FORECAST_ROOT_PATH)
-    process.exit(EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING)
-  } else {
-    log.debug('NEWEST_FORECAST_ROOT_PATH is set to ' + NEWEST_FORECAST_ROOT_PATH)
-  }
+  // if (!_.isString(NEWEST_FORECAST_ROOT_PATH)) {
+  //   log.fatal('NEWEST_FORECAST_ROOT_PATH must be a string: ' + NEWEST_FORECAST_ROOT_PATH)
+  //   process.exit(EXIT_CODE_NEWEST_FORECAST_ROOT_PATH_NOT_A_STRING)
+  // } else {
+  //   log.debug('NEWEST_FORECAST_ROOT_PATH is set to ' + NEWEST_FORECAST_ROOT_PATH)
+  // }
 
-  if (!_.isString(POIS_JSON_FILE_PATH)) {
-    log.fatal('POIS_JSON_FILE_PATH must be a string: ' + POIS_JSON_FILE_PATH)
-    process.exit(EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING)
-  } else {
-    log.debug('POIS_JSON_FILE_PATH is set to ' + POIS_JSON_FILE_PATH)
-  }
+  // if (!_.isString(POIS_JSON_FILE_PATH)) {
+  //   log.fatal('POIS_JSON_FILE_PATH must be a string: ' + POIS_JSON_FILE_PATH)
+  //   process.exit(EXIT_CODE_POIS_JSON_FILE_PATH_NOT_A_STRING)
+  // } else {
+  //   log.debug('POIS_JSON_FILE_PATH is set to ' + POIS_JSON_FILE_PATH)
+  // }
 
   if (!_.isString(JWT_PUBLIC_KEY_FILE_PATH)) {
     log.fatal('JWT_PUBLIC_KEY_FILE_PATH must be a string: ' + JWT_PUBLIC_KEY_FILE_PATH)
@@ -248,8 +248,8 @@ async function failValidation (c, req, res, next) {
 }
 
 async function init () {
-  let api = await fs.readJson(API_SPECIFICATION_FILE_PATH)
-  api = await $RefParser.dereference(api)
+  // let api = await fs.readJson(API_SPECIFICATION_FILE_PATH)
+  // api = await $RefParser.dereference(api)
 
   // Read API-specification and initialize backend
   let backend = null
@@ -302,9 +302,9 @@ async function init () {
 
   // Load configuration
   const stationCatalog = await sc.getAllStations('./config/')
-  const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
-    encoding: 'utf8'
-  })
+  // const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
+  //   encoding: 'utf8'
+  // })
 
   // Define routing
   backend.register('getFilteredListOfStations', hda.getWeatherStations(stationCatalog))
