@@ -69,7 +69,7 @@ const log = bunyan.createLogger({
 })
 log.info('instantiation of service initiated')
 
-function checkIfConfigIsValid () {
+async function checkIfConfigIsValid () {
   if (!(_.isNumber(LISTEN_PORT) && LISTEN_PORT > 0 && LISTEN_PORT < 65535)) {
     log.fatal('LISTEN_PORT is ' + LISTEN_PORT + ' but must be an integer number larger than 0 and smaller than 65535')
     process.exit(EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER)
@@ -135,8 +135,6 @@ function checkIfConfigIsValid () {
 
   log.info('configuration is formally correct')
 }
-
-checkIfConfigIsValid()
 
 // Instantiate express-app
 const app = express()
@@ -248,6 +246,8 @@ async function failValidation (c, req, res, next) {
 }
 
 async function init () {
+  await checkIfConfigIsValid()
+
   // let api = await fs.readJson(API_SPECIFICATION_FILE_PATH)
   // api = await $RefParser.dereference(api)
 
