@@ -53,6 +53,7 @@
     "chai": "^4.2.0",
     "chai-openapi-response-validator": "^0.9.4",
     "dredd": "^13.1.1",
+    "eslint": "^7.4.0",
     "mocha": "^7.1.2",
     "mochawesome": "^6.1.1",
     "speccy": "^0.11.0",
