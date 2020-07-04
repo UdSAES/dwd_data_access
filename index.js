@@ -216,6 +216,7 @@ app.use((req, res, next) => {
 
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded()) // FIXME body-parser deprecated undefined extended: provide extended option index.js:209:17
 
 app.on('error', (error) => {
   log.fatal(error)
