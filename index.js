@@ -69,6 +69,17 @@ const log = bunyan.createLogger({
 })
 log.info('instantiation of service initiated')
 
+// Exit immediately on uncaught errors or unhandled promise rejections
+process.on('unhandledRejection', function (error) {
+  log.fatal('unhandled promise rejection', error)
+  process.exit(EXIT_CODE_SERVER_ERROR)
+})
+
+process.on('uncaughtException', function (error) {
+  log.fatal('uncaught exception', error)
+  process.exit(EXIT_CODE_SERVER_ERROR)
+})
+
 async function checkIfConfigIsValid () {
   if (!(_.isNumber(LISTEN_PORT) && LISTEN_PORT > 0 && LISTEN_PORT < 65535)) {
     log.fatal('LISTEN_PORT is ' + LISTEN_PORT + ' but must be an integer number larger than 0 and smaller than 65535')
@@ -265,7 +276,7 @@ async function init () {
     log.info('successfully loaded API description ' + API_SPECIFICATION_FILE_PATH)
   } catch (error) {
     log.fatal('error while loading API description ' + API_SPECIFICATION_FILE_PATH)
-    process.exit(1)
+    process.exit(EXIT_CODE_SERVER_ERROR)
   }
 
   backend.init()
