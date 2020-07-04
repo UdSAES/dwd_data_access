@@ -26,8 +26,8 @@ var log = bunyan.createLogger({
 })
 log.info('loaded module for handling requests for non-cached data')
 
-function getWeatherStations (stationCatalog, location, radius, limit) {
-  return async function (req, res, next) {
+function getWeatherStations (stationCatalog) {
+  return async function (c, req, res, next) {
     // res.set('Accept', ['application/json', 'text/csv']) // @Review doesn't make sense
 
     // @Review better name `renderStationListAsCSV`?
@@ -101,6 +101,11 @@ function getWeatherStations (stationCatalog, location, radius, limit) {
       res.send(stationsToExpose)
     }
   }
+}
+
+// TODO @Georgii implement
+function getSingleWeatherStation (stationCatalog) {
+  return async function (c, req, res, next) {}
 }
 
 // GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
@@ -319,6 +324,7 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
 }
 
 exports.getWeatherStations = getWeatherStations
+exports.getSingleWeatherStation = getSingleWeatherStation
 exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
 exports.getWeatherReport = getWeatherReport

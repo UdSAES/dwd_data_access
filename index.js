@@ -12,7 +12,7 @@ const hm = require('./handlers/measurements')
 const hpoi = require('./handlers/poi')
 const poifce = require('./lib/poi_forecast_engine')
 const path = require('path')
-const swaggerTools = require('swagger-tools')
+const { OpenAPIBackend } = require('openapi-backend')
 const fs = require('fs-extra')
 const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
@@ -48,6 +48,7 @@ const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
 const VOIS_JSON_FILE_PATH = './config/vois.json'
 const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
+const API_SPECIFICATION_FILE_PATH = './docs/openapi_oas3.json'
 
 // Instantiate logger
 const log = bunyan.createLogger({
@@ -206,124 +207,86 @@ app.use((req, res, next) => {
 
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded())
-app.use(express.static('./docs'))
-app.use('/oas', express.static('./docs/openapi_oas3.json'))
-
-// Expose UI iff UI_URL_PATH is not empty
-if (UI_URL_PATH !== '') {
-  if (UI_STATIC_FILES_PATH !== '') {
-    // expose locally defined UI
-    app.use(UI_URL_PATH, express.static(UI_STATIC_FILES_PATH))
-
-    // register UI in OAS that is provided as a resource
-  } else {
-    // fall back to default-UI
-    log.error('default-UI not implemented')
-  }
-
-  // redirect GET-request on origin to UI iff UI is exposed
-  app.get('', async (req, res) => {
-    res.redirect(UI_URL_PATH)
-  })
-}
 
 app.on('error', (error) => {
   log.fatal(error)
   process.exit(EXIT_CODE_SERVER_ERROR)
 })
 
-app.listen(LISTEN_PORT, () => {
-  log.info('now listening on port ' + LISTEN_PORT)
-  init()
-})
+
+  })
 
 async function init () {
+  let api = await fs.readJson(API_SPECIFICATION_FILE_PATH)
+  api = await $RefParser.dereference(api)
+
+  // Read API-specification and initialize backend
+  let backend = null
+  try {
+    backend = new OpenAPIBackend({
+      definition: API_SPECIFICATION_FILE_PATH,
+      strict: true,
+      validate: true,
+      ajvOpts: {
+        format: false
+      }
+    })
+    log.info('successfully loaded API description ' + API_SPECIFICATION_FILE_PATH)
+  } catch (error) {
+    log.fatal('error while loading API description ' + API_SPECIFICATION_FILE_PATH)
+    process.exit(1)
+  }
+
+  backend.init()
+
+  // Expose dereferenced OpenAPI-specification as /oas
+  app.use('/oas', express.static(API_SPECIFICATION_FILE_PATH))
+
+  // Expose UI iff UI_URL_PATH is not empty
+  if (UI_URL_PATH !== '') {
+    if (UI_STATIC_FILES_PATH !== '') {
+      // Expose locally defined UI
+      app.use(UI_URL_PATH, express.static(UI_STATIC_FILES_PATH))
+
+      // Register UI in OAS that is provided as a resource
+    } else {
+      // Fall back to default-UI
+      log.error('default-UI not implemented')
+    }
+
+    // Redirect GET-request on origin to UI iff UI is exposed
+    app.get('', async (req, res) => {
+      res.redirect(UI_URL_PATH)
+    })
+  }
+
+  // Log all incoming requests
+  app.use((req, res, next) => {
+    log.info(`received ${req.method}-request on ${req.originalUrl}`)
+    next()
+  })
+
+  // Pass requests to middleware
+  app.use((req, res, next) => backend.handleRequest(req, req, res, next))
+
+  // Load configuration
   const stationCatalog = await sc.getAllStations('./config/')
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
   })
-  const endPointMapping = [
-    {
-      method: 'get',
-      openapiPath: '/weather-stations',
-      path: '/weather-stations',
-      handler: hda.getWeatherStations(stationCatalog)
-    },
-    {
-      method: 'get',
-      openapiPath: '/weather/cosmo/d2/{referenceTimestamp}/{voi}',
-      path: '/weather/cosmo/d2/:referenceTimestamp/:voi',
-      handler: hda.getWeatherCosmoD2(DATA_ROOT_PATH, voisDataAccessConfigs)
-    },
-    {
-      method: 'get',
-      openapiPath: '/weather/local_forecasts/poi/{referenceTimestamp}/{sid}/{voi}',
-      path: '/weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi',
-      handler: hda.getWeatherMosmix(DATA_ROOT_PATH, voisDataAccessConfigs)
-    },
-    {
-      method: 'get',
-      openapiPath: '/weather/weather_reports/poi/{sid}/{voi}',
-      path: '/weather/weather_reports/poi/:sid/:voi',
-      handler: hda.getWeatherReport(DATA_ROOT_PATH, voisDataAccessConfigs)
-    },
-    {
-      method: 'get',
-      openapiPath: '/poi_forecasts/cosmo_de_27/{poi_id}',
-      path: '/poi_forecasts/cosmo_de_27/:poi_id',
-      handler: hfc.getPoiForecastsCosmeDe27Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)
-    },
-    {
-      method: 'get',
-      openapiPath: '/poi_forecasts/cosmo_de_45/{poi_id}',
-      path: '/poi_forecasts/cosmo_de_45/:poi_id',
-      handler: hfc.getPoiForecastsCosmeDe45Poi(NEWEST_FORECAST_ROOT_PATH, stationCatalog)
-    },
-    {
-      method: 'get',
-      openapiPath: '/poi_measurements/{poi_id}',
-      path: '/poi_measurements/:poi_id',
-      handler: hm.getNewestMeasurementDataPoi(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports', 'poi'), POIS_JSON_FILE_PATH, VOIS_JSON_FILE_PATH, stationCatalog)
-    }, {
-      method: 'get',
-      openapiPath: '/pois',
-      path: '/pois',
-      handler: hpoi.getPois(POIS_JSON_FILE_PATH)
-    }
-  ]
 
-  var api = await fs.readJson('./docs/openapi_oas3.json')
-  api = await $RefParser.dereference(api)
-
-  // TODO @Moritz replace swagger-stuff with up-to-date alternative
-  // swaggerTools.initializeMiddleware(api, function (middleware) {
-  //   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
-  //   app.use(middleware.swaggerMetadata())
-  //
-  //   // Validate Swagger requests
-  //   app.use(middleware.swaggerValidator())
-
-  const paths = _.get(api, ['paths'])
-  _.forEach(paths, (pathDefinition, path) => {
-    _.forEach(pathDefinition, (spec, method) => {
-      const mapping = _.find(endPointMapping, (mapping) => {
-        return _.lowerCase(mapping.method) === _.lowerCase(method) && _.lowerCase(mapping.openapiPath) === _.lowerCase(path)
-      })
-
-      if (_.isNil(mapping)) {
-        log.error('no fitting mapping found for method ' + _.toUpper(method) + ' and resource ' + path)
-        return
-      }
-
-      log.info('created mapping for method %s on resource %s', _.toUpper(method), mapping.path)
-      app[method](mapping.path, mapping.handler)
-    })
-  })
-  // })
+  // Define routing
+  backend.register('getFilteredListOfStations', hda.getWeatherStations(stationCatalog))
+  // backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
 
   log.info('configuration of service instance completed successfully')
+
+  app.listen(LISTEN_PORT, () => {
+    log.info('now listening on port ' + LISTEN_PORT)
+  })
 }
 
-// poifce.run(60, path.join(DATA_ROOT_PATH, 'weather', 'cosmo', 'de', 'grib'), NEWEST_FORECAST_ROOT_PATH)
-poifce.run(60, path.join(DATA_ROOT_PATH, 'weather', 'cosmo-d2', 'grib'), NEWEST_FORECAST_ROOT_PATH)
+// Enter main tasks
+if (require.main === module) {
+  init()
+}
