@@ -82,7 +82,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/stationId"
+              "$ref": "#/components/schemas/StationId"
             }
         } ],
         "responses": {
@@ -154,7 +154,7 @@
           "url": "tbd"
         }
       },
-      "stationId": {
+      "StationId": {
         "type": "string",
         "description": "The identifier of the station used by DWD",
         "pattern": "^[A-Z\\d]{4,5}$",
@@ -176,7 +176,7 @@
             "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/dev/schemata/location/schema_v0.1.0_oas2.json#/Location"
           },
           "stationId": {
-            "$ref": "#/components/schemas/stationId"
+            "$ref": "#/components/schemas/StationId"
           },
           "measuredValues": {
             "type": "string",
