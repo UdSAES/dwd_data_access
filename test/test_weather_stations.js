@@ -125,70 +125,67 @@ describe('Test correct identification of weather stations in the vicinity of giv
   })
 })
 
-  describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
-    it('should return the expected result', async function () {
-      const stations = require('./data/data_for_stations_utils/test_stations.json')
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
+describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
+  it('should return the expected result', async function () {
+    const stations = require('./data/data_for_stations_utils/test_stations.json')
+    const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
 
-      addContext(this, {
-        title: 'expected output',
-        value: expected
-      })
-
-      // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, undefined)
-      addContext(this, {
-        title: 'actual output',
-        value: actual
-      })
-      // Check whether actual result matches expectations
-      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    addContext(this, {
+      title: 'expected output',
+      value: expected
     })
-  })
 
-  describe('Return one station from stations sorted by name if coordinates and radius are absent', function () {
-    it('should return the expected result', async function () {
-      const stations = require('./data/data_for_stations_utils/test_stations.json')
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
-
-      addContext(this, {
-        title: 'expected output',
-        value: expected
-      })
-
-      // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, 1)
-      addContext(this, {
-        title: 'actual output',
-        value: actual
-      })
-      // Check whether actual result matches expectations
-      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    // Find stations accordingly
+    const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, undefined)
+    addContext(this, {
+      title: 'actual output',
+      value: actual
     })
+    // Check whether actual result matches expectations
+    assert.deepEqual(actual, expected, 'Result does not match expectations')
   })
+})
 
-  describe('Return stations sorted by name if coordinates and limit are absent', function () {
-    it('should return the expected result', async function () {
-      const stations = require('./data/data_for_stations_utils/test_stations.json')
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
+describe('Return one station from stations sorted by name if coordinates and radius are absent', function () {
+  it('should return the expected result', async function () {
+    const stations = require('./data/data_for_stations_utils/test_stations.json')
+    const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
 
-      addContext(this, {
-        title: 'expected output',
-        value: expected
-      })
-
-      // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, undefined)
-      addContext(this, {
-        title: 'actual output',
-        value: actual
-      })
-      // Check whether actual result matches expectations
-      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    addContext(this, {
+      title: 'expected output',
+      value: expected
     })
+
+    // Find stations accordingly
+    const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, 1)
+    addContext(this, {
+      title: 'actual output',
+      value: actual
+    })
+    // Check whether actual result matches expectations
+    assert.deepEqual(actual, expected, 'Result does not match expectations')
   })
+})
 
+describe('Return stations sorted by name if coordinates and limit are absent', function () {
+  it('should return the expected result', async function () {
+    const stations = require('./data/data_for_stations_utils/test_stations.json')
+    const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
 
+    addContext(this, {
+      title: 'expected output',
+      value: expected
+    })
+
+    // Find stations accordingly
+    const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, undefined)
+    addContext(this, {
+      title: 'actual output',
+      value: actual
+    })
+    // Check whether actual result matches expectations
+    assert.deepEqual(actual, expected, 'Result does not match expectations')
+  })
 
   describe('Return one station from stations sorted by name if coordinates are absent', function () {
     it('should return the expected result', async function () {
@@ -222,7 +219,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, {longitude: 11.11, latitude: 60.19}, undefined, undefined)
+      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, undefined, undefined)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -243,7 +240,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations,  {longitude: 11.11, latitude: 60.19}, undefined, 1)
+      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, undefined, 1)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -264,7 +261,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations,  {longitude: 11.11, latitude: 60.19}, 1000, undefined)
+      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, 1000, undefined)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -285,7 +282,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations,  {longitude: 11.11, latitude: 60.19}, 1000, 1)
+      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, 1000, 1)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -294,8 +291,6 @@ describe('Test correct identification of weather stations in the vicinity of giv
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
-
-
 
   describe('Return correct distance in kilometers', function () {
     it('should return the expected result', async function () {
@@ -327,4 +322,4 @@ describe('Test correct identification of weather stations in the vicinity of giv
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
-
+})
