@@ -94,7 +94,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
     stations = await sc.getAllStations('./test/data')
   })
 
-  describe('Find _the_ single closest station', function () {
+  describe('Find the single closest station', function () {
     it('should return the expected result', async function () {
       const expected = [{
         station: {
@@ -114,7 +114,7 @@ describe('Test correct identification of weather stations in the vicinity of giv
         value: expected
       })
 
-      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 630000, 1) // @Review no radius
+      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, undefined, 1) // @Review no radius
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -123,265 +123,20 @@ describe('Test correct identification of weather stations in the vicinity of giv
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
+})
 
-  // @Review Doesn't make sense to me for internal function; if anything, the function should throw, which it would do automatically
-  describe('Return empty list if no arguments are passed', function () {
+  describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
     it('should return the expected result', async function () {
-      const expected = []
-      addContext(this, {
-        title: 'expected output',
-        value: expected
-      })
-
-      const actual = await su.findStationsInVicinityOf()
-      addContext(this, {
-        title: 'actual output',
-        value: actual
-      })
-
-      assert.deepEqual(actual, expected, 'Result does not match expectations')
-    })
-  })
-
-  describe('Return all stations if limit is 0', function () {
-    it('should return the expected result', async function () {
-      // @Review Better to read from file, gets hard to read otherwise
-      const expected = [
-        {
-          station: {
-            location: {
-              latitude: 54.62823,
-              longitude: 9.364924,
-              elevation: 17
-            },
-            name: 'Eggebek',
-            stationId: 'A159',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 627.856
-        },
-        {
-          station: {
-            location: {
-              latitude: 54.692781,
-              longitude: 8.527128,
-              elevation: 8
-            },
-            name: 'Wrixum/Föhr',
-            stationId: 'A112',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 631.083
-        },
-        {
-          station: {
-            location: {
-              latitude: 54.119305,
-              longitude: 8.858369,
-              elevation: 3
-            },
-            name: 'Büsum',
-            stationId: 'A505',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 689.221
-        },
-        {
-          station: {
-            location: {
-              latitude: 54.018844,
-              longitude: 9.925507,
-              elevation: 16.5
-            },
-            name: 'Padenstedt (Pony-Park)',
-            stationId: 'A653',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 690.663
-        },
-        {
-          station: {
-            location: {
-              latitude: 53.938481,
-              longitude: 10.698267,
-              elevation: 26
-            },
-            name: 'Schwartau,Bad -Groß Parin',
-            stationId: 'A791',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 696.358
-        },
-        {
-          station: {
-            location: {
-              latitude: 54.174957,
-              longitude: 7.891954,
-              elevation: 4
-            },
-            name: 'Helgoland',
-            stationId: '10015',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 696.961
-        },
-        {
-          station: {
-            location: {
-              latitude: 54.1667,
-              longitude: 7.45,
-              elevation: 0
-            },
-            name: 'UFS Deutsche Bucht',
-            stationId: '10007',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 705.672
-        },
-        {
-          station: {
-            location: {
-              latitude: 48.709746,
-              longitude: 11.209617,
-              elevation: 380
-            },
-            name: 'Neuburg/Donau (Flugplatz)',
-            stationId: '10853',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 1277.992
-        },
-        {
-          station: {
-            location: {
-              latitude: 47.884339,
-              longitude: 12.540379,
-              elevation: 551.2
-            },
-            name: 'Chieming',
-            stationId: '10982',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 1372.965
-        },
-        {
-          station: {
-            location: {
-              latitude: 47.800864,
-              longitude: 11.010754,
-              elevation: 977
-            },
-            name: 'Hohenpeißenberg',
-            stationId: '10962',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 1379.167
-        },
-        {
-          station: {
-            location: {
-              latitude: 47.874893,
-              longitude: 8.003817,
-              elevation: 1489.6
-            },
-            name: 'Feldberg/Schwarzwald',
-            stationId: '10908',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 1385.485
-        },
-        {
-          station: {
-            location: {
-              latitude: 47.709538,
-              longitude: 9.865926,
-              elevation: 666
-            },
-            name: 'Wangen/Allgäu-Schwaderberg',
-            stationId: 'Q999',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 1391.644
-        },
-        {
-          station: {
-            location: {
-              latitude: 47.48305,
-              longitude: 11.062293,
-              elevation: 719
-            },
-            name: 'Garmisch-Partenkirchen',
-            stationId: '10963',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 1414.535
-        },
-        {
-          station: {
-            location: {
-              latitude: 47.420868,
-              longitude: 10.984724,
-              elevation: 2964
-            },
-            name: 'Zugspitze',
-            stationId: '10961',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 1421.476
-        },
-        {
-          station: {
-            location: {
-              latitude: -70.673054,
-              longitude: -8.27498,
-              elevation: 40
-            },
-            name: 'GEORG VON NEUMAYER',
-            stationId: '89002',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 14646.696
-        }
-      ]
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
 
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      // @Review first letter of comment capitalized if on own line (minor style issue)
-      // find stations accordingly
-      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 900000) // @Review radius should be optional, do not use arbitrary value instead of null-value
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, undefined)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -391,61 +146,179 @@ describe('Test correct identification of weather stations in the vicinity of giv
     })
   })
 
-  describe('Return list limited to 3 stations', function () {
+  describe('Return one station from stations sorted by name if coordinates and radius are absent', function () {
     it('should return the expected result', async function () {
-      const expected = [
-        {
-          station: {
-            location: {
-              latitude: 54.62823,
-              longitude: 9.364924,
-              elevation: 17
-            },
-            name: 'Eggebek',
-            stationId: 'A159',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 627.856
-        },
-        {
-          station: {
-            location: {
-              latitude: 54.692781,
-              longitude: 8.527128,
-              elevation: 8
-            },
-            name: 'Wrixum/Föhr',
-            stationId: 'A112',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 631.083
-        },
-        {
-          station: {
-            location: {
-              latitude: 54.119305,
-              longitude: 8.858369,
-              elevation: 3
-            },
-            name: 'Büsum',
-            stationId: 'A505',
-            types: [
-              'BEOB'
-            ]
-          },
-          distance: 689.221
-        }
-      ]
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
+
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      const actual = await su.findStationsInVicinityOf({ longitude: 11.11, latitude: 60.19 }, stations, 9000000, 3) // @Review radius should be optional, do not use arbitrary value instead of null-value
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, 1)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+  describe('Return stations sorted by name if coordinates and limit are absent', function () {
+    it('should return the expected result', async function () {
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
+
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, undefined)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+
+
+  describe('Return one station from stations sorted by name if coordinates are absent', function () {
+    it('should return the expected result', async function () {
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
+
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, 1)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+  describe('Return stations sorted by distance when only coordinates specified', function () {
+    it('should return the expected result', async function () {
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_distance.json')
+
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations, {longitude: 11.11, latitude: 60.19}, undefined, undefined)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+  describe('Return stations sorted by distance when coordinates and limit specified', function () {
+    it('should return the expected result', async function () {
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_distance_limited_to_one.json')
+
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations,  {longitude: 11.11, latitude: 60.19}, undefined, 1)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+  describe('Return stations sorted by distance when coordinates and radius specified', function () {
+    it('should return the expected result', async function () {
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_in_1000km_radius.json')
+
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations,  {longitude: 11.11, latitude: 60.19}, 1000, undefined)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+  describe('Return stations sorted by distance when coordinates, radius and limit are specified', function () {
+    it('should return the expected result', async function () {
+      const stations = require('./data/data_for_stations_utils/test_stations.json')
+      const expected = require('./data/data_for_stations_utils/test_stations_in_1000km_limited_to_one.json')
+
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Find stations accordingly
+      const actual = await su.findStationsInVicinityOf(stations,  {longitude: 11.11, latitude: 60.19}, 1000, 1)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
+
+
+
+  describe('Return correct distance in kilometers', function () {
+    it('should return the expected result', async function () {
+      const distanceBetweenLondonAndBerlin = 913.543
+      const expected = distanceBetweenLondonAndBerlin
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      const berlinLocation = { latitude: 52.516272, longitude: 13.377722 }
+
+      const actual = await su.findStationsInVicinityOf(
+        [{
+          location: {
+            latitude: 51.503333,
+            longitude: 0.1278,
+            elevation: 0
+          },
+          name: 'London',
+          stationId: 'TEST',
+          types: ['TEST']
+        }], berlinLocation, 9000000, 1)[0].distance
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -454,34 +327,4 @@ describe('Test correct identification of weather stations in the vicinity of giv
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
-})
 
-describe('Return correct distance in kilometers', function () {
-  it('should return the expected result', async function () {
-    const expected = 930.304 // @Review where from?
-    addContext(this, {
-      title: 'expected output',
-      value: expected
-    })
-
-    const berlinLocation = { latitude: 52.516272, longitude: 13.377722 }
-
-    const actual = await su.findStationsInVicinityOf(berlinLocation,
-      [{
-        location: {
-          latitude: 51.503333,
-          longitude: -0.119722,
-          elevation: 0
-        },
-        name: 'London',
-        stationId: 'TEST',
-        types: ['TEST']
-      }], 9000000, 3)[0].distance // @Review radius should be optional, do not use arbitrary value instead of null-value
-    addContext(this, {
-      title: 'actual output',
-      value: actual
-    })
-
-    assert.deepEqual(actual, expected, 'Result does not match expectations')
-  })
-})

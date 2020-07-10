@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "ajx": "^0.1.0",
+    "array-keyed-map": "^2.0.0",
     "async-parallel": "^1.2.3",
     "axios": "^0.19.2",
     "bunyan": "^1.8.12",
@@ -38,7 +39,7 @@
     "grib2-simple": "^1.1.1",
     "json-schema-ref-parser": "^6.1.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.25.3",
     "openapi-backend": "^3.5.1",
     "papaparse": "^5.2.0",
