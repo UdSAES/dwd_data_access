@@ -91,12 +91,12 @@ describe('Test correct filtering of station list', function () {
   let stations = null
   before(async function () {
     // stations = await sc.getAllStations('./test/data') // from raw data
-    stations = require('./data/data_for_stations_utils/test_stations.json')
+    stations = await fs.readJson('./test/data/data_for_stations_utils/test_stations.json')
   })
 
   describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_sorted_by_name.json')
 
       addContext(this, {
         title: 'expected output',
@@ -116,7 +116,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return one station from stations sorted by name if coordinates and radius are absent', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
 
       addContext(this, {
         title: 'expected output',
@@ -137,7 +137,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by name if coordinates and limit are absent', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_sorted_by_name.json')
 
       addContext(this, {
         title: 'expected output',
@@ -157,7 +157,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return one station from stations sorted by name if coordinates are absent', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_sorted_by_name_limited_to_one.json')
 
       addContext(this, {
         title: 'expected output',
@@ -178,7 +178,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when only coordinates specified', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_distance.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_sorted_by_distance.json')
 
       addContext(this, {
         title: 'expected output',
@@ -198,7 +198,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates and limit specified', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_sorted_by_distance_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_sorted_by_distance_limited_to_one.json')
 
       addContext(this, {
         title: 'expected output',
@@ -219,7 +219,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates and radius specified', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_in_1000km_radius.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_in_1000km_radius.json')
 
       addContext(this, {
         title: 'expected output',
@@ -239,7 +239,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates, radius and limit are specified', function () {
     it('should return the expected result', async function () {
-      const expected = require('./data/data_for_stations_utils/test_stations_in_1000km_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/data_for_stations_utils/test_stations_in_1000km_limited_to_one.json')
 
       addContext(this, {
         title: 'expected output',
