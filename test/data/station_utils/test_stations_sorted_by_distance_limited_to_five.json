@@ -1,0 +1,61 @@
+[{
+    "station": {
+        "location": {
+            "latitude": 54.62823,
+            "longitude": 9.364924,
+            "elevation": 17
+        },
+        "stationId": "A159",
+        "name": "Eggebek",
+        "types": ["BEOB"]
+    },
+    "distance": 627.856
+}, {
+    "station": {
+        "location": {
+            "latitude": 54.692781,
+            "longitude": 8.527128,
+            "elevation": 8
+        },
+        "stationId": "A112",
+        "name": "Wrixum/Föhr",
+        "types": ["BEOB"]
+    },
+    "distance": 631.083
+}, {
+    "station": {
+        "location": {
+            "latitude": 54.119305,
+            "longitude": 8.858369,
+            "elevation": 3
+        },
+        "stationId": "A505",
+        "name": "Büsum",
+        "types": ["BEOB"]
+    },
+    "distance": 689.221
+}, {
+    "station": {
+        "location": {
+            "latitude": 54.018844,
+            "longitude": 9.925507,
+            "elevation": 16.5
+        },
+        "stationId": "A653",
+        "name": "Padenstedt (Pony-Park)",
+        "types": ["BEOB"]
+    },
+    "distance": 690.663
+}, {
+    "station": {
+        "location": {
+            "latitude": 53.938481,
+            "longitude": 10.698267,
+            "elevation": 26
+        },
+        "stationId": "A791",
+        "name": "Schwartau,Bad -Groß Parin",
+        "types": ["BEOB"]
+    },
+    "distance": 696.358
+}]

@@ -114,9 +114,9 @@ describe('Test correct filtering of station list', function () {
     })
   })
 
-  describe('Return one station from stations sorted by name if coordinates and radius are absent', function () {
+  describe('Return five stations from stations sorted by name if coordinates and radius are absent', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json')
 
       addContext(this, {
         title: 'expected output',
@@ -124,8 +124,7 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      // @Review you cannot verify that stations are sorted by name if limit equals 1, can you?
-      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, 1)
+      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, 5)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -155,9 +154,9 @@ describe('Test correct filtering of station list', function () {
     })
   })
 
-  describe('Return one station from stations sorted by name if coordinates are absent', function () {
+  describe('Return five stations from stations sorted by name if coordinates are absent', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json')
 
       addContext(this, {
         title: 'expected output',
@@ -165,8 +164,7 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      // @Review you cannot verify that stations are sorted by name if limit equals 1, can you?
-      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, 1)
+      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, 5)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -198,7 +196,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates and limit specified', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_distance_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_distance_limited_to_five.json')
 
       addContext(this, {
         title: 'expected output',
@@ -206,7 +204,7 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, undefined, 1)
+      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, undefined, 5)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -239,7 +237,7 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates, radius and limit are specified', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_in_1000km_limited_to_one.json')
+      const expected = await fs.readJson('./test/data/station_utils/test_stations_in_1000km_limited_to_five.json')
 
       addContext(this, {
         title: 'expected output',
@@ -247,7 +245,7 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, 1000, 1)
+      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, 1000, 5)
       addContext(this, {
         title: 'actual output',
         value: actual
