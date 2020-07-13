@@ -3,7 +3,7 @@
 
 'use strict'
 
-var url = require('url') // @Review `var` is deprecated, use `const` unless `let` is necessary
+const url = require('url')
 const path = require('path')
 const moment = require('moment')
 const csv = require('dwd-csv-helper')
@@ -28,22 +28,6 @@ log.info('loaded module for handling requests for non-cached data')
 
 function getWeatherStations (stationCatalog) {
   return async function (c, req, res, next) {
-    // res.set('Accept', ['application/json', 'text/csv']) // @Review doesn't make sense
-
-    // @Review better name `renderStationListAsCSV`?
-    function formatStationsCSV (stations) {
-      const csvLabels = 'name, url, distance \n'
-      const resultString = csvLabels
-      return stations.reduce((acc, item) => {
-        if (item.distance) {
-          acc += `${item.name}, ${item.url}, ${item.distance} \n`
-        } else {
-          acc += `${item.name}, ${item.url}, \n`
-        }
-        return acc
-      }, resultString)
-    }
-
     function getUrlOfTheStation (station, req) {
       return url.format({
         protocol: req.protocol,
@@ -52,54 +36,92 @@ function getWeatherStations (stationCatalog) {
       })
     }
 
-    // @Review better name `renderStationListAsJSON`? Should also accept full list
-    function formatStationJSON (item) {
+    function formatJSONStationWithDistance (item) {
       const stationName = item.station.name
       const stationDistance = item.distance
-      if (stationDistance) {
-        return {
-          name: stationName,
-          url: getUrlOfTheStation(item.station, req),
-          distance: stationDistance
-        }
-      } else {
-        return {
-          name: stationName,
-          url: getUrlOfTheStation(item.station, req)
-        }
+      return {
+        name: stationName,
+        url: getUrlOfTheStation(item.station, req),
+        distance: stationDistance
       }
     }
 
-    let stationsToExpose
-
-    if (Object.keys(req.query).length === 0) { // @Review distinction on `in-vicinity-of`
-      // @Review Just say `stationsToExpose = stationCatalog` here and pass list to render-function later (maybe sort alphabetically)
-      stationsToExpose = stationCatalog.map(item => { return { name: item.name, url: getUrlOfTheStation(item, req) } }, []) // think the last , [] is too much?
-    } else {
-      const radius = parseInt(req.query.radius)
-      const limit = parseInt(req.query.limit)
-      const inVicinityOf = req.query['in-vicinity-of'].split('/')
-      const latitude = inVicinityOf[0]
-      const longitude = inVicinityOf[1]
-      const stationsInVicinity = su.findStationsInVicinityOf({ latitude: latitude, longitude: longitude }, stationCatalog, radius, limit)
-
-      // @Review Not here, rendering happens below
-      stationsToExpose = stationsInVicinity.map(item => formatStationJSON(item), [])
+    function formatJSONStationWithoutDistance (item) {
+      const stationName = item.name
+      return {
+        name: stationName,
+        url: getUrlOfTheStation(item, req)
+      }
     }
 
-    // @Review ..else, get lost because checking for strict equality is not content negotiation
-    // Use https://expressjs.com/en/4x/api.html#res.format instead!
-    // @Review explicitly set status and type!
-    // https://expressjs.com/en/4x/api.html#res.status
-    if (req.get('Accept') === 'application/json') {
-      // @Review Rendering as JSON should happen here
-      res.send(stationsToExpose)
+    function renderStationListAsJSON (stations) {
+      if (stations === []) {
+        return []
+      } else if (stations[0].distance) {
+        return stations.map(item => formatJSONStationWithDistance(item))
+      } else {
+        return stations.map(item => formatJSONStationWithoutDistance(item))
+      }
     }
-    if (req.get('Accept') === 'text/csv') {
-      res.send([formatStationsCSV(stationsToExpose)]) // @Review not within a list
-    } else {
-      res.send(stationsToExpose)
+
+    const csvLabels = 'name, url, distance \n'
+
+    function formatCSVStationWithDistance (item) {
+      const stationName = item.station.name
+      const distance = item.distance
+      return `${stationName}, ${getUrlOfTheStation(item.station, req)}, ${distance} \n`
     }
+
+    function formatCSVStationWithoutDistance (item) {
+      const stationName = item.name
+      return `${stationName}, ${getUrlOfTheStation(item, req)}, \n`
+    }
+
+    function renderStationListAsCSV (stations) {
+      const resultString = ''
+      if (stations === []) {
+        return []
+      } else if (stations[0].distance) {
+        return csvLabels + stations.reduce((acc, item) => {
+          acc += formatCSVStationWithDistance(item)
+          return acc
+        }, resultString)
+      } else {
+        return csvLabels + stations.reduce((acc, item) => {
+          acc += formatCSVStationWithoutDistance(item)
+          return acc
+        }, resultString)
+      }
+    }
+
+    function parseCoordinates (coordinates) {
+      if (coordinates === undefined || coordinates === null) {
+        return undefined
+      } else {
+        const splitCoordinates = coordinates.split('/')
+        return { latitude: splitCoordinates[0], longitude: splitCoordinates[1] }
+      }
+    }
+
+    const queryString = req.query
+    const coordinates = parseCoordinates(queryString['in-vicinity-of'])
+    const radius = queryString.radius
+    const limit = queryString.limit
+    const stations = su.findStationsInVicinityOf(stationCatalog, coordinates, radius, limit)
+
+    res.format({
+      'application/json': function () {
+        res.status(200).send(renderStationListAsJSON(stations))
+      },
+
+      'text/csv': function () {
+        res.status(200).send(renderStationListAsCSV(stations))
+      },
+
+      default: function () {
+        res.status(406).send('Not Acceptable')
+      }
+    })
   }
 }
 
