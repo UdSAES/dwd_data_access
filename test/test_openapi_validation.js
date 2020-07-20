@@ -23,7 +23,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       expect(res.status).to.equal(200)
 
       // Assert that the HTTP response satisfies the OpenAPI spec
-      expect(res).to.satisfyApiSpec
+      expect(res).to.satisfyApiSpec // eslint-disable-line
     })
   })
 
@@ -34,7 +34,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       expect(res.status).to.equal(200)
 
       // Assert that the HTTP response satisfies the OpenAPI spec
-      expect(res).to.satisfyApiSpec
+      expect(res).to.satisfyApiSpec // eslint-disable-line
     })
   })
 
@@ -45,7 +45,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       expect(res.status).to.equal(200)
 
       // Assert that the HTTP response satisfies the OpenAPI spec
-      expect(res).to.satisfyApiSpec
+      expect(res).to.satisfyApiSpec // eslint-disable-line
     })
   })
 
@@ -56,7 +56,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       expect(res.status).to.equal(200)
 
       // Assert that the HTTP response satisfies the OpenAPI spec
-      expect(res).to.satisfyApiSpec
+      expect(res).to.satisfyApiSpec // eslint-disable-line
     })
   })
 
@@ -67,7 +67,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       expect(res.status).to.equal(200)
 
       // Assert that the HTTP response satisfies the OpenAPI spec
-      expect(res).to.satisfyApiSpec
+      expect(res).to.satisfyApiSpec // eslint-disable-line
     })
   })
 
@@ -78,7 +78,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       expect(res.status).to.equal(200)
 
       // Assert that the HTTP response satisfies the OpenAPI spec
-      expect(res).to.satisfyApiSpec
+      expect(res).to.satisfyApiSpec // eslint-disable-line
     })
   })
 
@@ -89,7 +89,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       expect(res.status).to.equal(200)
 
       // Assert that the HTTP response satisfies the OpenAPI spec
-      expect(res).to.satisfyApiSpec
+      expect(res).to.satisfyApiSpec // eslint-disable-line
     })
   })
 
