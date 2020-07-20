@@ -105,8 +105,8 @@ function getWeatherStations (stationCatalog) {
 
     const queryString = req.query
     const coordinates = parseCoordinates(queryString['in-vicinity-of'])
-    const radius = queryString.radius
-    const limit = queryString.limit
+    const radius = parseInt(queryString.radius)
+    const limit = parseInt(queryString.limit)
     const stations = su.findStationsInVicinityOf(stationCatalog, coordinates, radius, limit)
 
     res.format({
