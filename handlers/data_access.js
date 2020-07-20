@@ -3,6 +3,7 @@
 
 'use strict'
 
+const url = require('url')
 const path = require('path')
 const moment = require('moment')
 const csv = require('dwd-csv-helper')
@@ -11,6 +12,7 @@ const {
   convertUnit
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
+const su = require('../lib/station_utils.js')
 
 // Instantiate logger
 const processenv = require('processenv')
@@ -23,6 +25,110 @@ var log = bunyan.createLogger({
   serializers: bunyan.stdSerializers
 })
 log.info('loaded module for handling requests for non-cached data')
+
+function getWeatherStations (stationCatalog) {
+  return async function (c, req, res, next) {
+    function getUrlOfTheStation (station, req) {
+      return url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: 'weather-stations/' + station.stationId
+      })
+    }
+
+    function formatJSONStationWithDistance (item) {
+      const stationName = item.station.name
+      const stationDistance = item.distance
+      return {
+        name: stationName,
+        url: getUrlOfTheStation(item.station, req),
+        distance: stationDistance
+      }
+    }
+
+    function formatJSONStationWithoutDistance (item) {
+      const stationName = item.name
+      return {
+        name: stationName,
+        url: getUrlOfTheStation(item, req)
+      }
+    }
+
+    function renderStationListAsJSON (stations) {
+      if (stations === []) {
+        return []
+      } else if (_.has(stations[0], 'distance')) {
+        return stations.map(item => formatJSONStationWithDistance(item))
+      } else {
+        return stations.map(item => formatJSONStationWithoutDistance(item))
+      }
+    }
+
+    const csvLabels = 'name, url, distance \n'
+
+    function formatCSVStationWithDistance (item) {
+      const stationName = item.station.name
+      const distance = item.distance
+      return `${stationName}, ${getUrlOfTheStation(item.station, req)}, ${distance} \n`
+    }
+
+    function formatCSVStationWithoutDistance (item) {
+      const stationName = item.name
+      return `${stationName}, ${getUrlOfTheStation(item, req)}, \n`
+    }
+
+    function renderStationListAsCSV (stations) {
+      const resultString = ''
+      if (stations === []) {
+        return []
+      } else if (stations[0].distance) {
+        return csvLabels + stations.reduce((acc, item) => {
+          acc += formatCSVStationWithDistance(item)
+          return acc
+        }, resultString)
+      } else {
+        return csvLabels + stations.reduce((acc, item) => {
+          acc += formatCSVStationWithoutDistance(item)
+          return acc
+        }, resultString)
+      }
+    }
+
+    function parseCoordinates (coordinates) {
+      if (coordinates === undefined || coordinates === null) {
+        return undefined
+      } else {
+        const splitCoordinates = coordinates.split('/')
+        return { latitude: splitCoordinates[0], longitude: splitCoordinates[1] }
+      }
+    }
+
+    const queryString = req.query
+    const coordinates = parseCoordinates(queryString['in-vicinity-of'])
+    const radius = parseInt(queryString.radius)
+    const limit = parseInt(queryString.limit)
+    const stations = su.findStationsInVicinityOf(stationCatalog, coordinates, radius, limit)
+
+    res.format({
+      'application/json': function () {
+        res.status(200).send(renderStationListAsJSON(stations))
+      },
+
+      'text/csv': function () {
+        res.status(200).send(renderStationListAsCSV(stations))
+      },
+
+      default: function () {
+        res.status(406).send('Not Acceptable')
+      }
+    })
+  }
+}
+
+// TODO @Georgii implement
+function getSingleWeatherStation (stationCatalog) {
+  return async function (c, req, res, next) {}
+}
 
 // GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
 function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
@@ -239,6 +345,8 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
+exports.getWeatherStations = getWeatherStations
+exports.getSingleWeatherStation = getSingleWeatherStation
 exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
 exports.getWeatherReport = getWeatherReport

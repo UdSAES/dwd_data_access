@@ -1,3 +1,5 @@
+# Ignore specific files/folders
 node_modules
 local/
 .env
+**/.DS_Store
