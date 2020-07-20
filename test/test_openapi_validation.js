@@ -4,6 +4,7 @@
 const axios = require('axios')
 const chai = require('chai')
 const expect = chai.expect
+const assert = chai.assert
 const describe = require('mocha').describe
 const it = require('mocha').it
 const processenv = require('processenv')
@@ -21,6 +22,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const allStations = API_ORIGIN + '/weather-stations'
       const res = await axios.get(allStations, { headers: { Accept: 'application/json' } })
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
 
       // Assert that the HTTP response satisfies the OpenAPI spec
       expect(res).to.satisfyApiSpec // eslint-disable-line
@@ -32,6 +34,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?radius=10'
       const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
 
       // Assert that the HTTP response satisfies the OpenAPI spec
       expect(res).to.satisfyApiSpec // eslint-disable-line
@@ -43,6 +46,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?limit=5'
       const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
 
       // Assert that the HTTP response satisfies the OpenAPI spec
       expect(res).to.satisfyApiSpec // eslint-disable-line
@@ -54,6 +58,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451'
       const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
 
       // Assert that the HTTP response satisfies the OpenAPI spec
       expect(res).to.satisfyApiSpec // eslint-disable-line
@@ -65,6 +70,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&radius=10'
       const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
 
       // Assert that the HTTP response satisfies the OpenAPI spec
       expect(res).to.satisfyApiSpec // eslint-disable-line
@@ -76,6 +82,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&limit=5'
       const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
 
       // Assert that the HTTP response satisfies the OpenAPI spec
       expect(res).to.satisfyApiSpec // eslint-disable-line
@@ -87,6 +94,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&radius=100&limit=5'
       const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
 
       // Assert that the HTTP response satisfies the OpenAPI spec
       expect(res).to.satisfyApiSpec // eslint-disable-line
@@ -99,6 +107,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const res = await axios.get(allStations, { headers: { Accept: 'text/csv' } })
 
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'text/csv')
     })
   })
 
@@ -108,6 +117,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'text/csv' } })
 
       expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'text/csv')
     })
   })
 })
