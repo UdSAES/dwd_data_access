@@ -9,7 +9,7 @@ const it = require('mocha').it
 const processenv = require('processenv')
 const chaiResponseValidator = require('chai-openapi-response-validator')
 
-const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI')
+const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI', './docs/openapi_oas3.json')
 const API_ORIGIN = processenv('API_ORIGIN')
 
 // Load an OpenAPI file (YAML or JSON) into this plugin
