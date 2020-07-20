@@ -99,28 +99,22 @@ describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limi
   })
 })
 
-describe.skip('GET /weather-stations as CSV', function () {
-  it('should satisfy OpenAPI spec for all stations', async function () {
+describe('GET /weather-stations as CSV', function () {
+  it('should return `200 OK`', async function () {
     // example: http://localhost:5000/weather-stations
     const allStations = API_ORIGIN + '/weather-stations'
     const res = await axios.get(allStations, { headers: { Accept: 'text/csv' } })
 
     expect(res.status).to.equal(200)
-
-    // Assert that the HTTP response satisfies the OpenAPI spec
-    expect(res).to.satisfyApiSpec
   })
 })
 
-describe.skip('GET /weather-stations as CSV', function () {
-  it('should satisfy OpenAPI spec for all stations', async function () {
+describe('GET /weather-stations as CSV', function () {
+  it('should return `200 OK`', async function () {
     // example: http://localhost:5000/weather-stations
     const filteredStationsUrl = API_ORIGIN + '/weather-stations?limit=5'
     const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'text/csv' } })
 
     expect(res.status).to.equal(200)
-
-    // Assert that the HTTP response satisfies the OpenAPI spec
-    expect(res).to.satisfyApiSpec
   })
 })
