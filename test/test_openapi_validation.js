@@ -16,8 +16,7 @@ const HOST_URL = processenv('HOST_URL')
 // Load an OpenAPI file (YAML or JSON) into this plugin
 chai.use(chaiResponseValidator(PATH_TO_OPENAPI))
 
-
-describe('GET /host/weather-stations', function () { // @Review just path (also below), "as JSON"
+describe('GET /weather-stations as JSON', function () {
   it('should satisfy OpenAPI spec for all stations', async function () {
     // example: http://localhost:5000/weather-stations
     const allStations = HOST_URL + 'weather-stations'
@@ -30,7 +29,7 @@ describe('GET /host/weather-stations', function () { // @Review just path (also 
 })
 
 
-describe('GET /host/weather-stations?radius=1000000', function () {
+describe('GET /weather-stations?radius=1000000 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
     // example http://localhost:5000/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5
     const filteredStationsUrl = HOST_URL + 'weather-stations?radius=1000000'
@@ -42,7 +41,7 @@ describe('GET /host/weather-stations?radius=1000000', function () {
   })
 })
 
-describe('GET /host/weather-stations?limit=5', function () {
+describe('GET /weather-stations?limit=5 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
     // example http://localhost:5000/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5
     const filteredStationsUrl = HOST_URL + 'weather-stations?limit=5'
@@ -54,7 +53,7 @@ describe('GET /host/weather-stations?limit=5', function () {
   })
 })
 
-describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451', function () {
+describe('GET /weather-stations?in-vicinity-of=54.1663/7.451 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
     // example http://localhost:5000/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5
     const filteredStationsUrl = HOST_URL + 'weather-stations?in-vicinity-of=54.1663/7.451'
@@ -67,7 +66,7 @@ describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451', function () 
 })
 
 
-describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000', function () {
+describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
     // example http://localhost:5000/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5
     const filteredStationsUrl = HOST_URL + 'weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000'
@@ -79,7 +78,7 @@ describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000
   })
 })
 
-describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451&limit=5', function () {
+describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&limit=5 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
     // example http://localhost:5000/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5
     const filteredStationsUrl = HOST_URL + 'weather-stations?in-vicinity-of=54.1663/7.451&limit=5'
@@ -91,7 +90,7 @@ describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451&limit=5', func
   })
 })
 
-describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5', function () {
+describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
     // example http://localhost:5000/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5
     const filteredStationsUrl = HOST_URL + 'weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5'
@@ -105,7 +104,7 @@ describe('GET /host/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000
 
 
 
-describe.skip('GET /host/weather-stations', function () {
+describe.skip('GET /weather-stations as CSV', function () {
   it('should satisfy OpenAPI spec for all stations', async function () {
     // example: http://localhost:5000/weather-stations
     const res = await axios.get(ALL_STATIONS_URL, { headers: { Accept: 'text/csv' } })
@@ -117,7 +116,7 @@ describe.skip('GET /host/weather-stations', function () {
   })
 })
 
-describe.skip('GET /host/weather-stations', function () {
+describe.skip('GET /weather-stations as CSV', function () {
   it('should satisfy OpenAPI spec for all stations', async function () {
     // example: http://localhost:5000/weather-stations
     const res = await axios.get(FILTERED_STATIONS_URL, { headers: { Accept: 'text/csv' } })
