@@ -57,7 +57,7 @@ function getWeatherStations (stationCatalog) {
     function renderStationListAsJSON (stations) {
       if (stations === []) {
         return []
-      } else if (stations[0].distance) {
+      } else if (_.has(stations[0], 'distance')) {
         return stations.map(item => formatJSONStationWithDistance(item))
       } else {
         return stations.map(item => formatJSONStationWithoutDistance(item))
