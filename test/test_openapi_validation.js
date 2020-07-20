@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 const axios = require('axios')
-const path = require('path')
 const chai = require('chai')
 const expect = chai.expect
 const describe = require('mocha').describe
@@ -10,7 +9,7 @@ const it = require('mocha').it
 const processenv = require('processenv')
 const chaiResponseValidator = require('chai-openapi-response-validator')
 
-const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI') // @Review Typo, can be hardcoded
+const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI')
 const HOST_URL = processenv('HOST_URL')
 
 // Load an OpenAPI file (YAML or JSON) into this plugin
@@ -27,7 +26,6 @@ describe('GET /weather-stations as JSON', function () {
     expect(res).to.satisfyApiSpec
   })
 })
-
 
 describe('GET /weather-stations?radius=1000000 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
@@ -65,7 +63,6 @@ describe('GET /weather-stations?in-vicinity-of=54.1663/7.451 as JSON', function 
   })
 })
 
-
 describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000 as JSON', function () {
   it('should satisfy OpenAPI spec for filtered stations', async function () {
     // example http://localhost:5000/weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limit=5
@@ -101,8 +98,6 @@ describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=1000000&limi
     expect(res).to.satisfyApiSpec
   })
 })
-
-
 
 describe.skip('GET /weather-stations as CSV', function () {
   it('should satisfy OpenAPI spec for all stations', async function () {
