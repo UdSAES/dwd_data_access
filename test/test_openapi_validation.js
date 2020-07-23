@@ -120,4 +120,24 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       assert.include(res.headers['content-type'], 'text/csv')
     })
   })
+
+  describe('GET /weather-stations/10505', function () {
+    it('should return single JSON station representation', async function () {
+      const stationUrl = API_ORIGIN + '/weather-stations/10505'
+      const res = await axios.get(stationUrl, { headers: { Accept: 'application/json' } })
+
+      expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'application/json')
+    })
+  })
+
+  describe('GET /weather-stations/10505', function () {
+    it('should return single CSV station representation', async function () {
+      const stationUrl = API_ORIGIN + '/weather-stations/10505'
+      const res = await axios.get(stationUrl, { headers: { Accept: 'text/csv' } })
+
+      expect(res.status).to.equal(200)
+      assert.include(res.headers['content-type'], 'text/csv')
+    })
+  })
 })
