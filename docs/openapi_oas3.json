@@ -122,6 +122,12 @@
                 "schema": {
                   "$ref": "#/components/schemas/MeasurementValuesAsJSON"
                 }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasurementValuesAsCSV"
+                },
+                "example": "timestamp / ms,asob_s / W/m2,t_2m / K\n1595426400000,832,299.75"
               }
             }
           },
@@ -254,6 +260,13 @@
               ]
             }
           }
+        }
+      },
+      "MeasurementValuesAsCSV": {
+        "description": "Measurement data at a weather station serialized as CSV",
+        "externalDocs": {
+          "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
+          "url": "tbd"
         }
       }
     },
