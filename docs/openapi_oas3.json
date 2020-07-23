@@ -77,14 +77,9 @@
         "tags": [ "Weather Stations" ],
         "summary": "Show details about a single weather station",
         "operationId": "getStation",
-        "parameters": [ {
-            "name": "stationId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/StationId"
-            }
-        } ],
+        "parameters": [
+          { "$ref": "#/components/parameters/StationId" }
+        ],
         "responses": {
           "200": {
             "description": "A representation of a single weather station",
@@ -223,6 +218,14 @@
             }
           }
         }
+      }
+    },
+    "parameters": {
+      "StationId": {
+        "name": "stationId",
+        "in": "path",
+        "required": true,
+        "schema": { "$ref": "#/components/schemas/StationId" },
       }
     }
   },
