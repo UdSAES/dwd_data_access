@@ -102,6 +102,34 @@
           }
         }
       }
+    },
+    "/weather-stations/{stationId}/measured-values": {
+      "get": {
+        "tags": [ "Weather Stations" ],
+        "summary": "Show measurement values taken at a specific weather station",
+        "operationId": "getMeasuredValues",
+        "parameters": [
+          { "$ref": "#/components/parameters/StationId" },
+          { "$ref": "#/components/parameters/Quantities" },
+          { "$ref": "#/components/parameters/From" },
+          { "$ref": "#/components/parameters/To" }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested measurement values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasurementValuesAsJSON"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/SchemaValidationFailed"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -193,6 +221,40 @@
           "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
           "url": "tbd"
         }
+      },
+      "QuantitiesOfInterest": {
+        "type": "string",
+        "description": "A comma-separated list of quantity identifiers",
+        "pattern": "^([a-z_1-9]+,?)+$",
+        "default": "t_2m"
+      },
+      "Timestamp": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": 0,
+        "description": "A timestamp as [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time) in milliseconds",
+        "example": 1595502578837
+      },
+      "MeasurementValuesAsJSON": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Quantities t_2m, pmsl measured at station 10704"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                { "required": [ "label" ]},
+                { "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/dev/schemata/timeseries/schema_v1.3.0-oas2.json#/Timeseries" }
+              ]
+            }
+          }
+        }
       }
     },
     "responses": {
@@ -226,6 +288,24 @@
         "in": "path",
         "required": true,
         "schema": { "$ref": "#/components/schemas/StationId" },
+      },
+      "Quantities": {
+        "name": "quantities",
+        "in": "query",
+        "schema": { "$ref": "#/components/schemas/QuantitiesOfInterest" },
+        "example": "aswdir_s,aswdifd_s"
+      },
+      "From": {
+        "name": "from",
+        "in": "query",
+        "description": "Start of period as inclusive [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time) in milliseconds; defaults to the start of today (in timezone 'Europe/Berlin')",
+        "schema": { "$ref": "#/components/schemas/Timestamp" }
+      },
+      "To": {
+        "name": "to",
+        "in": "query",
+        "description": "End of period as inclusive [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time) in milliseconds; defaults to the end of today (in timezone 'Europe/Berlin')",
+        "schema": { "$ref": "#/components/schemas/Timestamp" }
       }
     }
   },
