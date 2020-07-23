@@ -13,6 +13,7 @@ const {
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
+const ind = require('../index.js')
 
 // Instantiate logger
 const processenv = require('processenv')
@@ -171,6 +172,17 @@ function getSingleWeatherStation (stationCatalog) {
     }
 
     const station = getStationById(stations, stationId)[0]
+
+    if (station === undefined) {
+      res.set('Content-Type', 'application/problem+json')
+      res.status(404).send({
+        title: 'Not Found',
+        status: 404,
+        detail: 'The requested resource was not found on this server'
+      })
+      log.info('sent `404 Not Found` as response to ' + req.method + '-request on ' + req.path)
+      return
+    }
 
     res.format({
       'application/json': function () {
