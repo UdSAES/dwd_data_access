@@ -27,6 +27,7 @@ var log = bunyan.createLogger({
 })
 log.info('loaded module for handling requests for non-cached data')
 
+// GET /weather-stations
 function getWeatherStations (stationCatalog) {
   return async function (c, req, res, next) {
     function getUrlOfTheStation (station, req) {
@@ -125,7 +126,8 @@ function getWeatherStations (stationCatalog) {
     })
   }
 }
-// GET Single weather station
+
+// GET /weather-stations/:stationId
 function getSingleWeatherStation (stationCatalog) {
   return async function (c, req, res, next) {
     const urlString = req.originalUrl
@@ -149,9 +151,9 @@ function getSingleWeatherStation (stationCatalog) {
       return {
         name: station.name,
         location: {
-          latitude: {unit: "deg", value: station.location.latitude},
-          longitude: {unit: "deg", value: station.location.longitude},
-          elevation: {unit: "m", value: station.location.elevation}
+          latitude: { unit: 'deg', value: station.location.latitude },
+          longitude: { unit: 'deg', value: station.location.longitude },
+          elevation: { unit: 'm', value: station.location.elevation }
         },
         stationId: station.stationId,
         measuredValues: getUrlForMeasuredValuesOrForecast(station, req, 'measured-values'),
