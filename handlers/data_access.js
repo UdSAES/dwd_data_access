@@ -128,6 +128,14 @@ function getWeatherStations (stationCatalog) {
 // GET Single weather station
 function getSingleWeatherStation (stationCatalog) {
   return async function (c, req, res, next) {
+    const urlString = req.originalUrl
+    const stations = su.findStationsInVicinityOf(stationCatalog, undefined, undefined, undefined)
+    const stationId = urlString.split('/')[2]
+    const station = getStationById(stations, stationId)[0]
+
+    function getStationById (stations, stationId) {
+      return stations.filter(station => station.stationId === stationId)
+    }
 
     function getUrlForMeasuredValuesOrForecast (station, req, parameter) {
       return url.format({
@@ -136,10 +144,6 @@ function getSingleWeatherStation (stationCatalog) {
         pathname: 'weather-stations/' + station.stationId + '/' + parameter
       })
     }
-
-    const stations = su.findStationsInVicinityOf(stationCatalog, undefined, undefined, undefined)
-    const urlString = req.originalUrl
-    const stationId = urlString.split('/')[2]
 
     function renderStationAsJSON (station) {
       return {
@@ -167,11 +171,7 @@ function getSingleWeatherStation (stationCatalog) {
       return csvLabels + '\n' + stationString
     }
 
-    function getStationById(stations, stationId) {
-      return stations.filter(station => station.stationId === stationId)
-    }
 
-    const station = getStationById(stations, stationId)[0]
 
     if (station === undefined) {
       res.set('Content-Type', 'application/problem+json')
