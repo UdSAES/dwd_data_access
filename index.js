@@ -339,3 +339,5 @@ async function init () {
 if (require.main === module) {
   init()
 }
+
+exports.respondWithNotFound = respondWithNotFound

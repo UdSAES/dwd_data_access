@@ -171,32 +171,23 @@ function getSingleWeatherStation (stationCatalog) {
       return csvLabels + '\n' + stationString
     }
 
+    if (station !== undefined) {
+      res.format({
+        'application/json': function () {
+          res.status(200).send(renderStationAsJSON(station))
+        },
 
+        'text/csv': function () {
+          res.status(200).send(renderStationAsCSV(station))
+        },
 
-    if (station === undefined) {
-      res.set('Content-Type', 'application/problem+json')
-      res.status(404).send({
-        title: 'Not Found',
-        status: 404,
-        detail: 'The requested resource was not found on this server'
+        default: function () {
+          res.status(406).send('Not Acceptable')
+        }
       })
-      log.info('sent `404 Not Found` as response to ' + req.method + '-request on ' + req.path)
-      return
+    } else {
+      ind.respondWithNotFound(c, req, res, next)
     }
-
-    res.format({
-      'application/json': function () {
-        res.status(200).send(renderStationAsJSON(station))
-      },
-
-      'text/csv': function () {
-        res.status(200).send(renderStationAsCSV(station))
-      },
-
-      default: function () {
-        res.status(406).send('Not Acceptable')
-      }
-    })
   }
 }
 
