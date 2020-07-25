@@ -142,13 +142,11 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   })
 
   describe('GET /weather-stations/1050', function () {
-  it('should return 404, resource not found', async function () {
-    const stationUrl = API_ORIGIN + '/weather-stations/1050'
-    const res = await axios.get(stationUrl, { headers: { Accept: 'application/json' }, validateStatus: false })
+    it('should return 404, resource not found', async function () {
+      const stationUrl = API_ORIGIN + '/weather-stations/1050'
+      const res = await axios.get(stationUrl, { headers: { Accept: 'application/json' }, validateStatus: false })
 
-    expect(res.status).to.equal(404)
-
+      expect(res.status).to.equal(404)
+    })
   })
-})
-
 })
