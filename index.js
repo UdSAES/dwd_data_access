@@ -321,7 +321,7 @@ async function init () {
   // Define routing
   backend.register('getFilteredListOfStations', hda.getWeatherStations(stationCatalog))
   backend.register('getStation', respondWithNotImplemented)
-  // backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
+  backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
 
   // Handle unsuccessful requests
   backend.register('validationFail', failValidation)
@@ -339,3 +339,5 @@ async function init () {
 if (require.main === module) {
   init()
 }
+
+exports.respondWithNotFound = respondWithNotFound

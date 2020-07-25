@@ -13,6 +13,7 @@ const {
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
+const ind = require('../index.js')
 
 // Instantiate logger
 const processenv = require('processenv')
@@ -26,6 +27,7 @@ var log = bunyan.createLogger({
 })
 log.info('loaded module for handling requests for non-cached data')
 
+// GET /weather-stations
 function getWeatherStations (stationCatalog) {
   return async function (c, req, res, next) {
     function getUrlOfTheStation (station, req) {
@@ -125,9 +127,70 @@ function getWeatherStations (stationCatalog) {
   }
 }
 
-// TODO @Georgii implement
+// GET /weather-stations/:stationId
 function getSingleWeatherStation (stationCatalog) {
-  return async function (c, req, res, next) {}
+  return async function (c, req, res, next) {
+    const urlString = req.originalUrl
+    const stations = su.findStationsInVicinityOf(stationCatalog, undefined, undefined, undefined)
+    const stationId = urlString.split('/')[2]
+    const station = getStationById(stations, stationId)[0]
+
+    function getStationById (stations, stationId) {
+      return stations.filter(station => station.stationId === stationId)
+    }
+
+    function getUrlForMeasuredValuesOrForecast (station, req, parameter) {
+      return url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: 'weather-stations/' + station.stationId + '/' + parameter
+      })
+    }
+
+    function renderStationAsJSON (station) {
+      return {
+        name: station.name,
+        location: {
+          latitude: { unit: 'deg', value: station.location.latitude },
+          longitude: { unit: 'deg', value: station.location.longitude },
+          elevation: { unit: 'm', value: station.location.elevation }
+        },
+        stationId: station.stationId,
+        measuredValues: getUrlForMeasuredValuesOrForecast(station, req, 'measured-values'),
+        forecast: getUrlForMeasuredValuesOrForecast(station, req, 'forecast')
+      }
+    }
+
+    function renderStationAsCSV (station) {
+      const csvLabels = 'stationId,name,latitude,longitude,elevation'
+      const stationId = station.stationId
+      const name = station.name
+      const latitude = station.location.latitude
+      const longitude = station.location.longitude
+      const elevation = station.location.elevation
+      const stationString = [stationId, name, latitude, longitude, elevation].join(',')
+
+      return csvLabels + '\n' + stationString
+    }
+
+    if (station !== undefined) {
+      res.format({
+        'application/json': function () {
+          res.status(200).send(renderStationAsJSON(station))
+        },
+
+        'text/csv': function () {
+          res.status(200).send(renderStationAsCSV(station))
+        },
+
+        default: function () {
+          res.status(406).send('Not Acceptable')
+        }
+      })
+    } else {
+      ind.respondWithNotFound(c, req, res, next)
+    }
+  }
 }
 
 // GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
