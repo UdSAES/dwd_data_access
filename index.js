@@ -22,9 +22,9 @@ var bunyan = require('bunyan')
 const addRequestId = require('express-request-id')()
 
 const LISTEN_PORT = processenv('LISTEN_PORT')
-// const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
-// const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
-// const POIS_JSON_FILE_PATH = processenv('POIS_JSON_FILE_PATH')
+const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
+const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
+const POIS_JSON_FILE_PATH = processenv('POIS_JSON_FILE_PATH')
 const JWT_PUBLIC_KEY_FILE_PATH = processenv('JWT_PUBLIC_KEY_FILE_PATH')
 const AUTHORIZATION_LIMIT_INTERVAL = processenv('AUTHORIZATION_LIMIT_INTERVAL') || 10
 const AUTHORIZATION_LIMIT_VALUE = processenv('AUTHORIZATION_LIMIT_VALUE') || 1000
@@ -46,8 +46,8 @@ const EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER = 9
 const EXIT_CODE_SERVER_ERROR = 10
 const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
-// const VOIS_JSON_FILE_PATH = './config/vois.json'
-// const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
+const VOIS_JSON_FILE_PATH = './config/vois.json'
+const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
 const API_SPECIFICATION_FILE_PATH = './docs/openapi_oas3.json'
 
 // Instantiate logger
@@ -314,14 +314,14 @@ async function init () {
 
   // Load configuration
   const stationCatalog = await sc.getAllStations('./config/')
-  // const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
-  //   encoding: 'utf8'
-  // })
+  const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
+    encoding: 'utf8'
+  })
 
   // Define routing
   backend.register('getFilteredListOfStations', hda.getWeatherStations(stationCatalog))
-  backend.register('getStation', respondWithNotImplemented)
-  // backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
+  backend.register('getMeasuredValues', hda.getWeatherReport(DATA_ROOT_PATH, voisDataAccessConfigs))
+  //backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
 
   // Handle unsuccessful requests
   backend.register('validationFail', failValidation)

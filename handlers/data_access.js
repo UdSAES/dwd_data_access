@@ -263,6 +263,21 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
+// GET /weather-stations/{stationId}/measured-values?...&...&...
+
+function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
+  const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
+  return async function (req, res, next) {
+    const success = true
+    console.log(success)
+    console.log(REPORT_DATA_BASE_PATH)
+
+  }
+}
+
+
+
+
 // GET /weather/weather_reports/poi/:sid/:voi?startTimestamp=...&endTimestamp=...
 function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
@@ -345,8 +360,13 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
+
+
+
+
 exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
 exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
 exports.getWeatherReport = getWeatherReport
+exports.getMeasuredValues = getMeasuredValues
