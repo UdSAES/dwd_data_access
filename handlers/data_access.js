@@ -263,48 +263,21 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
-// GET /weather-stations/{stationId}/measured-values?...&...&...
-
-function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
-  return async function (req, res, next) {
-    const success = true
-    console.log(success)
-    console.log(REPORT_DATA_BASE_PATH)
-
-  }
-}
-
 
 
 
 // /weather/weather_reports/poi/{sid}/{voi}
 // weather-stations/{stationId}/measured-values?...&...&...
 // http://localhost:5000/weather-stations/10505/measured-values?quantities=t_2m&from=123123124&to=123123123
-function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
+function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
   return async function (c, req, res, next) {
 
-    const result = {
-      description: 'Quantities ... ',
-      data: [
-        {
-          label: 'string',
-          unit: 'string',
-          timeseries: [
-            {
-              timestamp: 12345678967,
-              value: 0
-            }
-          ]
-        }
-      ]
-    }
-
     let startTimestamp = parseInt(req.query.from)
     let endTimestamp = parseInt(req.query.to)
     const voi = req.query.quantities
+    const vois = voi.split(',')
 
     const splitUrl = req.path.split('/')
     const sid = splitUrl[2]
@@ -316,81 +289,102 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
     if (isNaN(endTimestamp)) {
       endTimestamp = moment.utc().valueOf()
     }
+    const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
 
-    let debugArr = [sid, startTimestamp, endTimestamp]
 
-
-    try {
-      const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
-      const voiConfig = _.find(voisConfigs, (item) => {
-        return item.target.key === voi
+    function getVoiConfigsAsArray (vois) {
+      const voiConfigs = []
+      _.forEach(vois, function(voi) {
+        const voiConfig = _.find(voisConfigs, (item) => {
+          return item.target.key === voi
+        })
+        voiConfigs.push(voiConfig)
       })
+      return voiConfigs
+    }
 
+    const voiConfigs = getVoiConfigsAsArray(vois)
+
+    //What should be returned if one of vois is not cofigured properly?
+    _.forEach(voiConfigs, function(voiConfig) {
       if (_.isNil(_.get(voiConfig, ['report', 'key']))) {
-        res.status(500).send(`Received request for REPORT for unconfigured VOI: ${voi}`)
-        req.log.warn({ res: res }, `Received request for REPORT for unconfigured VOI: ${voi}`)
+        res.status(500).send(`Received request for REPORT for unconfigured VOI`)
+        req.log.warn({ res: res }, `Received request for REPORT for unconfigured VOI`)
         return
       }
+    })
 
-      let timeseriesData = timeseriesDataCollection[voiConfig.report.key]
+    function getTimeSeriesData (voiConfigs, timeseriesDataCollection) {
+      const timeSeriesData = []
+      voiConfigs.forEach(function(voiConfig) {
+        timeSeriesData.push(timeseriesDataCollection[voiConfig.report.key])
+      })
+      return timeSeriesData
+    }
 
-      // Find timestamps for which at least one value is null and attempt to
-      // find a timestamp for which the value is not null
-      const timestampsToRemove = []
-      _.forEach(timeseriesData, (item) => {
-        // Skip item if value is not null
-        if (!_.isNil(item.value)) {
-          return
-        }
+    // timeSeriesDataArray is an array for timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
+    let timeseriesDataArray = getTimeSeriesData(voiConfigs, timeseriesDataCollection)
 
-        // If value is null, check if there exists another item with the same
-        // timestamp which has a value that is not null; return true xor false
-        const betterItem = _.find(timeseriesData, (item2) => {
-          return item2.timestamp === item.timestamp && !_.isNil(item2.value)
+    const timestampsToRemove = []
+    _.forEach(timeseriesDataArray, function(timeseriesData) {
+
+        _.forEach(timeseriesData, (item) => {
+          // Skip item if value is not null
+          if (!_.isNil(item.value)) {
+            return
+          }
+
+          // If value is null, check if there exists another item with the same
+          // timestamp which has a value that is not null; return true xor false
+          const betterItem = _.find(timeseriesData, (item2) => {
+            return item2.timestamp === item.timestamp && !_.isNil(item2.value)
+          })
+
+          // If betterItem is true, keep the timestamp; nominate timestamp
+          // for removal otherwise
+          if (!_.isNil(betterItem)) {
+            timestampsToRemove.push(item.timestamp)
+          }
+        })
+    })
+
+    _.forEach(timeseriesDataArray, function(timeseriesData) {
+      _.remove(timeseriesData, (item) => {
+          return _.includes(timestampsToRemove, item.timestamp) && _.isNil(item.value)
         })
 
-        // If betterItem is true, keep the timestamp; nominate timestamp
-        // for removal otherwise
-        if (!_.isNil(betterItem)) {
-          timestampsToRemove.push(item.timestamp)
-        }
-      })
+    })
 
-      // Remove items for which no value exists at timestamp
-      _.remove(timeseriesData, (item) => {
-        return _.includes(timestampsToRemove, item.timestamp) && _.isNil(item.value)
-      })
-
+    _.forEach(voiConfigs, function(voiConfig) {
       if (!_.isNil(voiConfig)) {
-        timeseriesData = _.map(timeseriesData, (item) => {
+        _.forEach(timeseriesDataArray, function(timeseriesData) {
+          timeseriesData = _.map(timeseriesData, (item) => {
           return {
             timestamp: item.timestamp,
             value: convertUnit(item.value, voiConfig.report.unit, voiConfig.target.unit)
-          }
+            }
+          })
         })
       }
+    })
 
-      const debug_dict = {
-        'voiConfig': voiConfig,
-        'timeseries': timeseriesData
-      }
-
-      const result = {
-        label: voiConfig.target.key,
-        unit: voiConfig.target.unit,
-        data: timeseriesData
-      }
-
-      const result = {
-        description: 'Quantities '
-      }
-
-      res.status(200).send(result) // FIXME successfull even if data is `[]`
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
-    } catch (error) {
-      res.status(500).send()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+    function makeResult(voiConfigs, timeseriesDataArray) {
+      return
     }
+
+
+    //const result = makeResult(voiConfigs, timeseriesDataArray)
+    const result = {voiConfigs: voiConfigs, timeseriesData: timeseriesDataArray}
+
+    res.status(200).send(result)
+
+
+    //   res.status(200).send(result) // FIXME successfull even if data is `[]`
+    //   req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
+    // } catch (error) {
+    //   res.status(500).send()
+    //   req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+    // }
   }
 }
 
@@ -402,5 +396,4 @@ exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
 exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
-exports.getWeatherReport = getWeatherReport
 exports.getMeasuredValues = getMeasuredValues
