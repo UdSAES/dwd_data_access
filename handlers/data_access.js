@@ -278,15 +278,36 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
 
 
-// GET /weather/weather_reports/poi/:sid/:voi?startTimestamp=...&endTimestamp=...
+// /weather/weather_reports/poi/{sid}/{voi}
+// weather-stations/{stationId}/measured-values?...&...&...
+// http://localhost:5000/weather-stations/10505/measured-values?quantities=t_2m&from=123123124&to=123123123
 function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
-  return async function (req, res, next) {
-    let startTimestamp = parseInt(req.query.startTimestamp)
-    let endTimestamp = parseInt(req.query.endTimestamp)
-    const sid = req.params.sid
-    const voi = req.params.voi
+  return async function (c, req, res, next) {
+
+    const result = {
+      description: 'Quantities ... ',
+      data: [
+        {
+          label: 'string',
+          unit: 'string',
+          timeseries: [
+            {
+              timestamp: 12345678967,
+              value: 0
+            }
+          ]
+        }
+      ]
+    }
+
+    let startTimestamp = parseInt(req.query.from)
+    let endTimestamp = parseInt(req.query.to)
+    const voi = req.query.quantities
+
+    const splitUrl = req.path.split('/')
+    const sid = splitUrl[2]
 
     if (isNaN(startTimestamp)) {
       startTimestamp = moment.utc().subtract(25, 'hours').valueOf()
@@ -296,6 +317,9 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
       endTimestamp = moment.utc().valueOf()
     }
 
+    let debugArr = [sid, startTimestamp, endTimestamp]
+
+
     try {
       const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
       const voiConfig = _.find(voisConfigs, (item) => {
@@ -303,8 +327,8 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
       })
 
       if (_.isNil(_.get(voiConfig, ['report', 'key']))) {
-        res.status(500).send('received request for REPORT for unconfigured VOI')
-        req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
+        res.status(500).send(`Received request for REPORT for unconfigured VOI: ${voi}`)
+        req.log.warn({ res: res }, `Received request for REPORT for unconfigured VOI: ${voi}`)
         return
       }
 
@@ -346,11 +370,21 @@ function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
         })
       }
 
+      const debug_dict = {
+        'voiConfig': voiConfig,
+        'timeseries': timeseriesData
+      }
+
       const result = {
         label: voiConfig.target.key,
         unit: voiConfig.target.unit,
         data: timeseriesData
       }
+
+      const result = {
+        description: 'Quantities '
+      }
+
       res.status(200).send(result) // FIXME successfull even if data is `[]`
       req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
     } catch (error) {
