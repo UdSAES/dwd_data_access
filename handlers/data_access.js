@@ -125,7 +125,7 @@ function getWeatherStations (stationCatalog) {
   }
 }
 
-// TODO @Georgii implement
+//
 function getSingleWeatherStation (stationCatalog) {
   return async function (c, req, res, next) {}
 }
