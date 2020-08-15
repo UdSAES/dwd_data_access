@@ -353,9 +353,12 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         const dataElement = {
           label: voiConfig.target.key,
           unit: voiConfig.target.unit,
-          timseries: timeseriesDataArray[i]
+          timeseries: timeseriesDataArray[i]
         }
         result.data.push(dataElement)
+      }
+      if (_.isNil(result.data[0].timeseries)) {
+        result.data[0].timeseries = []
       }
       return result
     }
