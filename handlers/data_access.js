@@ -263,18 +263,12 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
-
-
-
-// /weather/weather_reports/poi/{sid}/{voi}
-// weather-stations/{stationId}/measured-values?...&...&...
-// http://localhost:5000/weather-stations/10505/measured-values?quantities=t_2m&from=123123124&to=123123123
 // http://localhost:5000/weather-stations/10505/measured-values?quantities=t_2m&from=1597140000000&to=1597226400000
+
 function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
   return async function (c, req, res, next) {
-
     let startTimestamp = parseInt(req.query.from)
     let endTimestamp = parseInt(req.query.to)
     const voi = req.query.quantities
@@ -293,7 +287,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     function getVoiConfigsAsArray (vois) {
       const voiConfigs = []
-      _.forEach(vois, function(voi) {
+      _.forEach(vois, function (voi) {
         const voiConfig = _.find(voisConfigs, (item) => {
           return item.target.key === voi
         })
@@ -302,88 +296,148 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       return voiConfigs
     }
 
-
-    function ensureVoiConfigsCorrectness(voiConfigs) {
-      _.forEach(voiConfigs, function(voiConfig) {
+    function ensureVoiConfigsCorrectness (voiConfigs) {
+      _.forEach(voiConfigs, function (voiConfig) {
         if (_.isNil(_.get(voiConfig, ['report', 'key']))) {
-          res.status(500).send(`Received request for REPORT for unconfigured VOI`)
-          req.log.warn({ res: res }, `Received request for REPORT for unconfigured VOI`)
-          return
+          res.status(500).send('Received request for REPORT for unconfigured VOI')
+          req.log.warn({ res: res }, 'Received request for REPORT for unconfigured VOI')
         }
       })
-      return 
     }
 
     function getTimeSeriesData (voiConfigs, timeseriesDataCollection) {
       const timeSeriesData = []
-      voiConfigs.forEach(function(voiConfig) {
+      voiConfigs.forEach(function (voiConfig) {
         timeSeriesData.push(timeseriesDataCollection[voiConfig.report.key])
       })
       return timeSeriesData
     }
 
-    function formatTimeseriesDataArray(timeseriesDataArray) {
+    function formatTimeseriesDataArray (timeseriesDataArray) {
       const timestampsToRemove = []
-      _.forEach(timeseriesDataArray, function(timeseriesData) {
+      _.forEach(timeseriesDataArray, function (timeseriesData) {
+        _.forEach(timeseriesData, (item) => {
+          if (!_.isNil(item.value)) {
+            return
+          }
 
-          _.forEach(timeseriesData, (item) => {
-
-              if (!_.isNil(item.value)) {
-                return
-              }
-
-              const betterItem = _.find(timeseriesData, (item2) => {
-                return item2.timestamp === item.timestamp && !_.isNil(item2.value)
-              })
-
-              if (!_.isNil(betterItem)) {
-                timestampsToRemove.push(item.timestamp)
-              }
+          const betterItem = _.find(timeseriesData, (item2) => {
+            return item2.timestamp === item.timestamp && !_.isNil(item2.value)
           })
+
+          if (!_.isNil(betterItem)) {
+            timestampsToRemove.push(item.timestamp)
+          }
+        })
       })
 
-      _.forEach(timeseriesDataArray, function(timeseriesData) {
+      _.forEach(timeseriesDataArray, function (timeseriesData) {
         _.remove(timeseriesData, (item) => {
-            return _.includes(timestampsToRemove, item.timestamp) && _.isNil(item.value)
-          })
+          return _.includes(timestampsToRemove, item.timestamp) && _.isNil(item.value)
+        })
       })
       return timeseriesDataArray
+    }
+
+    function renderMeasuredValuesAsJSON (voiConfigs, timeseriesDataArray) {
+      const result = {
+        description: `Quantities ${vois} measured at station ${sid}`,
+        data: []
+      }
+      for (let i = 0; i < voiConfigs.length; i += 1) {
+        const voiConfig = voiConfigs[i]
+        const dataElement = {
+          label: voiConfig.target.key,
+          unit: voiConfig.target.unit,
+          timseries: timeseriesDataArray[i]
+        }
+        result.data.push(dataElement)
+      }
+      return result
+    }
+
+    function getCSVLabels (voiConfigs) {
+      let csvLabels = 'timestamp / ms,'
+      _.forEach(voiConfigs, function (voiConfig) {
+        const key = voiConfig.target.key
+        const unit = voiConfig.target.unit
+        csvLabels += `${key} / ${unit},`
+      })
+      csvLabels += '\n'
+      return csvLabels
+    }
+
+    function getFirstElementsFromTimeseries (timeseriesDataArray) {
+      const result = []
+      _.forEach(timeseriesDataArray, function (item) {
+        result.push(_.first(item))
+      })
+      return result
+    }
+
+    function getLastElementsFromTimeseries (timeseriesDataArray) {
+      // returns from each array in timeseriesDataArray first element.
+      const result = []
+      _.forEach(timeseriesDataArray, function (item) {
+        result.push(_.tail(item))
+      })
+      return result
+    }
+
+    function getValuesAsCSVString (timeStampsAndValues) {
+      // Accepts the results from getFirstElementsFromTimeseries
+      // timeStampsAndValues [{timestamp: 1, value: 2}, {...}]
+      // item {timestamp: 1, value:2}
+      const timestampValue = timeStampsAndValues[0].timestamp
+      let result = `${timestampValue},`
+      _.forEach(timeStampsAndValues, function (item) {
+        result += `${item.value},`
+      })
+      return result
+    }
+
+    function getStringsFromStationDataPayload (timeseriesDataArray) {
+      function helper (timeseries, result) {
+        if (_.isEmpty(getFirstElementsFromTimeseries(timeseries)[0])) {
+          return result
+        }
+        const stringWithValues = getFirstElementsFromTimeseries(timeseries)
+        result.push(getValuesAsCSVString(stringWithValues))
+        return helper(getLastElementsFromTimeseries(timeseries), result)
+      }
+      return helper(timeseriesDataArray, [])
+    }
+
+    function renderMeasuredValuesAsCSV (voiConfigs, timeseriesDataArray) {
+      const csvLabels = getCSVLabels(voiConfigs, timeseriesDataArray)
+      const csvStrings = getStringsFromStationDataPayload(timeseriesDataArray)
+      return csvLabels + csvStrings.join('\n')
     }
 
     const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
     const voiConfigs = getVoiConfigsAsArray(vois)
     ensureVoiConfigsCorrectness(voiConfigs)
-
-
     // timeseriesDataArray is an array for timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
     // timeseriesDataArray = [[{str:int, str: null}, {...} <-tmstmp]<-voi,[{...}, {...}]<-voi]
-    let timeseriesDataArray = getTimeSeriesData(voiConfigs, timeseriesDataCollection)
+    const timeseriesDataArray = formatTimeseriesDataArray(getTimeSeriesData(voiConfigs, timeseriesDataCollection))
 
-    function renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray) {
-      const result = {description: `Quantities ${vois} measured at station ${sid}`,
-                      data: []}
+    res.format({
+      'application/json': function () {
+        const measuredValues = renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray)
+        res.status(200).send(measuredValues)
+      },
 
-      for(let i=0; i < voiConfigs.length; i += 1) {
-        const voiConfig = voiConfigs[i]
-        const data_element = {
-          label: voiConfig.target.key,
-          unit: voiConfig.target.unit,
-          timseries: timeseriesDataArray[i]
-        }
-        result.data.push(data_element)
+      'text/csv': function () {
+        const measuredValues = renderMeasuredValuesAsCSV(voiConfigs, timeseriesDataArray)
+        res.status(200).send(measuredValues)
+      },
+
+      default: function () {
+        res.status(406).send('Not Acceptable')
       }
-      return result
-    }
-
-    const measured_values = renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray)
-
-    res.send(measured_values)
+    })
   }
 }
-
-
-
-
 
 exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
