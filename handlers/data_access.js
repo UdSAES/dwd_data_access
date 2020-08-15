@@ -269,10 +269,14 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
   return async function (c, req, res, next) {
+    const defaultParameter = ['t_2m']
     let startTimestamp = parseInt(req.query.from)
     let endTimestamp = parseInt(req.query.to)
     const voi = req.query.quantities
-    const vois = voi.split(',')
+    let vois = defaultParameter
+    if (voi) {
+      vois = voi.split(',')
+    }
 
     const splitUrl = req.path.split('/')
     const sid = splitUrl[2]
