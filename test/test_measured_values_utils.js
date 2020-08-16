@@ -124,4 +124,25 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
     })
   })
 
+  describe('Validate got cvs values correctly', async function () {
+    it('should return the expected output', async function () {
+      // Read expected result from .json-file
+      const expected = '12345,Value1,Value2,'
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      // Parse test file (shortened to a few lines)
+      const test_data = [{timestamp: '12345', value: 'Value1'}, {timestamp: '12345', value: 'Value2'}]
+      const actual = mvu.getValuesAsCSVString(test_data)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+
+      // Check whether actual result matches expectations
+      assert.deepEqual(actual, expected, 'Result does not match expectations')
+    })
+  })
 })
