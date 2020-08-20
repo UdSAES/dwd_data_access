@@ -5,7 +5,6 @@
 
 const fs = require('fs-extra')
 const describe = require('mocha').describe
-const before = require('mocha').before
 const it = require('mocha').it
 const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
@@ -87,8 +86,8 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
       })
 
       // Parse test file (shortened to a few lines)
-      const test_data = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
-      const actual = mvu.getFirstElementsFromTimeseries(test_data)
+      const testData = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
+      const actual = mvu.getFirstElementsFromTimeseries(testData)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -109,8 +108,8 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
       })
 
       // Parse test file (shortened to a few lines)
-      const test_data = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
-      const actual = mvu.getLastElementsFromTimeseries(test_data)
+      const testData = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
+      const actual = mvu.getLastElementsFromTimeseries(testData)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -131,8 +130,8 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
       })
 
       // Parse test file (shortened to a few lines)
-      const test_data = [{ timestamp: '12345', value: 'Value1' }, { timestamp: '12345', value: 'Value2' }]
-      const actual = mvu.getValuesAsCSVString(test_data)
+      const testData = [{ timestamp: '12345', value: 'Value1' }, { timestamp: '12345', value: 'Value2' }]
+      const actual = mvu.getValuesAsCSVString(testData)
       addContext(this, {
         title: 'actual output',
         value: actual
