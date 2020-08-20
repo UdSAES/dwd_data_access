@@ -302,7 +302,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     const voiConfigs = getVoiConfigsAsArray(vois)
     const checkedVois = mvu.ensureVoiConfigsCorrectness(voiConfigs)
-    
+
     if (_.includes(checkedVois, false)) {
       res.status(500).send('received a request for REPORT for unconfigured VOI')
       req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')

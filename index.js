@@ -321,7 +321,7 @@ async function init () {
   // Define routing
   backend.register('getFilteredListOfStations', hda.getWeatherStations(stationCatalog))
   backend.register('getMeasuredValues', hda.getMeasuredValues(DATA_ROOT_PATH, voisDataAccessConfigs))
-  //backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
+  // backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
 
   // Handle unsuccessful requests
   backend.register('validationFail', failValidation)
