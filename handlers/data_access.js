@@ -266,7 +266,8 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
-// http://localhost:5000/weather-stations/10505/measured-values?quantities=t_2m&from=1597140000000&to=1597226400000
+
+// GET /weather-stations/{stationId}/measured-values?quantities=...&from=...&to=...
 function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
@@ -306,7 +307,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     const voiConfigs = getVoiConfigsAsArray(vois)
-    const checkedVois = mvu.ensureVoiConfigsCorrectness(voiConfigs)
+    const checkedVois = mvu.checkValidityOfQuantityIds(voiConfigs)
 
     if (_.includes(checkedVois, false)) {
       const config = {
@@ -321,7 +322,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
     // timeseriesDataArray is an array of timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
-    const timeseriesDataArray = mvu.formatTimeseriesDataArray(mvu.getTimeSeriesData(voiConfigs, timeseriesDataCollection))
+    const timeseriesDataArray = mvu.formatTimeseriesDataArray(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
 
     res.format({
       'application/json': function () {
