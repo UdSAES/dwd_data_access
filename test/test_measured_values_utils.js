@@ -35,6 +35,7 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
   describe('Validate there is as much timeseries as vois', async function () {
     it ('should return the same amoubt of timeseries as vois', async function () {
       const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
+      // Temperature in K and pressure in Pa.
       const vois = ['t_2m', 'pmsl']
       const stationId = 10505
       const startTimestamp = 1597140000000
@@ -44,6 +45,16 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
       const timeseriesDataArray = mvu.useSIunitsAndDropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
       const voisLength = voiConfigs.length
       const timeseriesDataArrayLength = timeseriesDataArray.length
+      const firstVoiUnit = voiConfigs[0].target.unit
+      const secondVoiUnit = voiConfigs[1].target.unit
+      assert.deepEqual(firstVoiUnit, 'K')
+      assert.deepEqual(secondVoiUnit, 'Pa')
+      const veryLowPressure = 500
+      const veryHighTemperature = 500
+      console.log(timeseriesDataArray)
+      console.log(voiConfigs)
+      assert.isBelow(timeseriesDataArray[0][0].value, veryHighTemperature, 'Temperature was higher than 500 K')
+      assert.isAbove(timeseriesDataArray[1][0].value, veryLowPressure, 'Pressure was below 500?')
       assert.deepEqual(voisLength, timeseriesDataArrayLength, 'VOI configs and timeseriesDataArray are not the same length')
     })
   })
