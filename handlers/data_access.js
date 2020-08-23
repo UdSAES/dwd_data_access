@@ -13,6 +13,7 @@ const {
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
+const ind = require('../index.js')
 const mvu = require('../lib/measured_values_utils.js')
 
 // Instantiate logger
@@ -307,7 +308,12 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     const checkedVois = mvu.ensureVoiConfigsCorrectness(voiConfigs)
 
     if (_.includes(checkedVois, false)) {
-      res.status(500).send('received a request for REPORT for unconfigured VOI')
+      res.set('Content-Type', 'application/problem+json')
+      res.status(400).json({
+        title: 'Schema validation Failed',
+        status: 400,
+        detail: 'Received request for unconfigured voi',
+      })
       req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
       return
     }
