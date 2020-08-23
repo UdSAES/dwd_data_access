@@ -269,6 +269,9 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
   return async function (c, req, res, next) {
+    const now = moment()
+    const defaultStartTimestamp = now.startOf('day').tz('Europe/Berlin').format('x')
+    const defaultEndTimestamp = now.endOf('day').tz('Europe/Berlin').format('x')
     const defaultParameter = ['t_2m']
     let startTimestamp = parseInt(req.query.from)
     let endTimestamp = parseInt(req.query.to)
@@ -282,11 +285,11 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     const sid = splitUrl[2]
 
     if (isNaN(startTimestamp)) {
-      startTimestamp = moment.utc().subtract(25, 'hours').valueOf()
+      startTimestamp = parseInt(defaultStartTimestamp)
     }
 
     if (isNaN(endTimestamp)) {
-      endTimestamp = moment.utc().valueOf()
+      endTimestamp = parseInt(defaultEndTimestamp)
     }
 
     function getVoiConfigsAsArray (vois) {
@@ -329,6 +332,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         res.status(406).send('Not Acceptable')
       }
     })
+
   }
 }
 
