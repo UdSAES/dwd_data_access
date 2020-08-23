@@ -3,6 +3,7 @@
 
 'use strict'
 
+const processenv = require('processenv')
 const fs = require('fs-extra')
 const describe = require('mocha').describe
 const it = require('mocha').it
@@ -10,6 +11,9 @@ const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
 const mvu = require('../lib/measured_values_utils')
 const _ = require('lodash')
+const csv = require('dwd-csv-helper')
+const path = require('path')
+
 
 describe('Validate correctness of functions that manipulate VOIS', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
@@ -28,6 +32,22 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
     return voiConfigs
   }
 
+  describe('Validate there is as much timeseries as vois', async function () {
+    it ('should return the same amoubt of timeseries as vois', async function () {
+      const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
+      const vois = ['t_2m', 'pmsl']
+      const stationId = 10505
+      const startTimestamp = 1597140000000
+      const endTimestamp = 1597150000000
+      const voiConfigs = getVoiConfigsAsArray(vois)
+      const timeseriesDataCollection = await csv.readTimeseriesDataReport(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports'), startTimestamp, endTimestamp, stationId)
+      const timeseriesDataArray = mvu.useSIunitsAndDropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
+      const voisLength = voiConfigs.length
+      const timeseriesDataArrayLength = timeseriesDataArray.length
+      assert.deepEqual(voisLength, timeseriesDataArrayLength, 'VOI configs and timeseriesDataArray are not the same length')
+    })
+  })
+
   describe('Validate unconfigured vois do not pass', async function () {
     const vois = ['t_2m', 'pdml']
     const voisDataAccessConfigs = getVoiConfigsAsArray(vois)
@@ -40,7 +60,7 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
       })
 
       // Parse test file (shortened to a few lines)
-      const actual = mvu.ensureVoiConfigsCorrectness(voisDataAccessConfigs)
+      const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -63,7 +83,7 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
       })
 
       // Parse test file (shortened to a few lines)
-      const actual = mvu.ensureVoiConfigsCorrectness(voisDataAccessConfigs)
+      const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -87,7 +107,7 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
 
       // Parse test file (shortened to a few lines)
       const testData = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
-      const actual = mvu.getFirstElementsFromTimeseries(testData)
+      const actual = mvu.getHeadElementsFromTimeseries(testData)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -109,7 +129,7 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
 
       // Parse test file (shortened to a few lines)
       const testData = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
-      const actual = mvu.getLastElementsFromTimeseries(testData)
+      const actual = mvu.getTailElementsFromTimeseries(testData)
       addContext(this, {
         title: 'actual output',
         value: actual
