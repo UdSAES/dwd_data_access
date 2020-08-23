@@ -15,6 +15,7 @@ const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
 const ind = require('../index.js')
 const mvu = require('../lib/measured_values_utils.js')
+const ru = require('../lib/response_utils.js')
 
 // Instantiate logger
 const processenv = require('processenv')
@@ -308,19 +309,18 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     const checkedVois = mvu.ensureVoiConfigsCorrectness(voiConfigs)
 
     if (_.includes(checkedVois, false)) {
-      res.set('Content-Type', 'application/problem+json')
-      res.status(400).json({
+      const config = {
         title: 'Schema validation Failed',
         status: 400,
-        detail: 'Received request for unconfigured voi',
-      })
+        detail: 'Received request for unconfigured VOI'
+      }
+      ru.problemDetail(res, config)
       req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
       return
     }
 
     const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
-    // timeseriesDataArray is an array for timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
-    // timeseriesDataArray = [[{str:int, str: null}, {...} <-tmstmp]<-voi,[{...}, {...}]<-voi]
+    // timeseriesDataArray is an array of timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
     const timeseriesDataArray = mvu.formatTimeseriesDataArray(mvu.getTimeSeriesData(voiConfigs, timeseriesDataCollection))
 
     res.format({
@@ -335,7 +335,12 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       },
 
       default: function () {
-        res.status(406).send('Not Acceptable')
+        const config = {
+          title: 'Not acceptable',
+          status: 406,
+          detail: 'Received request for not acceptable Accept header'
+        }
+        ru.problemDetail(res, config)
       }
     })
 
