@@ -51,8 +51,7 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
       assert.deepEqual(secondVoiUnit, 'Pa')
       const veryLowPressure = 500
       const veryHighTemperature = 500
-      console.log(timeseriesDataArray)
-      console.log(voiConfigs)
+      // Data used is not UnitConverted for shortness
       assert.isBelow(timeseriesDataArray[0][0].value, veryHighTemperature, 'Temperature was higher than 500 K')
       assert.isAbove(timeseriesDataArray[1][0].value, veryLowPressure, 'Pressure was below 500?')
       assert.deepEqual(voisLength, timeseriesDataArrayLength, 'VOI configs and timeseriesDataArray are not the same length')
@@ -63,21 +62,18 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
     const vois = ['t_2m', 'pdml']
     const voisDataAccessConfigs = getVoiConfigsAsArray(vois)
     it('should return the expected output', async function () {
-      // Read expected result from .json-file
       const expected = [true, false]
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      // Parse test file (shortened to a few lines)
       const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
       addContext(this, {
         title: 'actual output',
         value: actual
       })
 
-      // Check whether actual result matches expectations
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
@@ -86,21 +82,18 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
     const vois = ['t_2m', 'pmsl', 'aswdir_s']
     const voisDataAccessConfigs = getVoiConfigsAsArray(vois)
     it('should return the expected output', async function () {
-      // Read expected result from .json-file
       const expected = [true, true, true]
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      // Parse test file (shortened to a few lines)
       const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
       addContext(this, {
         title: 'actual output',
         value: actual
       })
 
-      // Check whether actual result matches expectations
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
@@ -109,14 +102,12 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
 describe('Validate correctness of functions that manipulate CSVs', async function () {
   describe('Validate first elements got correctly', async function () {
     it('should return the expected output', async function () {
-      // Read expected result from .json-file
       const expected = [{ a: 1 }, { b: 2 }, { c: 3 }]
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      // Parse test file (shortened to a few lines)
       const testData = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
       const actual = mvu.getHeadElementsFromTimeseries(testData)
       addContext(this, {
@@ -124,21 +115,18 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
         value: actual
       })
 
-      // Check whether actual result matches expectations
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
 
   describe('Validate last elements got correctly', async function () {
     it('should return the expected output', async function () {
-      // Read expected result from .json-file
       const expected = [[{ g: 8 }, { h: 11 }], [{ f: 14 }, { o: 0 }], [{ r: 30 }, { q: 12 }]]
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      // Parse test file (shortened to a few lines)
       const testData = [[{ a: 1 }, { g: 8 }, { h: 11 }], [{ b: 2 }, { f: 14 }, { o: 0 }], [{ c: 3 }, { r: 30 }, { q: 12 }]]
       const actual = mvu.getTailElementsFromTimeseries(testData)
       addContext(this, {
@@ -146,21 +134,18 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
         value: actual
       })
 
-      // Check whether actual result matches expectations
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
 
   describe('Validate got cvs values correctly', async function () {
     it('should return the expected output', async function () {
-      // Read expected result from .json-file
       const expected = '12345,Value1,Value2,'
       addContext(this, {
         title: 'expected output',
         value: expected
       })
 
-      // Parse test file (shortened to a few lines)
       const testData = [{ timestamp: '12345', value: 'Value1' }, { timestamp: '12345', value: 'Value2' }]
       const actual = mvu.getValuesAsCSVString(testData)
       addContext(this, {
@@ -168,7 +153,6 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
         value: actual
       })
 
-      // Check whether actual result matches expectations
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
