@@ -266,7 +266,6 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
-
 // GET /weather-stations/{stationId}/measured-values?quantities=...&from=...&to=...
 function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
@@ -324,7 +323,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     // timeseriesDataArray is an array of timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
     const timeseriesDataArrayUnformatted = mvu.useSIunitsAndDropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
     const timeseriesDataArray = mvu.convertUnits(voiConfigs, timeseriesDataArrayUnformatted)
-    //res.send(timeSeries)
+    // res.send(timeSeries)
 
     res.format({
       'application/json': function () {
@@ -346,7 +345,6 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         ru.problemDetail(res, config)
       }
     })
-
   }
 }
 
