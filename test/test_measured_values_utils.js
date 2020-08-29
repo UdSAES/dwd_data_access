@@ -11,7 +11,7 @@ const addContext = require('mochawesome/addContext')
 const mvu = require('../lib/measured_values_utils')
 const _ = require('lodash')
 
-describe('Validate correctness of functions that manipulate VOIS', async function () {
+describe('Validate correctness of utility functions', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
@@ -54,8 +54,8 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
   })
 })
 
-describe('Validate correctness of functions that manipulate CSVs', async function () {
-  describe('Validate first elements got correctly', async function () {
+describe('Validate correctness of functions that generate CSV-representation', async function () {
+  describe('Get first element', async function () {
     it('should return the expected output', async function () {
       const expected = [{ a: 1 }, { b: 2 }, { c: 3 }]
       addContext(this, {
@@ -74,7 +74,7 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
     })
   })
 
-  describe('Validate last elements got correctly', async function () {
+  describe('Get all but first elements', async function () {
     it('should return the expected output', async function () {
       const expected = [[{ g: 8 }, { h: 11 }], [{ f: 14 }, { o: 0 }], [{ r: 30 }, { q: 12 }]]
       addContext(this, {
@@ -93,7 +93,7 @@ describe('Validate correctness of functions that manipulate CSVs', async functio
     })
   })
 
-  describe('Validate got cvs values correctly', async function () {
+  describe('Assemble one row of CSV-representation', async function () {
     it('should return the expected output', async function () {
       const expected = '12345,Value1,Value2,'
       addContext(this, {
