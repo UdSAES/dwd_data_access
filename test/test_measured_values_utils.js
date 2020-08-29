@@ -41,7 +41,7 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
       const endTimestamp = 1597150000000
       const voiConfigs = getVoiConfigsAsArray(vois)
       const timeseriesDataCollection = await csv.readTimeseriesDataReport(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports'), startTimestamp, endTimestamp, stationId)
-      const timeseriesDataArray = mvu.useSIunitsAndDropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
+      const timeseriesDataArray = mvu.dropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
       const voisLength = voiConfigs.length
       const timeseriesDataArrayLength = timeseriesDataArray.length
       const firstVoiUnit = voiConfigs[0].target.unit
