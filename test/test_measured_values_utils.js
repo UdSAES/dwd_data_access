@@ -57,43 +57,28 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
     })
   })
 
-  describe('Validate unconfigured vois do not pass', async function () {
-    const vois = ['t_2m', 'pdml']
-    const voisDataAccessConfigs = getVoiConfigsAsArray(vois)
-    it('should return the expected output', async function () {
-      const expected = [true, false]
-      addContext(this, {
-        title: 'expected output',
-        value: expected
+  describe('Identify unconfigured VOIs', async function () {
+    const testCases = [
+      { input: ['t_2m', 'pdml'], expected: [true, false] },
+      { input: ['t_2m', 'pmsl', 'aswdir_s'], expected: [true, true, true] }
+    ]
+    testCases.forEach(function (test) {
+      it('should return the expected output', async function () {
+        const voisDataAccessConfigs = getVoiConfigsAsArray(test.input)
+        const expected = test.expected
+        addContext(this, {
+          title: 'expected output',
+          value: expected
+        })
+
+        const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
+        addContext(this, {
+          title: 'actual output',
+          value: actual
+        })
+
+        assert.deepEqual(actual, expected, 'Result does not match expectations')
       })
-
-      const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
-      addContext(this, {
-        title: 'actual output',
-        value: actual
-      })
-
-      assert.deepEqual(actual, expected, 'Result does not match expectations')
-    })
-  })
-
-  describe('Validate configured vois do pass', async function () {
-    const vois = ['t_2m', 'pmsl', 'aswdir_s']
-    const voisDataAccessConfigs = getVoiConfigsAsArray(vois)
-    it('should return the expected output', async function () {
-      const expected = [true, true, true]
-      addContext(this, {
-        title: 'expected output',
-        value: expected
-      })
-
-      const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
-      addContext(this, {
-        title: 'actual output',
-        value: actual
-      })
-
-      assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
 })
