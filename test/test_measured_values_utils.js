@@ -3,7 +3,6 @@
 
 'use strict'
 
-const processenv = require('processenv')
 const fs = require('fs-extra')
 const describe = require('mocha').describe
 const it = require('mocha').it
@@ -11,8 +10,6 @@ const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
 const mvu = require('../lib/measured_values_utils')
 const _ = require('lodash')
-const csv = require('dwd-csv-helper')
-const path = require('path')
 
 describe('Validate correctness of functions that manipulate VOIS', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
@@ -30,32 +27,6 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
     })
     return voiConfigs
   }
-
-  describe('Validate there is as much timeseries as vois', async function () {
-    it('should return the same amoubt of timeseries as vois', async function () {
-      const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
-      // Temperature in K and pressure in Pa.
-      const vois = ['t_2m', 'pmsl']
-      const stationId = 10505
-      const startTimestamp = 1597140000000
-      const endTimestamp = 1597150000000
-      const voiConfigs = getVoiConfigsAsArray(vois)
-      const timeseriesDataCollection = await csv.readTimeseriesDataReport(path.join(DATA_ROOT_PATH, 'weather', 'weather_reports'), startTimestamp, endTimestamp, stationId)
-      const timeseriesDataArray = mvu.dropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
-      const voisLength = voiConfigs.length
-      const timeseriesDataArrayLength = timeseriesDataArray.length
-      const firstVoiUnit = voiConfigs[0].target.unit
-      const secondVoiUnit = voiConfigs[1].target.unit
-      assert.deepEqual(firstVoiUnit, 'K')
-      assert.deepEqual(secondVoiUnit, 'Pa')
-      const veryLowPressure = 500
-      const veryHighTemperature = 500
-      // Data used is not UnitConverted for shortness
-      assert.isBelow(timeseriesDataArray[0][0].value, veryHighTemperature, 'Temperature was higher than 500 K')
-      assert.isAbove(timeseriesDataArray[1][0].value, veryLowPressure, 'Pressure was below 500?')
-      assert.deepEqual(voisLength, timeseriesDataArrayLength, 'VOI configs and timeseriesDataArray are not the same length')
-    })
-  })
 
   describe('Identify unconfigured VOIs', async function () {
     const testCases = [
