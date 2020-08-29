@@ -14,7 +14,6 @@ const _ = require('lodash')
 const csv = require('dwd-csv-helper')
 const path = require('path')
 
-
 describe('Validate correctness of functions that manipulate VOIS', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
@@ -33,7 +32,7 @@ describe('Validate correctness of functions that manipulate VOIS', async functio
   }
 
   describe('Validate there is as much timeseries as vois', async function () {
-    it ('should return the same amoubt of timeseries as vois', async function () {
+    it('should return the same amoubt of timeseries as vois', async function () {
       const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
       // Temperature in K and pressure in Pa.
       const vois = ['t_2m', 'pmsl']
