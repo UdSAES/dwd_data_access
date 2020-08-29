@@ -13,7 +13,6 @@ const {
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
-const ind = require('../index.js')
 const mvu = require('../lib/measured_values_utils.js')
 const ru = require('../lib/response_utils.js')
 
@@ -323,7 +322,6 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     // timeseriesDataArray is an array of timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
     const timeseriesDataArrayUnformatted = mvu.dropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
     const timeseriesDataArray = mvu.convertUnits(voiConfigs, timeseriesDataArrayUnformatted)
-    // res.send(timeSeries)
 
     res.format({
       'application/json': function () {
@@ -340,7 +338,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         const config = {
           title: 'Not acceptable',
           status: 406,
-          detail: 'Received request for not acceptable Accept header'
+          detail: 'The requested (hyper-) media type is not supported for this resource'
         }
         ru.problemDetail(res, config)
       }

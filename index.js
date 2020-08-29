@@ -330,6 +330,7 @@ async function init () {
 
   log.info('configuration of service instance completed successfully')
 
+  // Start listening to incoming requests
   app.listen(LISTEN_PORT, () => {
     log.info('now listening on port ' + LISTEN_PORT)
   })
