@@ -305,7 +305,9 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     const voiConfigs = getVoiConfigsAsArray(vois)
+    log.trace({ voiConfigs })
     const checkedVois = mvu.checkValidityOfQuantityIds(voiConfigs)
+    log.trace({ checkedVois })
 
     if (_.includes(checkedVois, false)) {
       const config = {
@@ -318,11 +320,17 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       return
     }
 
+    log.debug('reading BEOB data from disk...')
     const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
-    // timeseriesDataArray is an array of timeseries for each voi: [[{}, {}, {}], [{}, {}, {}]]
-    const timeseriesDataArrayUnformatted = mvu.dropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
-    const timeseriesDataArray = mvu.convertUnits(voiConfigs, timeseriesDataArrayUnformatted)
+    log.trace({ timeseriesDataCollection })
 
+    const timeseriesDataArrayUnformatted = mvu.dropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
+    log.trace({ timeseriesDataArrayUnformatted })
+
+    const timeseriesDataArray = mvu.convertUnits(voiConfigs, timeseriesDataArrayUnformatted)
+    log.trace({ timeseriesDataArray })
+
+    log.debug('rendering and sending response now')
     res.format({
       'application/json': function () {
         const measuredValues = mvu.renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray, vois, sid)
