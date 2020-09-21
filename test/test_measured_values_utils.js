@@ -95,7 +95,7 @@ describe('Validate correctness of functions that generate CSV-representation', a
 
   describe('Assemble one row of CSV-representation', async function () {
     it('should return the expected output', async function () {
-      const expected = '12345,Value1,Value2,'
+      const expected = '12345,Value1,Value2'
       addContext(this, {
         title: 'expected output',
         value: expected
