@@ -11,7 +11,7 @@ const addContext = require('mochawesome/addContext')
 const mvu = require('../lib/measured_values_utils')
 const _ = require('lodash')
 
-describe('Validate correctness of utility functions', async function () {
+describe('Validate correctness of utility functions for loading BEOB data', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
