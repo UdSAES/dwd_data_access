@@ -325,6 +325,21 @@ async function init () {
   backend.register('notFound', ru.respondWithNotFound)
 
   // Serialize any remaining errors as JSON
+  app.use(function (err, req, res, next) {
+    log.error(
+      'an internal server error occured and was caught at the end of the chain',
+      err
+    )
+    if (res.headersSent) {
+      return next(err)
+    }
+
+    ru.sendProblemDetail(res, {
+      title: 'Internal Server Error',
+      status: 500
+    })
+  })
+
   log.info('configuration of service instance completed successfully')
 
   // Start listening to incoming requests
