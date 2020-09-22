@@ -1,4 +1,6 @@
 # dwd_data_access
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
 `dwd_data_access` is a micro service that offers a REST-API to query
 weather forecasts based on data that has been downloaded from
 [opendata.dwd.de](http://opendata.dwd.de) by micro service `dwd_data_crawler`
