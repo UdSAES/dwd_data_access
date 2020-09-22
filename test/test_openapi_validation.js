@@ -157,18 +157,6 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     })
   })
 
-  describe('GET /weather-stations/10505 as CSV', function () {
-    it('should return single CSV station representation', async function () {
-      const stationUrl = API_ORIGIN + '/weather-stations/10505'
-      const res = await axios.get(stationUrl, {
-        headers: { Accept: 'text/csv' }
-      })
-
-      expect(res.status).to.equal(200)
-      assert.include(res.headers['content-type'], 'text/csv')
-    })
-  })
-
   describe('GET /weather-stations/1050 (does not exist)', function () {
     it('should return 404, resource not found', async function () {
       const stationUrl = API_ORIGIN + '/weather-stations/1050'

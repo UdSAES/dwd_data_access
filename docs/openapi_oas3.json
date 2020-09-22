@@ -89,12 +89,6 @@
                 "schema": {
                   "$ref": "#/components/schemas/WeatherStationAsJSON"
                 }
-              },
-              "text/csv": {
-                "schema": {
-                  "$ref": "#/components/schemas/WeatherStationAsCSV"
-                },
-                "example": "stationId,name,latitude,longitude,elevation\n\"10982\",\"Chieming\",47.884339,12.540379,551.2"
               }
             }
           },
@@ -213,13 +207,6 @@
             "description": "A resource exposing weather forecasts for this station's location",
             "example": "http://example.com/weather-stations/10708/forecast"
           }
-        }
-      },
-      "WeatherStationAsCSV": {
-        "description": "Information about a single weather stations serialized as CSV",
-        "externalDocs": {
-          "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
-          "url": "tbd"
         }
       },
       "QuantitiesOfInterest": {

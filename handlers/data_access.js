@@ -179,32 +179,10 @@ function getSingleWeatherStation (stationCatalog) {
       }
     }
 
-    function renderStationAsCSV (station) {
-      const csvLabels = 'stationId,name,latitude,longitude,elevation'
-      const stationId = station.stationId
-      const name = station.name
-      const latitude = station.location.latitude
-      const longitude = station.location.longitude
-      const elevation = station.location.elevation
-      const stationString = [
-        stationId,
-        name,
-        latitude,
-        longitude,
-        elevation
-      ].join(',')
-
-      return csvLabels + '\n' + stationString
-    }
-
     if (station !== undefined) {
       res.format({
         'application/json': function () {
           res.status(200).send(renderStationAsJSON(station))
-        },
-
-        'text/csv': function () {
-          res.status(200).send(renderStationAsCSV(station))
         },
 
         default: function () {
