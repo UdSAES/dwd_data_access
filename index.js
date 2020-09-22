@@ -19,6 +19,7 @@ const cors = require('cors')
 const sc = require('./lib/weather_stations')
 var jwt = require('express-jwt')
 const addRequestId = require('express-request-id')()
+const ru = require('./lib/response_utils.js')
 
 const LISTEN_PORT = processenv('LISTEN_PORT')
 const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
@@ -239,48 +240,6 @@ app.on('error', error => {
   process.exit(EXIT_CODE_SERVER_ERROR)
 })
 
-async function respondWithNotImplemented (c, req, res, next) {
-  res.set('Content-Type', 'application/problem+json')
-  res.status(501).json({
-    title: 'Not Implemented',
-    status: 501,
-    detail:
-      'The request was understood, but the underlying implementation is not available yet.'
-  })
-  log.info(
-    `sent \`501 Not Implemented\` as response to ${req.method}-request on ${req.path}`
-  )
-}
-
-async function respondWithNotFound (c, req, res, next) {
-  res.set('Content-Type', 'application/problem+json')
-  res.status(404).json({
-    title: 'Not Found',
-    status: 404,
-    detail: 'The requested resource was not found on this server'
-  })
-  log.info(
-    'sent `404 Not Found` as response to ' +
-      req.method +
-      '-request on ' +
-      req.path
-  )
-}
-
-async function failValidation (c, req, res, next) {
-  const firstError = c.validation.errors[0]
-
-  res.set('Content-Type', 'application/problem+json')
-  res.status(400).json({
-    title: 'Schema Validation Failed',
-    status: 400,
-    detail: firstError.message,
-    path: firstError.dataPath
-  })
-
-  log.info('schema validation failed -- request dropped', firstError)
-}
-
 async function init () {
   await checkIfConfigIsValid()
 
@@ -361,9 +320,9 @@ async function init () {
   )
 
   // Handle unsuccessful requests
-  backend.register('validationFail', failValidation)
-  backend.register('notImplemented', respondWithNotImplemented)
-  backend.register('notFound', respondWithNotFound)
+  backend.register('validationFail', ru.failValidation)
+  backend.register('notImplemented', ru.respondWithNotImplemented)
+  backend.register('notFound', ru.respondWithNotFound)
 
   log.info('configuration of service instance completed successfully')
 
@@ -377,5 +336,3 @@ async function init () {
 if (require.main === module) {
   init()
 }
-
-exports.respondWithNotFound = respondWithNotFound
