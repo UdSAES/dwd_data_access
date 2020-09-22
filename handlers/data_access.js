@@ -13,7 +13,6 @@ const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
 const ru = require('../lib/response_utils.js')
-const ind = require('../index.js')
 
 // Instantiate logger
 const log = require('../lib/logger.js')
@@ -126,7 +125,12 @@ function getWeatherStations (stationCatalog) {
       },
 
       default: function () {
-        res.status(406).send('Not Acceptable')
+        ru.sendProblemDetail(res, {
+          title: 'Not acceptable',
+          status: 406,
+          detail:
+            'The requested (hyper-) media type is not supported for this resource'
+        })
       }
     })
   }
@@ -204,11 +208,16 @@ function getSingleWeatherStation (stationCatalog) {
         },
 
         default: function () {
-          res.status(406).send('Not Acceptable')
+          ru.sendProblemDetail(res, {
+            title: 'Not acceptable',
+            status: 406,
+            detail:
+              'The requested (hyper-) media type is not supported for this resource'
+          })
         }
       })
     } else {
-      ind.respondWithNotFound(c, req, res, next)
+      ru.respondWithNotFound(c, req, res, next)
     }
   }
 }
@@ -436,12 +445,11 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     log.trace({ checkedVois })
 
     if (_.includes(checkedVois, false)) {
-      const config = {
+      ru.sendProblemDetail(res, {
         title: 'Schema validation Failed',
         status: 400,
         detail: 'Received request for unconfigured VOI'
-      }
-      ru.problemDetail(res, config)
+      })
       req.log.warn(
         { res: res },
         'received request for REPORT for unconfigured VOI'
@@ -490,13 +498,12 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       },
 
       default: function () {
-        const config = {
+        ru.sendProblemDetail(res, {
           title: 'Not acceptable',
           status: 406,
           detail:
             'The requested (hyper-) media type is not supported for this resource'
-        }
-        ru.problemDetail(res, config)
+        })
       }
     })
   }
