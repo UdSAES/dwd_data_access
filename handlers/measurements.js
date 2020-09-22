@@ -36,7 +36,7 @@ function parseCSV (fileContent) {
   fileContent = fileContent.replace(/\r\n/g, '\n')
   const lineStrings = fileContent.split('\n')
 
-  const lines = _.map(lineStrings, (lineString) => {
+  const lines = _.map(lineStrings, lineString => {
     return lineString.split(';')
   })
   return lines
@@ -53,19 +53,29 @@ async function getAvailableStationIDs (searchDirectoryPath) {
   return ids
 }
 
-function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFilePath, voisJSONFilePath, stationCatalog) {
+function getNewestMeasurementDataPoi (
+  measurementDataBaseDirectory,
+  poisJSONFilePath,
+  voisJSONFilePath,
+  stationCatalog
+) {
   return async function (req, res, next) {
     const poiID = req.params.poi_id
 
     try {
-      const poisConfig = await fs.readJson(poisJSONFilePath, { encoding: 'utf8' })
-      var poi = _.find(poisConfig, (item) => {
+      const poisConfig = await fs.readJson(poisJSONFilePath, {
+        encoding: 'utf8'
+      })
+      var poi = _.find(poisConfig, item => {
         return item.id === poiID
       })
     } catch (error) {
       res.status(500).send(error)
       res.end()
-      req.log.error({ err: error, res: res }, `failed to read file ${poisJSONFilePath}`)
+      req.log.error(
+        { err: error, res: res },
+        `failed to read file ${poisJSONFilePath}`
+      )
       return
     }
 
@@ -81,7 +91,10 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
     } catch (error) {
       res.status(500).send(error)
       res.end()
-      req.log.error({ err: error, res: res }, `failed to read file ${voisJSONFilePath}`)
+      req.log.error(
+        { err: error, res: res },
+        `failed to read file ${voisJSONFilePath}`
+      )
       return
     }
 
@@ -90,7 +103,10 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
       longitude: poi.lon
     }
 
-    const m = moment().tz('UTC').startOf('day').subtract(2, 'days')
+    const m = moment()
+      .tz('UTC')
+      .startOf('day')
+      .subtract(2, 'days')
     var closestStation = null
 
     try {
@@ -99,26 +115,39 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
       const resultItems = {}
       while (m.isBefore(now)) {
         try {
-          const dateDirectoryName = formatNumber(m.year(), 4) + formatNumber(m.month() + 1, 2) + formatNumber(m.date(), 2)
-          const dateDirectoryPath = path.join(measurementDataBaseDirectory, dateDirectoryName)
-          const filteredStationIds = await getAvailableStationIDs(dateDirectoryPath)
+          const dateDirectoryName =
+            formatNumber(m.year(), 4) +
+            formatNumber(m.month() + 1, 2) +
+            formatNumber(m.date(), 2)
+          const dateDirectoryPath = path.join(
+            measurementDataBaseDirectory,
+            dateDirectoryName
+          )
+          const filteredStationIds = await getAvailableStationIDs(
+            dateDirectoryPath
+          )
 
           var filteredStationIdsMap = {}
-          _.forEach(filteredStationIds, (item) => {
+          _.forEach(filteredStationIds, item => {
             filteredStationIdsMap[item] = item
           })
 
-          const filteredStationCatalog = _.filter(stationCatalog, (item) => {
+          const filteredStationCatalog = _.filter(stationCatalog, item => {
             return !_.isNil(filteredStationIdsMap[item.stationId])
           })
-          closestStation = su.findClosestStation(coordinates, filteredStationCatalog)
+          closestStation = su.findClosestStation(
+            coordinates,
+            filteredStationCatalog
+          )
 
           const filePath = path.join(
             dateDirectoryPath,
             _.pad(closestStation.station.stationId, 5, '_') + '-BEOB.csv'
           )
 
-          const fileContentString = await fs.readFile(filePath, { encoding: 'utf8' })
+          const fileContentString = await fs.readFile(filePath, {
+            encoding: 'utf8'
+          })
           const table = parseCSV(fileContentString)
 
           _.forEach(voisConfig, (voiConfig, voiName) => {
@@ -147,7 +176,9 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
                 resultItems[voiName] = []
               }
 
-              const timestamp = moment(table[i][0], 'DD.MM.YY').add(moment.duration(table[i][1])).valueOf()
+              const timestamp = moment(table[i][0], 'DD.MM.YY')
+                .add(moment.duration(table[i][1]))
+                .valueOf()
 
               if (timestamp < now.valueOf() - 49 * 3600 * 1000) {
                 continue
@@ -155,12 +186,18 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
 
               resultItems[voiName].push({
                 timestamp: timestamp,
-                value: (parseFloat(table[i][columnIndex].replace(',', '.')) + scalingOffset) * scalingFactor
+                value:
+                  (parseFloat(table[i][columnIndex].replace(',', '.')) +
+                    scalingOffset) *
+                  scalingFactor
               })
             }
           })
         } catch (error) {
-          req.log.error(error, `failed to get newest measurement data for POI ${poiID}`)
+          req.log.error(
+            error,
+            `failed to get newest measurement data for POI ${poiID}`
+          )
         }
         m.add(1, 'day')
       }
@@ -186,7 +223,7 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
 
       _.forEach(resultItems, (resultItem, voiName) => {
         // sort timeseries by increasing timestamp
-        resultItems[voiName] = _.sortBy(resultItem, (item) => {
+        resultItems[voiName] = _.sortBy(resultItem, item => {
           return item.timestamp
         })
 
@@ -199,12 +236,18 @@ function getNewestMeasurementDataPoi (measurementDataBaseDirectory, poisJSONFile
 
       res.status(200).send(result)
       res.end()
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
+      req.log.info(
+        { res: res },
+        `successfully handled ${req.method}-request on ${req.path}`
+      )
       return
     } catch (error) {
       res.status(404).send(error.toString())
       res.end()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+      req.log.warn(
+        { err: error, res: res },
+        `error while handling ${req.method}-request on ${req.path}`
+      )
     }
   }
 }

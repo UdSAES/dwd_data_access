@@ -19,7 +19,7 @@
     "27hForecastLength": 28,
     "27hForecastdt": 3600000,
     "45hForecastLength": 45,
-    "45hForecastdt": 3600000     
+    "45hForecastdt": 3600000
   },
   "zonal_wind_10m_ag": {
     "gribLabel": "u_10m",
@@ -67,7 +67,7 @@
     "gribUnit": "W/m2",
     "resultUnit": "W/m2",
     "csvUnit": "W/m2",
-    "csvLabel": "direct_solar_radiation_last_hour",    
+    "csvLabel": "direct_solar_radiation_last_hour",
     "27hForecastLength": 109,
     "27hForecastdt": 900000,
     "45hForecastLength": 181,
@@ -78,7 +78,7 @@
     "gribUnit": "W/m2",
     "resultUnit": "W/m2",
     "csvUnit": "W/m2",
-    "csvLabel": "diffuse_solar_radiation_last_hour",    
+    "csvLabel": "diffuse_solar_radiation_last_hour",
     "27hForecastLength": 109,
     "27hForecastdt": 900000,
     "45hForecastLength": 181,

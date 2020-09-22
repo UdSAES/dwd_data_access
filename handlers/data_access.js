@@ -8,9 +8,7 @@ const path = require('path')
 const moment = require('moment')
 const csv = require('dwd-csv-helper')
 const _ = require('lodash')
-const {
-  convertUnit
-} = require('../lib/unit_conversion.js')
+const { convertUnit } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
@@ -73,7 +71,10 @@ function getWeatherStations (stationCatalog) {
     function formatCSVStationWithDistance (item) {
       const stationName = item.station.name
       const distance = item.distance
-      return `${stationName}, ${getUrlOfTheStation(item.station, req)}, ${distance} \n`
+      return `${stationName}, ${getUrlOfTheStation(
+        item.station,
+        req
+      )}, ${distance} \n`
     }
 
     function formatCSVStationWithoutDistance (item) {
@@ -86,15 +87,21 @@ function getWeatherStations (stationCatalog) {
       if (stations === []) {
         return []
       } else if (stations[0].distance) {
-        return csvLabels + stations.reduce((acc, item) => {
-          acc += formatCSVStationWithDistance(item)
-          return acc
-        }, resultString)
+        return (
+          csvLabels +
+          stations.reduce((acc, item) => {
+            acc += formatCSVStationWithDistance(item)
+            return acc
+          }, resultString)
+        )
       } else {
-        return csvLabels + stations.reduce((acc, item) => {
-          acc += formatCSVStationWithoutDistance(item)
-          return acc
-        }, resultString)
+        return (
+          csvLabels +
+          stations.reduce((acc, item) => {
+            acc += formatCSVStationWithoutDistance(item)
+            return acc
+          }, resultString)
+        )
       }
     }
 
@@ -111,7 +118,12 @@ function getWeatherStations (stationCatalog) {
     const coordinates = parseCoordinates(queryString['in-vicinity-of'])
     const radius = parseInt(queryString.radius)
     const limit = parseInt(queryString.limit)
-    const stations = su.findStationsInVicinityOf(stationCatalog, coordinates, radius, limit)
+    const stations = su.findStationsInVicinityOf(
+      stationCatalog,
+      coordinates,
+      radius,
+      limit
+    )
 
     res.format({
       'application/json': function () {
@@ -133,7 +145,12 @@ function getWeatherStations (stationCatalog) {
 function getSingleWeatherStation (stationCatalog) {
   return async function (c, req, res, next) {
     const urlString = req.originalUrl
-    const stations = su.findStationsInVicinityOf(stationCatalog, undefined, undefined, undefined)
+    const stations = su.findStationsInVicinityOf(
+      stationCatalog,
+      undefined,
+      undefined,
+      undefined
+    )
     const stationId = urlString.split('/')[2]
     const station = getStationById(stations, stationId)[0]
 
@@ -158,7 +175,11 @@ function getSingleWeatherStation (stationCatalog) {
           elevation: { unit: 'm', value: station.location.elevation }
         },
         stationId: station.stationId,
-        measuredValues: getUrlForMeasuredValuesOrForecast(station, req, 'measured-values'),
+        measuredValues: getUrlForMeasuredValuesOrForecast(
+          station,
+          req,
+          'measured-values'
+        ),
         forecast: getUrlForMeasuredValuesOrForecast(station, req, 'forecast')
       }
     }
@@ -170,7 +191,13 @@ function getSingleWeatherStation (stationCatalog) {
       const latitude = station.location.latitude
       const longitude = station.location.longitude
       const elevation = station.location.elevation
-      const stationString = [stationId, name, latitude, longitude, elevation].join(',')
+      const stationString = [
+        stationId,
+        name,
+        latitude,
+        longitude,
+        elevation
+      ].join(',')
 
       return csvLabels + '\n' + stationString
     }
@@ -206,13 +233,24 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     let gribBaseDirectory = null
     if (moment.utc(referenceTimestamp).isBefore(cosmoD2AvailableFrom)) {
-      gribBaseDirectory = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'cosmo', 'de', 'grib')
+      gribBaseDirectory = path.join(
+        WEATHER_DATA_BASE_PATH,
+        'weather',
+        'cosmo',
+        'de',
+        'grib'
+      )
     } else {
-      gribBaseDirectory = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'cosmo-d2', 'grib')
+      gribBaseDirectory = path.join(
+        WEATHER_DATA_BASE_PATH,
+        'weather',
+        'cosmo-d2',
+        'grib'
+      )
     }
 
     try {
-      const voiConfig = _.find(voisConfigs, (item) => {
+      const voiConfig = _.find(voisConfigs, item => {
         return item.target.key === voi
       })
 
@@ -278,17 +316,27 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
         location: timeseriesData.location
       }
       res.status(200).send(result)
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
+      req.log.info(
+        { res: res },
+        `successfully handled ${req.method}-request on ${req.path}`
+      )
     } catch (error) {
       res.status(500).send()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+      req.log.warn(
+        { err: error, res: res },
+        `error while handling ${req.method}-request on ${req.path}`
+      )
     }
   }
 }
 
 // GET /weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi
 function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  const MOSMIX_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'local_forecasts')
+  const MOSMIX_DATA_BASE_PATH = path.join(
+    WEATHER_DATA_BASE_PATH,
+    'weather',
+    'local_forecasts'
+  )
 
   return async function (req, res, next) {
     const referenceTimestamp = parseInt(req.params.referenceTimestamp)
@@ -296,18 +344,26 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
     const voi = req.params.voi
 
     try {
-      const timeseriesDataCollection = await csv.readTimeseriesDataMosmix(MOSMIX_DATA_BASE_PATH, referenceTimestamp, sid)
-      const voiConfig = _.find(voisConfigs, (item) => {
+      const timeseriesDataCollection = await csv.readTimeseriesDataMosmix(
+        MOSMIX_DATA_BASE_PATH,
+        referenceTimestamp,
+        sid
+      )
+      const voiConfig = _.find(voisConfigs, item => {
         return item.target.key === voi
       })
 
       let timeseriesData
       if (!_.isNil(_.get(voiConfig, ['mosmix', 'key']))) {
         timeseriesData = timeseriesDataCollection[voiConfig.mosmix.key]
-        timeseriesData = _.map(timeseriesData, (item) => {
+        timeseriesData = _.map(timeseriesData, item => {
           return {
             timestamp: item.timestamp,
-            value: convertUnit(item.value, voiConfig.mosmix.unit, voiConfig.target.unit)
+            value: convertUnit(
+              item.value,
+              voiConfig.mosmix.unit,
+              voiConfig.target.unit
+            )
           }
         })
       } else {
@@ -320,22 +376,38 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
         data: timeseriesData
       }
       res.status(200).send(result)
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
+      req.log.info(
+        { res: res },
+        `successfully handled ${req.method}-request on ${req.path}`
+      )
     } catch (error) {
       res.status(500).send()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+      req.log.warn(
+        { err: error, res: res },
+        `error while handling ${req.method}-request on ${req.path}`
+      )
     }
   }
 }
 
 // GET /weather-stations/{stationId}/measured-values?quantities=...&from=...&to=...
 function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
+  const REPORT_DATA_BASE_PATH = path.join(
+    WEATHER_DATA_BASE_PATH,
+    'weather',
+    'weather_reports'
+  )
 
   return async function (c, req, res, next) {
     const now = moment()
-    const defaultStartTimestamp = now.startOf('day').tz('Europe/Berlin').format('x')
-    const defaultEndTimestamp = now.endOf('day').tz('Europe/Berlin').format('x')
+    const defaultStartTimestamp = now
+      .startOf('day')
+      .tz('Europe/Berlin')
+      .format('x')
+    const defaultEndTimestamp = now
+      .endOf('day')
+      .tz('Europe/Berlin')
+      .format('x')
     const defaultParameter = ['t_2m']
     let startTimestamp = parseInt(req.query.from)
     let endTimestamp = parseInt(req.query.to)
@@ -359,7 +431,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     function getVoiConfigsAsArray (vois) {
       const voiConfigs = []
       _.forEach(vois, function (voi) {
-        const voiConfig = _.find(voisConfigs, (item) => {
+        const voiConfig = _.find(voisConfigs, item => {
           return item.target.key === voi
         })
         voiConfigs.push(voiConfig)
@@ -379,29 +451,50 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         detail: 'Received request for unconfigured VOI'
       }
       ru.problemDetail(res, config)
-      req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
+      req.log.warn(
+        { res: res },
+        'received request for REPORT for unconfigured VOI'
+      )
       return
     }
 
     log.debug('reading BEOB data from disk...')
-    const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
+    const timeseriesDataCollection = await csv.readTimeseriesDataReport(
+      REPORT_DATA_BASE_PATH,
+      startTimestamp,
+      endTimestamp,
+      sid
+    )
     log.trace({ timeseriesDataCollection })
 
-    const timeseriesDataArrayUnformatted = mvu.dropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
+    const timeseriesDataArrayUnformatted = mvu.dropNaN(
+      mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection)
+    )
     log.trace({ timeseriesDataArrayUnformatted })
 
-    const timeseriesDataArray = mvu.convertUnits(voiConfigs, timeseriesDataArrayUnformatted)
+    const timeseriesDataArray = mvu.convertUnits(
+      voiConfigs,
+      timeseriesDataArrayUnformatted
+    )
     log.trace({ timeseriesDataArray })
 
     log.debug('rendering and sending response now')
     res.format({
       'application/json': function () {
-        const measuredValues = mvu.renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray, vois, sid)
+        const measuredValues = mvu.renderMeasuredValuesAsJSON(
+          voiConfigs,
+          timeseriesDataArray,
+          vois,
+          sid
+        )
         res.status(200).send(measuredValues)
       },
 
       'text/csv': function () {
-        const measuredValues = mvu.renderMeasuredValuesAsCSV(voiConfigs, timeseriesDataArray)
+        const measuredValues = mvu.renderMeasuredValuesAsCSV(
+          voiConfigs,
+          timeseriesDataArray
+        )
         res.status(200).send(measuredValues)
       },
 
@@ -409,7 +502,8 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         const config = {
           title: 'Not acceptable',
           status: 406,
-          detail: 'The requested (hyper-) media type is not supported for this resource'
+          detail:
+            'The requested (hyper-) media type is not supported for this resource'
         }
         ru.problemDetail(res, config)
       }

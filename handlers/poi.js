@@ -19,15 +19,23 @@ log.info('loaded module for handling requests for list of POIs')
 function getPois (pathToPoisJsonFile) {
   return async function (req, res, next) {
     try {
-      const fileContent = await fs.readJson(pathToPoisJsonFile, { encoding: 'utf8' })
+      const fileContent = await fs.readJson(pathToPoisJsonFile, {
+        encoding: 'utf8'
+      })
       res.status(200).send(fileContent)
       res.end()
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
+      req.log.info(
+        { res: res },
+        `successfully handled ${req.method}-request on ${req.path}`
+      )
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+      req.log.warn(
+        { err: error, res: res },
+        `error while handling ${req.method}-request on ${req.path}`
+      )
     }
   }
 }

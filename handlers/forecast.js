@@ -17,38 +17,64 @@ var log = bunyan.createLogger({
 })
 log.info('loaded module for handling requests for pre-calculated/cached data')
 
-function getPoiForecastsCosmeDe27Poi (poiForecastsBaseDirectory, voisConfiguration) {
+function getPoiForecastsCosmeDe27Poi (
+  poiForecastsBaseDirectory,
+  voisConfiguration
+) {
   return async function (req, res, next) {
     const poiID = req.params.poi_id
     try {
-      const filePath = path.join(poiForecastsBaseDirectory, poiID, '27h_forecast.json')
+      const filePath = path.join(
+        poiForecastsBaseDirectory,
+        poiID,
+        '27h_forecast.json'
+      )
       const fileContent = await fs.readJson(filePath, { encoding: 'utf8' }) // FIXME successfull even if `null` -- wrong
       res.status(200).send(fileContent)
       res.end()
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
+      req.log.info(
+        { res: res },
+        `successfully handled ${req.method}-request on ${req.path}`
+      )
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+      req.log.warn(
+        { err: error, res: res },
+        `error while handling ${req.method}-request on ${req.path}`
+      )
     }
   }
 }
 
-function getPoiForecastsCosmeDe45Poi (poiForecastsBaseDirectory, voisConfiguration) {
+function getPoiForecastsCosmeDe45Poi (
+  poiForecastsBaseDirectory,
+  voisConfiguration
+) {
   return async function (req, res, next) {
     const poiID = req.params.poi_id
     try {
-      const filePath = path.join(poiForecastsBaseDirectory, poiID, '45h_forecast.json')
+      const filePath = path.join(
+        poiForecastsBaseDirectory,
+        poiID,
+        '45h_forecast.json'
+      )
       const fileContent = await fs.readJson(filePath, { encoding: 'utf8' }) // FIXME successfull even if `null` -- wrong
       res.status(200).send(fileContent)
       res.end()
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
+      req.log.info(
+        { res: res },
+        `successfully handled ${req.method}-request on ${req.path}`
+      )
       return
     } catch (error) {
       res.status(404).send(error)
       res.end()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+      req.log.warn(
+        { err: error, res: res },
+        `error while handling ${req.method}-request on ${req.path}`
+      )
     }
   }
 }

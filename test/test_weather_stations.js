@@ -96,7 +96,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_sorted_by_name.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -104,7 +106,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, undefined)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        undefined,
+        undefined,
+        undefined
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -116,7 +123,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return five stations from stations sorted by name if coordinates and radius are absent', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -124,7 +133,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, undefined, undefined, 5)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        undefined,
+        undefined,
+        5
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -136,7 +150,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by name if coordinates and limit are absent', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_sorted_by_name.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -144,7 +160,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, undefined)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        undefined,
+        1000,
+        undefined
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -156,7 +177,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return five stations from stations sorted by name if coordinates are absent', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -164,7 +187,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, 5)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        undefined,
+        1000,
+        5
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -176,7 +204,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when only coordinates specified', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_distance.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_sorted_by_distance.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -184,7 +214,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, undefined, undefined)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        { longitude: 11.11, latitude: 60.19 },
+        undefined,
+        undefined
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -196,7 +231,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates and limit specified', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_sorted_by_distance_limited_to_five.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_sorted_by_distance_limited_to_five.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -204,7 +241,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, undefined, 5)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        { longitude: 11.11, latitude: 60.19 },
+        undefined,
+        5
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -217,7 +259,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates and radius specified', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_in_1000km_radius.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_in_1000km_radius.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -225,7 +269,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, 1000, undefined)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        { longitude: 11.11, latitude: 60.19 },
+        1000,
+        undefined
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -237,7 +286,9 @@ describe('Test correct filtering of station list', function () {
 
   describe('Return stations sorted by distance when coordinates, radius and limit are specified', function () {
     it('should return the expected result', async function () {
-      const expected = await fs.readJson('./test/data/station_utils/test_stations_in_1000km_limited_to_five.json')
+      const expected = await fs.readJson(
+        './test/data/station_utils/test_stations_in_1000km_limited_to_five.json'
+      )
 
       addContext(this, {
         title: 'expected output',
@@ -245,7 +296,12 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(stations, { longitude: 11.11, latitude: 60.19 }, 1000, 5)
+      const actual = await su.findStationsInVicinityOf(
+        stations,
+        { longitude: 11.11, latitude: 60.19 },
+        1000,
+        5
+      )
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -267,16 +323,22 @@ describe('Test correct filtering of station list', function () {
       const berlinLocation = { latitude: 52.516272, longitude: 13.377722 }
 
       const actual = await su.findStationsInVicinityOf(
-        [{
-          location: {
-            latitude: 51.503333,
-            longitude: 0.1278,
-            elevation: 0
-          },
-          name: 'London',
-          stationId: 'TEST',
-          types: ['TEST']
-        }], berlinLocation, 9000000, 1)[0].distance
+        [
+          {
+            location: {
+              latitude: 51.503333,
+              longitude: 0.1278,
+              elevation: 0
+            },
+            name: 'London',
+            stationId: 'TEST',
+            types: ['TEST']
+          }
+        ],
+        berlinLocation,
+        9000000,
+        1
+      )[0].distance
       addContext(this, {
         title: 'actual output',
         value: actual

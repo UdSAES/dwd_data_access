@@ -11,11 +11,12 @@
   "paths": {
     "/weather-stations": {
       "get": {
-        "tags": [ "Weather Stations" ],
+        "tags": ["Weather Stations"],
         "summary": "Show list of weather stations that match criteria",
         "description": "Show the list of available weather stations, possibly limited to those in a specified radius around the given coordinates. If no location is given, the radius is ignored and the full list of stations is returned. In case there is no weather station in the radius of the specified location, an empty list will be returned with status code 200, indicating success. The list is sorted by distance (nearest first) if coordinates are supplied and alphabetically otherwise.",
         "operationId": "getFilteredListOfStations",
-        "parameters": [ {
+        "parameters": [
+          {
             "name": "in-vicinity-of",
             "in": "query",
             "description": "The coordinates at which to search for stations in the vicinity",
@@ -53,10 +54,12 @@
                 "schema": {
                   "$ref": "#/components/schemas/ListOfWeatherStationsAsJSON"
                 },
-                "example": [ {
-                  "name": "UFS Deutsche Bucht",
-                  "url": "http://example.com/weather-stations/10007"
-                } ]
+                "example": [
+                  {
+                    "name": "UFS Deutsche Bucht",
+                    "url": "http://example.com/weather-stations/10007"
+                  }
+                ]
               },
               "text/csv": {
                 "schema": {
@@ -74,12 +77,10 @@
     },
     "/weather-stations/{stationId}": {
       "get": {
-        "tags": [ "Weather Stations" ],
+        "tags": ["Weather Stations"],
         "summary": "Show details about a single weather station",
         "operationId": "getStation",
-        "parameters": [
-          { "$ref": "#/components/parameters/StationId" }
-        ],
+        "parameters": [{ "$ref": "#/components/parameters/StationId" }],
         "responses": {
           "200": {
             "description": "A representation of a single weather station",
@@ -105,7 +106,7 @@
     },
     "/weather-stations/{stationId}/measured-values": {
       "get": {
-        "tags": [ "Weather Stations" ],
+        "tags": ["Weather Stations"],
         "summary": "Show measurement values taken at a specific weather station",
         "operationId": "getMeasuredValues",
         "parameters": [
@@ -146,7 +147,7 @@
       "LatitudeLongitudePair": {
         "description": "Location on earth as latitude/longitude-pair in [decimal degrees](https://en.wikipedia.org/wiki/Decimal_degrees)",
         "type": "string",
-        "pattern": "^\\d{1,2}.\\d{1,8}\/\\d{1,2}.\\d{1,8}$",
+        "pattern": "^\\d{1,2}.\\d{1,8}/\\d{1,2}.\\d{1,8}$",
         "example": "54.1663/7.451"
       },
       "ListOfWeatherStationsAsJSON": {
@@ -154,10 +155,7 @@
         "type": "array",
         "items": {
           "type": "object",
-          "required": [
-            "name",
-            "url"
-          ],
+          "required": ["name", "url"],
           "properties": {
             "name": {
               "type": "string",
@@ -191,11 +189,7 @@
       },
       "WeatherStationAsJSON": {
         "type": "object",
-        "required": [
-          "name",
-          "location",
-          "stationId"
-        ],
+        "required": ["name", "location", "stationId"],
         "properties": {
           "name": {
             "type": "string",
@@ -243,9 +237,7 @@
       },
       "MeasurementValuesAsJSON": {
         "type": "object",
-        "required": [
-          "data"
-        ],
+        "required": ["data"],
         "properties": {
           "description": {
             "type": "string",
@@ -255,8 +247,10 @@
             "type": "array",
             "items": {
               "allOf": [
-                { "required": [ "label" ]},
-                { "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/dev/schemata/timeseries/schema_v1.3.0-oas2.json#/Timeseries" }
+                { "required": ["label"] },
+                {
+                  "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/dev/schemata/timeseries/schema_v1.3.0-oas2.json#/Timeseries"
+                }
               ]
             }
           }
@@ -278,7 +272,7 @@
             "schema": {
               "allOf": [
                 { "$ref": "#/components/schemas/ProblemDetail" },
-                { "required": [ "title", "status" ] }
+                { "required": ["title", "status"] }
               ]
             },
             "examples": {
@@ -300,7 +294,7 @@
         "name": "stationId",
         "in": "path",
         "required": true,
-        "schema": { "$ref": "#/components/schemas/StationId" },
+        "schema": { "$ref": "#/components/schemas/StationId" }
       },
       "Quantities": {
         "name": "quantities",
@@ -322,8 +316,10 @@
       }
     }
   },
-  "tags": [ {
-    "name": "Weather Stations",
-    "description": "All resources relating to specific weather stations."
-  } ]
+  "tags": [
+    {
+      "name": "Weather Stations",
+      "description": "All resources relating to specific weather stations."
+    }
+  ]
 }

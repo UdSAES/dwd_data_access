@@ -1,46 +1,52 @@
-[{
+[
+  {
     "location": {
-        "latitude": 54.119305,
-        "longitude": 8.858369,
-        "elevation": 3
+      "latitude": 54.119305,
+      "longitude": 8.858369,
+      "elevation": 3
     },
     "stationId": "A505",
     "name": "Büsum",
     "types": ["BEOB"]
-}, {
+  },
+  {
     "location": {
-        "latitude": 47.884339,
-        "longitude": 12.540379,
-        "elevation": 551.2
+      "latitude": 47.884339,
+      "longitude": 12.540379,
+      "elevation": 551.2
     },
     "name": "Chieming",
     "stationId": "10982",
     "types": ["BEOB"]
-}, {
+  },
+  {
     "location": {
-        "latitude": 54.62823,
-        "longitude": 9.364924,
-        "elevation": 17
+      "latitude": 54.62823,
+      "longitude": 9.364924,
+      "elevation": 17
     },
     "stationId": "A159",
     "name": "Eggebek",
     "types": ["BEOB"]
-}, {
+  },
+  {
     "location": {
-        "latitude": 47.874893,
-        "longitude": 8.003817,
-        "elevation": 1489.6
+      "latitude": 47.874893,
+      "longitude": 8.003817,
+      "elevation": 1489.6
     },
     "name": "Feldberg/Schwarzwald",
     "stationId": "10908",
     "types": ["BEOB"]
-}, {
+  },
+  {
     "location": {
-        "latitude": 47.48305,
-        "longitude": 11.062293,
-        "elevation": 719
+      "latitude": 47.48305,
+      "longitude": 11.062293,
+      "elevation": 719
     },
     "name": "Garmisch-Partenkirchen",
     "stationId": "10963",
     "types": ["BEOB"]
-}]
+  }
+]

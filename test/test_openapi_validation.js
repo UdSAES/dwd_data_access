@@ -21,7 +21,9 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
       const allStations = API_ORIGIN + '/weather-stations'
-      const res = await axios.get(allStations, { headers: { Accept: 'application/json' } })
+      const res = await axios.get(allStations, {
+        headers: { Accept: 'application/json' }
+      })
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
 
@@ -33,7 +35,9 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations?radius=10 as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?radius=10'
-      const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
+      const res = await axios.get(filteredStationsUrl, {
+        headers: { Accept: 'application/json' }
+      })
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
 
@@ -45,7 +49,9 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations?limit=5 as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?limit=5'
-      const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
+      const res = await axios.get(filteredStationsUrl, {
+        headers: { Accept: 'application/json' }
+      })
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
 
@@ -56,8 +62,11 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
 
   describe('GET /weather-stations?in-vicinity-of=54.1663/7.451 as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
-      const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451'
-      const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
+      const filteredStationsUrl =
+        API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451'
+      const res = await axios.get(filteredStationsUrl, {
+        headers: { Accept: 'application/json' }
+      })
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
 
@@ -68,8 +77,11 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
 
   describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=10 as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
-      const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&radius=10'
-      const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
+      const filteredStationsUrl =
+        API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&radius=10'
+      const res = await axios.get(filteredStationsUrl, {
+        headers: { Accept: 'application/json' }
+      })
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
 
@@ -80,8 +92,11 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
 
   describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&limit=5 as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
-      const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&limit=5'
-      const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
+      const filteredStationsUrl =
+        API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&limit=5'
+      const res = await axios.get(filteredStationsUrl, {
+        headers: { Accept: 'application/json' }
+      })
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
 
@@ -92,8 +107,12 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
 
   describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=100&limit=5 as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
-      const filteredStationsUrl = API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&radius=100&limit=5'
-      const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'application/json' } })
+      const filteredStationsUrl =
+        API_ORIGIN +
+        '/weather-stations?in-vicinity-of=54.1663/7.451&radius=100&limit=5'
+      const res = await axios.get(filteredStationsUrl, {
+        headers: { Accept: 'application/json' }
+      })
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
 
@@ -105,7 +124,9 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations as CSV', function () {
     it('should return `200 OK`', async function () {
       const allStations = API_ORIGIN + '/weather-stations'
-      const res = await axios.get(allStations, { headers: { Accept: 'text/csv' } })
+      const res = await axios.get(allStations, {
+        headers: { Accept: 'text/csv' }
+      })
 
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'text/csv')
@@ -115,7 +136,9 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations?limit=5 as CSV', function () {
     it('should return `200 OK`', async function () {
       const filteredStationsUrl = API_ORIGIN + '/weather-stations?limit=5'
-      const res = await axios.get(filteredStationsUrl, { headers: { Accept: 'text/csv' } })
+      const res = await axios.get(filteredStationsUrl, {
+        headers: { Accept: 'text/csv' }
+      })
 
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'text/csv')
@@ -125,7 +148,9 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations/10505 as JSON', function () {
     it('should return single JSON station representation', async function () {
       const stationUrl = API_ORIGIN + '/weather-stations/10505'
-      const res = await axios.get(stationUrl, { headers: { Accept: 'application/json' } })
+      const res = await axios.get(stationUrl, {
+        headers: { Accept: 'application/json' }
+      })
 
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'application/json')
@@ -135,7 +160,9 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations/10505 as CSV', function () {
     it('should return single CSV station representation', async function () {
       const stationUrl = API_ORIGIN + '/weather-stations/10505'
-      const res = await axios.get(stationUrl, { headers: { Accept: 'text/csv' } })
+      const res = await axios.get(stationUrl, {
+        headers: { Accept: 'text/csv' }
+      })
 
       expect(res.status).to.equal(200)
       assert.include(res.headers['content-type'], 'text/csv')
@@ -145,7 +172,10 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations/1050 (does not exist)', function () {
     it('should return 404, resource not found', async function () {
       const stationUrl = API_ORIGIN + '/weather-stations/1050'
-      const res = await axios.get(stationUrl, { headers: { Accept: 'application/json' }, validateStatus: false })
+      const res = await axios.get(stationUrl, {
+        headers: { Accept: 'application/json' },
+        validateStatus: false
+      })
 
       expect(res.status).to.equal(404)
     })
