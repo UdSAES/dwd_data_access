@@ -52,6 +52,40 @@ describe('Validate correctness of utility functions for loading BEOB data', asyn
       })
     })
   })
+
+  describe('Load and pre-process data requested', function () {
+    const timeseriesDataCollection = {
+      t_2m: [
+        { timestamp: 12345, value: 20 },
+        { timestamp: 12346, value: 30 }
+      ],
+      pmsl: [
+        { timestamp: 12345, value: 10020.1 },
+        { timestamp: 12346, value: 10030.2 }
+      ]
+    }
+    it('should pick only the requested quantities', function () {
+      const expected = { t_2m: timeseriesDataCollection.t_2m }
+      addContext(this, {
+        title: 'expected output',
+        value: expected
+      })
+
+      const actual = mvu.dropTimeseriesDataNotOfInterest([{ report: { key: 't_2m' } }], timeseriesDataCollection)
+      addContext(this, {
+        title: 'actual output',
+        value: actual
+      })
+
+      assert.deepEqual(actual, expected)
+    })
+    it.skip('should drop entries that are NaN', function () {
+      assert.fail('Not yet implemented')
+    })
+    it.skip('should convert values to intended units', function () {
+      assert.fail('Not yet implemented')
+    })
+  })
 })
 
 describe('Validate correctness of functions that generate CSV-representation', async function () {
