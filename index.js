@@ -18,7 +18,6 @@ const fs = require('fs-extra')
 const cors = require('cors')
 const sc = require('./lib/weather_stations')
 var jwt = require('express-jwt')
-var bunyan = require('bunyan')
 const addRequestId = require('express-request-id')()
 
 const LISTEN_PORT = processenv('LISTEN_PORT')
@@ -53,25 +52,7 @@ const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
 const API_SPECIFICATION_FILE_PATH = './docs/openapi_oas3.json'
 
 // Instantiate logger
-const log = bunyan.createLogger({
-  name: 'dwd_data_access', // TODO make configurable?
-  stream: process.stdout,
-  level: LOG_LEVEL,
-  serializers: {
-    err: bunyan.stdSerializers.err,
-    req: bunyan.stdSerializers.req,
-    res: function (res) {
-      if (!res || !res.statusCode) {
-        return res
-      }
-      return {
-        statusCode: res.statusCode,
-        headers: res._headers
-      }
-    }
-  }
-})
-log.info('instantiation of service initiated')
+const log = require('./lib/logger.js')
 
 // Exit immediately on uncaught errors or unhandled promise rejections
 process.on('unhandledRejection', function (error) {

@@ -16,16 +16,7 @@ const ru = require('../lib/response_utils.js')
 const ind = require('../index.js')
 
 // Instantiate logger
-const processenv = require('processenv')
-const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
-
-var bunyan = require('bunyan')
-var log = bunyan.createLogger({
-  name: 'handler_non-cached_data_access',
-  level: LOG_LEVEL,
-  serializers: bunyan.stdSerializers
-})
-log.info('loaded module for handling requests for non-cached data')
+const log = require('../lib/logger.js')
 
 // GET /weather-stations
 function getWeatherStations (stationCatalog) {
