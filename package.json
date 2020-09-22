@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "standard",
+    "format": "prettier-standard --lint '**/*.{js,json}'",
     "api-serve": "speccy serve ./docs/openapi_oas3.json",
     "test-unit": "mocha  --grep 'GET' --invert --reporter mochawesome --reporter-options reportDir=./local",
     "test-api": "mocha  --grep 'GET' --reporter mochawesome --reporter-options reportDir=./local",
