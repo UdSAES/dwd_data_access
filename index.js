@@ -34,7 +34,6 @@ const ANONYMOUS_LIMIT_INTERVAL = processenv('ANONYMOUS_LIMIT_INTERVAL') || 10
 const ANONYMOUS_LIMIT_VALUE = processenv('ANONYMOUS_LIMIT_VALUE') || 100
 const UI_STATIC_FILES_PATH = String(processenv('UI_STATIC_FILES_PATH') || '')
 const UI_URL_PATH = String(processenv('UI_URL_PATH') || '')
-const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
 
 const EXIT_CODE_LISTEN_PORT_NOT_A_NUMBER = 1
 // const EXIT_CODE_DATA_ROOT_PATH_NOT_A_STRING = 2
@@ -241,6 +240,7 @@ app.on('error', error => {
 })
 
 async function init () {
+  log.info('instantiation of service initiated, checking config...')
   await checkIfConfigIsValid()
 
   // let api = await fs.readJson(API_SPECIFICATION_FILE_PATH)
@@ -324,6 +324,7 @@ async function init () {
   backend.register('notImplemented', ru.respondWithNotImplemented)
   backend.register('notFound', ru.respondWithNotFound)
 
+  // Serialize any remaining errors as JSON
   log.info('configuration of service instance completed successfully')
 
   // Start listening to incoming requests
