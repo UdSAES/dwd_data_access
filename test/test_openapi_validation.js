@@ -16,6 +16,7 @@ const API_ORIGIN = processenv('API_ORIGIN') // requires absolute path!
 // Load an OpenAPI file (YAML or JSON) into this plugin
 chai.use(chaiResponseValidator(PATH_TO_OPENAPI))
 
+// NOTE could be rewritten to reduce code duplication; see API tests for measured values
 describe('Verify behaviour of API-instance against OAS and/or expectations', function () {
   describe('GET /weather-stations as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
@@ -121,7 +122,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     })
   })
 
-  describe('GET /weather-stations/10505', function () {
+  describe('GET /weather-stations/10505 as JSON', function () {
     it('should return single JSON station representation', async function () {
       const stationUrl = API_ORIGIN + '/weather-stations/10505'
       const res = await axios.get(stationUrl, { headers: { Accept: 'application/json' } })
@@ -131,7 +132,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     })
   })
 
-  describe('GET /weather-stations/10505', function () {
+  describe('GET /weather-stations/10505 as CSV', function () {
     it('should return single CSV station representation', async function () {
       const stationUrl = API_ORIGIN + '/weather-stations/10505'
       const res = await axios.get(stationUrl, { headers: { Accept: 'text/csv' } })
@@ -141,7 +142,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     })
   })
 
-  describe('GET /weather-stations/1050', function () {
+  describe('GET /weather-stations/1050 (does not exist)', function () {
     it('should return 404, resource not found', async function () {
       const stationUrl = API_ORIGIN + '/weather-stations/1050'
       const res = await axios.get(stationUrl, { headers: { Accept: 'application/json' }, validateStatus: false })

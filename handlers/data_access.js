@@ -13,6 +13,8 @@ const {
 } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
+const mvu = require('../lib/measured_values_utils.js')
+const ru = require('../lib/response_utils.js')
 const ind = require('../index.js')
 
 // Instantiate logger
@@ -326,85 +328,92 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
-// GET /weather/weather_reports/poi/:sid/:voi?startTimestamp=...&endTimestamp=...
-function getWeatherReport (WEATHER_DATA_BASE_PATH, voisConfigs) {
+// GET /weather-stations/{stationId}/measured-values?quantities=...&from=...&to=...
+function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const REPORT_DATA_BASE_PATH = path.join(WEATHER_DATA_BASE_PATH, 'weather', 'weather_reports')
 
-  return async function (req, res, next) {
-    let startTimestamp = parseInt(req.query.startTimestamp)
-    let endTimestamp = parseInt(req.query.endTimestamp)
-    const sid = req.params.sid
-    const voi = req.params.voi
+  return async function (c, req, res, next) {
+    const now = moment()
+    const defaultStartTimestamp = now.startOf('day').tz('Europe/Berlin').format('x')
+    const defaultEndTimestamp = now.endOf('day').tz('Europe/Berlin').format('x')
+    const defaultParameter = ['t_2m']
+    let startTimestamp = parseInt(req.query.from)
+    let endTimestamp = parseInt(req.query.to)
+    const voi = req.query.quantities
+    let vois = defaultParameter
+    if (voi) {
+      vois = voi.split(',')
+    }
+
+    const splitUrl = req.path.split('/')
+    const sid = splitUrl[2]
 
     if (isNaN(startTimestamp)) {
-      startTimestamp = moment.utc().subtract(25, 'hours').valueOf()
+      startTimestamp = parseInt(defaultStartTimestamp)
     }
 
     if (isNaN(endTimestamp)) {
-      endTimestamp = moment.utc().valueOf()
+      endTimestamp = parseInt(defaultEndTimestamp)
     }
 
-    try {
-      const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
-      const voiConfig = _.find(voisConfigs, (item) => {
-        return item.target.key === voi
-      })
-
-      if (_.isNil(_.get(voiConfig, ['report', 'key']))) {
-        res.status(500).send('received request for REPORT for unconfigured VOI')
-        req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
-        return
-      }
-
-      let timeseriesData = timeseriesDataCollection[voiConfig.report.key]
-
-      // Find timestamps for which at least one value is null and attempt to
-      // find a timestamp for which the value is not null
-      const timestampsToRemove = []
-      _.forEach(timeseriesData, (item) => {
-        // Skip item if value is not null
-        if (!_.isNil(item.value)) {
-          return
-        }
-
-        // If value is null, check if there exists another item with the same
-        // timestamp which has a value that is not null; return true xor false
-        const betterItem = _.find(timeseriesData, (item2) => {
-          return item2.timestamp === item.timestamp && !_.isNil(item2.value)
+    function getVoiConfigsAsArray (vois) {
+      const voiConfigs = []
+      _.forEach(vois, function (voi) {
+        const voiConfig = _.find(voisConfigs, (item) => {
+          return item.target.key === voi
         })
-
-        // If betterItem is true, keep the timestamp; nominate timestamp
-        // for removal otherwise
-        if (!_.isNil(betterItem)) {
-          timestampsToRemove.push(item.timestamp)
-        }
+        voiConfigs.push(voiConfig)
       })
-
-      // Remove items for which no value exists at timestamp
-      _.remove(timeseriesData, (item) => {
-        return _.includes(timestampsToRemove, item.timestamp) && _.isNil(item.value)
-      })
-
-      if (!_.isNil(voiConfig)) {
-        timeseriesData = _.map(timeseriesData, (item) => {
-          return {
-            timestamp: item.timestamp,
-            value: convertUnit(item.value, voiConfig.report.unit, voiConfig.target.unit)
-          }
-        })
-      }
-
-      const result = {
-        label: voiConfig.target.key,
-        unit: voiConfig.target.unit,
-        data: timeseriesData
-      }
-      res.status(200).send(result) // FIXME successfull even if data is `[]`
-      req.log.info({ res: res }, `successfully handled ${req.method}-request on ${req.path}`)
-    } catch (error) {
-      res.status(500).send()
-      req.log.warn({ err: error, res: res }, `error while handling ${req.method}-request on ${req.path}`)
+      return voiConfigs
     }
+
+    const voiConfigs = getVoiConfigsAsArray(vois)
+    log.trace({ voiConfigs })
+    const checkedVois = mvu.checkValidityOfQuantityIds(voiConfigs)
+    log.trace({ checkedVois })
+
+    if (_.includes(checkedVois, false)) {
+      const config = {
+        title: 'Schema validation Failed',
+        status: 400,
+        detail: 'Received request for unconfigured VOI'
+      }
+      ru.problemDetail(res, config)
+      req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
+      return
+    }
+
+    log.debug('reading BEOB data from disk...')
+    const timeseriesDataCollection = await csv.readTimeseriesDataReport(REPORT_DATA_BASE_PATH, startTimestamp, endTimestamp, sid)
+    log.trace({ timeseriesDataCollection })
+
+    const timeseriesDataArrayUnformatted = mvu.dropNaN(mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection))
+    log.trace({ timeseriesDataArrayUnformatted })
+
+    const timeseriesDataArray = mvu.convertUnits(voiConfigs, timeseriesDataArrayUnformatted)
+    log.trace({ timeseriesDataArray })
+
+    log.debug('rendering and sending response now')
+    res.format({
+      'application/json': function () {
+        const measuredValues = mvu.renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray, vois, sid)
+        res.status(200).send(measuredValues)
+      },
+
+      'text/csv': function () {
+        const measuredValues = mvu.renderMeasuredValuesAsCSV(voiConfigs, timeseriesDataArray)
+        res.status(200).send(measuredValues)
+      },
+
+      default: function () {
+        const config = {
+          title: 'Not acceptable',
+          status: 406,
+          detail: 'The requested (hyper-) media type is not supported for this resource'
+        }
+        ru.problemDetail(res, config)
+      }
+    })
   }
 }
 
@@ -412,4 +421,4 @@ exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
 exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
-exports.getWeatherReport = getWeatherReport
+exports.getMeasuredValues = getMeasuredValues

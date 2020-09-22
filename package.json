@@ -6,8 +6,9 @@
   "scripts": {
     "lint": "standard",
     "api-serve": "speccy serve ./docs/openapi_oas3.json",
-    "test-unit": "mocha --reporter mochawesome --reporter-options reportDir=./local",
-    "test-all": "npm run lint && npm run test-unit"
+    "test-unit": "mocha  --grep 'GET' --invert --reporter mochawesome --reporter-options reportDir=./local",
+    "test-api": "mocha  --grep 'GET' --reporter mochawesome --reporter-options reportDir=./local",
+    "test-all": "npm run lint && npm run test-unit && test-api"
   },
   "repository": {
     "type": "git",
@@ -55,6 +56,7 @@
     "chai-openapi-response-validator": "^0.9.4",
     "dredd": "^13.1.1",
     "eslint": "^7.4.0",
+    "got": "^11.5.2",
     "mocha": "^7.1.2",
     "mochawesome": "^6.1.1",
     "speccy": "^0.11.0",
