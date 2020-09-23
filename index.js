@@ -293,6 +293,10 @@ async function init () {
     'getMeasuredValues',
     hda.getMeasuredValues(DATA_ROOT_PATH, voisDataAccessConfigs)
   )
+  backend.register(
+    'getForecastAtStation',
+    hda.getForecastAtStation(DATA_ROOT_PATH, voisDataAccessConfigs)
+  )
 
   // Handle unsuccessful requests
   backend.register('validationFail', ru.failValidation)

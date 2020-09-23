@@ -475,8 +475,20 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   }
 }
 
+// GET /weather-stations/{stationId}/forecast?
+// model=...&model-run=...quantities=...&from=...&to=...
+function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
+  return async function (c, req, res, next) {
+    // Basically `getWeatherMosmix()`, but getting COSMO-D2 forecast at
+    // coordinates of weather station shall also be supported later
+    // In case you keep `getWeatherMosmix()`, please refactor to `getForecastMosmix()`
+    // and do not expose if only used from within this file
+  }
+}
+
 exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
 exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
 exports.getMeasuredValues = getMeasuredValues
+exports.getForecastAtStation = getForecastAtStation
