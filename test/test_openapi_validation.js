@@ -108,8 +108,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   describe('GET /weather-stations?in-vicinity-of=54.1663/7.451&radius=100&limit=5 as JSON', function () {
     it('should satisfy OpenAPI specification', async function () {
       const filteredStationsUrl =
-        API_ORIGIN +
-        '/weather-stations?in-vicinity-of=54.1663/7.451&radius=100&limit=5'
+        API_ORIGIN + '/weather-stations?in-vicinity-of=54.1663/7.451&radius=100&limit=5'
       const res = await axios.get(filteredStationsUrl, {
         headers: { Accept: 'application/json' }
       })

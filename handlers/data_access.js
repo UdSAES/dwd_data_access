@@ -50,9 +50,9 @@ function getWeatherStations (stationCatalog) {
       if (stations === []) {
         return []
       } else if (_.has(stations[0], 'distance')) {
-        return stations.map(item => formatJSONStationWithDistance(item))
+        return stations.map((item) => formatJSONStationWithDistance(item))
       } else {
-        return stations.map(item => formatJSONStationWithoutDistance(item))
+        return stations.map((item) => formatJSONStationWithoutDistance(item))
       }
     }
 
@@ -61,10 +61,7 @@ function getWeatherStations (stationCatalog) {
     function formatCSVStationWithDistance (item) {
       const stationName = item.station.name
       const distance = item.distance
-      return `${stationName}, ${getUrlOfTheStation(
-        item.station,
-        req
-      )}, ${distance} \n`
+      return `${stationName}, ${getUrlOfTheStation(item.station, req)}, ${distance} \n`
     }
 
     function formatCSVStationWithoutDistance (item) {
@@ -128,8 +125,7 @@ function getWeatherStations (stationCatalog) {
         ru.sendProblemDetail(res, {
           title: 'Not acceptable',
           status: 406,
-          detail:
-            'The requested (hyper-) media type is not supported for this resource'
+          detail: 'The requested (hyper-) media type is not supported for this resource'
         })
       }
     })
@@ -150,7 +146,7 @@ function getSingleWeatherStation (stationCatalog) {
     const station = getStationById(stations, stationId)[0]
 
     function getStationById (stations, stationId) {
-      return stations.filter(station => station.stationId === stationId)
+      return stations.filter((station) => station.stationId === stationId)
     }
 
     function getUrlForMeasuredValuesOrForecast (station, req, parameter) {
@@ -228,7 +224,7 @@ function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     try {
-      const voiConfig = _.find(voisConfigs, item => {
+      const voiConfig = _.find(voisConfigs, (item) => {
         return item.target.key === voi
       })
 
@@ -327,21 +323,17 @@ function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
         referenceTimestamp,
         sid
       )
-      const voiConfig = _.find(voisConfigs, item => {
+      const voiConfig = _.find(voisConfigs, (item) => {
         return item.target.key === voi
       })
 
       let timeseriesData
       if (!_.isNil(_.get(voiConfig, ['mosmix', 'key']))) {
         timeseriesData = timeseriesDataCollection[voiConfig.mosmix.key]
-        timeseriesData = _.map(timeseriesData, item => {
+        timeseriesData = _.map(timeseriesData, (item) => {
           return {
             timestamp: item.timestamp,
-            value: convertUnit(
-              item.value,
-              voiConfig.mosmix.unit,
-              voiConfig.target.unit
-            )
+            value: convertUnit(item.value, voiConfig.mosmix.unit, voiConfig.target.unit)
           }
         })
       } else {
@@ -409,7 +401,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     function getVoiConfigsAsArray (vois) {
       const voiConfigs = []
       _.forEach(vois, function (voi) {
-        const voiConfig = _.find(voisConfigs, item => {
+        const voiConfig = _.find(voisConfigs, (item) => {
           return item.target.key === voi
         })
         voiConfigs.push(voiConfig)
@@ -428,10 +420,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         status: 400,
         detail: 'Received request for unconfigured VOI'
       })
-      req.log.warn(
-        { res: res },
-        'received request for REPORT for unconfigured VOI'
-      )
+      req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
       return
     }
 
@@ -479,8 +468,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         ru.sendProblemDetail(res, {
           title: 'Not acceptable',
           status: 406,
-          detail:
-            'The requested (hyper-) media type is not supported for this resource'
+          detail: 'The requested (hyper-) media type is not supported for this resource'
         })
       }
     })

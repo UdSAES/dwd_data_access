@@ -187,12 +187,7 @@ describe('Test correct filtering of station list', function () {
       })
 
       // Find stations accordingly
-      const actual = await su.findStationsInVicinityOf(
-        stations,
-        undefined,
-        1000,
-        5
-      )
+      const actual = await su.findStationsInVicinityOf(stations, undefined, 1000, 5)
       addContext(this, {
         title: 'actual output',
         value: actual

@@ -138,11 +138,8 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
         if (!_.isNil(test.quantities)) {
           // Verify that timeseries for each requested quantity exists by checking label
           it('should meet expectations', function () {
-            _.forEach(_.split(options.searchParams.quantities, ','), q => {
-              assert(
-                _.find(actual.data, { label: q }),
-                `label ${q} is missing!`
-              )
+            _.forEach(_.split(options.searchParams.quantities, ','), (q) => {
+              assert(_.find(actual.data, { label: q }), `label ${q} is missing!`)
             })
           })
 

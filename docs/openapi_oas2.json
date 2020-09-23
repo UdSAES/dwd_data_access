@@ -251,9 +251,7 @@
             },
             "url": {
               "type": "string",
-              "enum": [
-                "https://www.dwd.de/EN/ourservices/opendata/opendata.html"
-              ]
+              "enum": ["https://www.dwd.de/EN/ourservices/opendata/opendata.html"]
             }
           }
         },
@@ -295,12 +293,7 @@
     },
     "ForecastResult": {
       "type": "object",
-      "required": [
-        "forecastModelType",
-        "location",
-        "referenceTimestamp",
-        "forecasts"
-      ],
+      "required": ["forecastModelType", "location", "referenceTimestamp", "forecasts"],
       "properties": {
         "sourceReference": {
           "type": "object",
@@ -312,9 +305,7 @@
             },
             "url": {
               "type": "string",
-              "enum": [
-                "https://www.dwd.de/EN/ourservices/opendata/opendata.html"
-              ]
+              "enum": ["https://www.dwd.de/EN/ourservices/opendata/opendata.html"]
             }
           }
         },

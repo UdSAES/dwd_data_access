@@ -26,10 +26,8 @@ const DATA_ROOT_PATH = processenv('DATA_ROOT_PATH')
 // const NEWEST_FORECAST_ROOT_PATH = processenv('NEWEST_FORECAST_ROOT_PATH')
 // const POIS_JSON_FILE_PATH = processenv('POIS_JSON_FILE_PATH')
 const JWT_PUBLIC_KEY_FILE_PATH = processenv('JWT_PUBLIC_KEY_FILE_PATH')
-const AUTHORIZATION_LIMIT_INTERVAL =
-  processenv('AUTHORIZATION_LIMIT_INTERVAL') || 10
-const AUTHORIZATION_LIMIT_VALUE =
-  processenv('AUTHORIZATION_LIMIT_VALUE') || 1000
+const AUTHORIZATION_LIMIT_INTERVAL = processenv('AUTHORIZATION_LIMIT_INTERVAL') || 10
+const AUTHORIZATION_LIMIT_VALUE = processenv('AUTHORIZATION_LIMIT_VALUE') || 1000
 const ANONYMOUS_LIMIT_INTERVAL = processenv('ANONYMOUS_LIMIT_INTERVAL') || 10
 const ANONYMOUS_LIMIT_VALUE = processenv('ANONYMOUS_LIMIT_VALUE') || 100
 const UI_STATIC_FILES_PATH = String(processenv('UI_STATIC_FILES_PATH') || '')
@@ -99,42 +97,30 @@ async function checkIfConfigIsValid () {
   // }
 
   if (!_.isString(JWT_PUBLIC_KEY_FILE_PATH)) {
-    log.fatal(
-      'JWT_PUBLIC_KEY_FILE_PATH must be a string: ' + JWT_PUBLIC_KEY_FILE_PATH
-    )
+    log.fatal('JWT_PUBLIC_KEY_FILE_PATH must be a string: ' + JWT_PUBLIC_KEY_FILE_PATH)
     process.exit(EXIT_CODE_JWT_PUBLIC_KEY_FILE_PATH_NOT_A_STRING)
   } else {
     log.debug('JWT_PUBLIC_KEY_FILE_PATH is set to ' + JWT_PUBLIC_KEY_FILE_PATH)
   }
 
-  if (
-    !_.isNumber(AUTHORIZATION_LIMIT_INTERVAL) ||
-    AUTHORIZATION_LIMIT_INTERVAL <= 0
-  ) {
+  if (!_.isNumber(AUTHORIZATION_LIMIT_INTERVAL) || AUTHORIZATION_LIMIT_INTERVAL <= 0) {
     log.fatal(
       'AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' +
         AUTHORIZATION_LIMIT_INTERVAL
     )
     process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_INTERVAL_NOT_A_POSITIVE_NUMBER)
   } else {
-    log.debug(
-      'AUTHORIZATION_LIMIT_INTERVAL is set to ' + AUTHORIZATION_LIMIT_INTERVAL
-    )
+    log.debug('AUTHORIZATION_LIMIT_INTERVAL is set to ' + AUTHORIZATION_LIMIT_INTERVAL)
   }
 
-  if (
-    !_.isNumber(AUTHORIZATION_LIMIT_VALUE) ||
-    AUTHORIZATION_LIMIT_VALUE <= 0
-  ) {
+  if (!_.isNumber(AUTHORIZATION_LIMIT_VALUE) || AUTHORIZATION_LIMIT_VALUE <= 0) {
     log.fatal(
       'AUTHORIZATION_LIMIT_INTERVAL must be a positive number: ' +
         AUTHORIZATION_LIMIT_VALUE
     )
     process.exit(EXIT_CODE_AUTHORIZATION_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
   } else {
-    log.debug(
-      'AUTHORIZATION_LIMIT_VALUE is set to ' + AUTHORIZATION_LIMIT_VALUE
-    )
+    log.debug('AUTHORIZATION_LIMIT_VALUE is set to ' + AUTHORIZATION_LIMIT_VALUE)
   }
 
   if (!_.isNumber(ANONYMOUS_LIMIT_INTERVAL) || ANONYMOUS_LIMIT_INTERVAL <= 0) {
@@ -149,8 +135,7 @@ async function checkIfConfigIsValid () {
 
   if (!_.isNumber(ANONYMOUS_LIMIT_VALUE) || ANONYMOUS_LIMIT_VALUE <= 0) {
     log.fatal(
-      'ANONYMOUS_LIMIT_VALUE must be a positive number: ' +
-        ANONYMOUS_LIMIT_VALUE
+      'ANONYMOUS_LIMIT_VALUE must be a positive number: ' + ANONYMOUS_LIMIT_VALUE
     )
     process.exit(EXIT_CODE_ANONYMOUS_LIMIT_VALUE_NOT_A_POSITIVE_NUMBER)
   } else {
@@ -214,7 +199,7 @@ app.use((req, res, next) => {
   }
 
   const now = Date.now()
-  _.remove(authorizedRequestStatisticsMap[sub], timestamp => {
+  _.remove(authorizedRequestStatisticsMap[sub], (timestamp) => {
     if (Math.abs(now - timestamp) > limitInterval * 1000) {
       return true
     }
@@ -234,7 +219,7 @@ app.use((req, res, next) => {
 app.use(express.json())
 app.use(express.urlencoded()) // FIXME body-parser deprecated undefined extended: provide extended option index.js:209:17
 
-app.on('error', error => {
+app.on('error', (error) => {
   log.fatal(error)
   process.exit(EXIT_CODE_SERVER_ERROR)
 })
@@ -257,13 +242,9 @@ async function init () {
         format: false
       }
     })
-    log.info(
-      'successfully loaded API description ' + API_SPECIFICATION_FILE_PATH
-    )
+    log.info('successfully loaded API description ' + API_SPECIFICATION_FILE_PATH)
   } catch (error) {
-    log.fatal(
-      'error while loading API description ' + API_SPECIFICATION_FILE_PATH
-    )
+    log.fatal('error while loading API description ' + API_SPECIFICATION_FILE_PATH)
     process.exit(EXIT_CODE_SERVER_ERROR)
   }
 
@@ -301,18 +282,12 @@ async function init () {
 
   // Load configuration
   const stationCatalog = await sc.getAllStations('./config/')
-  const voisDataAccessConfigs = await fs.readJson(
-    VOIS_DATA_ACCESS_CONFIGS_PATH,
-    {
-      encoding: 'utf8'
-    }
-  )
+  const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
+    encoding: 'utf8'
+  })
 
   // Define routing
-  backend.register(
-    'getFilteredListOfStations',
-    hda.getWeatherStations(stationCatalog)
-  )
+  backend.register('getFilteredListOfStations', hda.getWeatherStations(stationCatalog))
   backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
   backend.register(
     'getMeasuredValues',

@@ -13,17 +13,14 @@ const _ = require('lodash')
 
 describe('Validate correctness of utility functions for loading BEOB data', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
-  const voisDataAccessConfigs = await fs.readJson(
-    VOIS_DATA_ACCESS_CONFIGS_PATH,
-    {
-      encoding: 'utf8'
-    }
-  )
+  const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
+    encoding: 'utf8'
+  })
 
   function getVoiConfigsAsArray (vois) {
     const voiConfigs = []
     _.forEach(vois, function (voi) {
-      const voiConfig = _.find(voisDataAccessConfigs, item => {
+      const voiConfig = _.find(voisDataAccessConfigs, (item) => {
         return item.target.key === voi
       })
       voiConfigs.push(voiConfig)

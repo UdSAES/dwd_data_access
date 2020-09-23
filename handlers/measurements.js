@@ -36,7 +36,7 @@ function parseCSV (fileContent) {
   fileContent = fileContent.replace(/\r\n/g, '\n')
   const lineStrings = fileContent.split('\n')
 
-  const lines = _.map(lineStrings, lineString => {
+  const lines = _.map(lineStrings, (lineString) => {
     return lineString.split(';')
   })
   return lines
@@ -66,16 +66,13 @@ function getNewestMeasurementDataPoi (
       const poisConfig = await fs.readJson(poisJSONFilePath, {
         encoding: 'utf8'
       })
-      var poi = _.find(poisConfig, item => {
+      var poi = _.find(poisConfig, (item) => {
         return item.id === poiID
       })
     } catch (error) {
       res.status(500).send(error)
       res.end()
-      req.log.error(
-        { err: error, res: res },
-        `failed to read file ${poisJSONFilePath}`
-      )
+      req.log.error({ err: error, res: res }, `failed to read file ${poisJSONFilePath}`)
       return
     }
 
@@ -91,10 +88,7 @@ function getNewestMeasurementDataPoi (
     } catch (error) {
       res.status(500).send(error)
       res.end()
-      req.log.error(
-        { err: error, res: res },
-        `failed to read file ${voisJSONFilePath}`
-      )
+      req.log.error({ err: error, res: res }, `failed to read file ${voisJSONFilePath}`)
       return
     }
 
@@ -123,22 +117,17 @@ function getNewestMeasurementDataPoi (
             measurementDataBaseDirectory,
             dateDirectoryName
           )
-          const filteredStationIds = await getAvailableStationIDs(
-            dateDirectoryPath
-          )
+          const filteredStationIds = await getAvailableStationIDs(dateDirectoryPath)
 
           var filteredStationIdsMap = {}
-          _.forEach(filteredStationIds, item => {
+          _.forEach(filteredStationIds, (item) => {
             filteredStationIdsMap[item] = item
           })
 
-          const filteredStationCatalog = _.filter(stationCatalog, item => {
+          const filteredStationCatalog = _.filter(stationCatalog, (item) => {
             return !_.isNil(filteredStationIdsMap[item.stationId])
           })
-          closestStation = su.findClosestStation(
-            coordinates,
-            filteredStationCatalog
-          )
+          closestStation = su.findClosestStation(coordinates, filteredStationCatalog)
 
           const filePath = path.join(
             dateDirectoryPath,
@@ -194,10 +183,7 @@ function getNewestMeasurementDataPoi (
             }
           })
         } catch (error) {
-          req.log.error(
-            error,
-            `failed to get newest measurement data for POI ${poiID}`
-          )
+          req.log.error(error, `failed to get newest measurement data for POI ${poiID}`)
         }
         m.add(1, 'day')
       }
@@ -223,7 +209,7 @@ function getNewestMeasurementDataPoi (
 
       _.forEach(resultItems, (resultItem, voiName) => {
         // sort timeseries by increasing timestamp
-        resultItems[voiName] = _.sortBy(resultItem, item => {
+        resultItems[voiName] = _.sortBy(resultItem, (item) => {
           return item.timestamp
         })
 

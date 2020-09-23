@@ -65,18 +65,12 @@ describe.skip('./lib/grib2.js', () => {
       )
       assert(_.isArray(result))
       assert(result.length === 46)
-      _.forEach(result, item => {
+      _.forEach(result, (item) => {
         const keys = _.keys(item)
         assert(
           _.isEqual(
             keys.sort(),
-            [
-              'referenceTimestamp',
-              'forecastTimestamp',
-              'value',
-              'lon',
-              'lat'
-            ].sort()
+            ['referenceTimestamp', 'forecastTimestamp', 'value', 'lon', 'lat'].sort()
           )
         )
       })
@@ -105,17 +99,11 @@ describe.skip('./lib/grib2.js', () => {
         path.join(tmpDirPath, 'sample_data', 'grib', GRIB_TEST_FILE_PATH),
         GRIB_TEST_POSITION
       )
-      _.forEach(result, item => {
+      _.forEach(result, (item) => {
         assert(
           _.isEqual(
             _.keys(item).sort(),
-            [
-              'referenceTimestamp',
-              'forecastTimestamp',
-              'value',
-              'lon',
-              'lat'
-            ].sort()
+            ['referenceTimestamp', 'forecastTimestamp', 'value', 'lon', 'lat'].sort()
           )
         )
       })
