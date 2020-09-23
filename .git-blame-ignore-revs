@@ -1,2 +1,5 @@
 # Migrate code style to prettier-standard
 070cac13135e1081ff465a787efa2fb021477e0f
+
+# Increase line width to 88, enforce arrow parens and lf as EOL
+5401aef4930a2657e7892b5ed90b4ba5822f013e
