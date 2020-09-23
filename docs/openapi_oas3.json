@@ -131,6 +131,42 @@
           }
         }
       }
+    },
+    "/weather-stations/{stationId}/forecast": {
+      "get": {
+        "tags": ["Weather Stations"],
+        "summary": "Show weather forecasts for the location of a specific weather station",
+        "operationId": "getForecastAtStation",
+        "parameters": [
+          { "$ref": "#/components/parameters/StationId" },
+          { "$ref": "#/components/parameters/ModelName" },
+          { "$ref": "#/components/parameters/ModelRun" },
+          { "$ref": "#/components/parameters/Quantities" },
+          { "$ref": "#/components/parameters/From" },
+          { "$ref": "#/components/parameters/To" }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested weather forecast",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastValuesAsJSON"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastValuesAsCSV"
+                },
+                "example": "timestamp / ms,asob_s / W/m2,t_2m / K\n1595426400000,832,299.75"
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/SchemaValidationFailed"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -249,6 +285,47 @@
           "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
           "url": "tbd"
         }
+      },
+      "ForecastValuesAsJSON": {
+        "type": "object",
+        "description": "Weather forecasts for the location of a specific weather station serialized as JSON",
+        "required": ["data"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Forecast for quantities t_2m, pmsl at station 10704 based on the 06 o'clock run of the COSMO-D2 model from 2020-09-22T00:00 to 2020-09-23T23:59"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                { "required": ["label"] },
+                {
+                  "$ref": "https://raw.githubusercontent.com/UdSAES/designetz_schemata/dev/schemata/timeseries/schema_v1.3.0-oas2.json#/Timeseries"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ForecastValuesAsCSV": {
+        "description": "Weather forecasts for the location of a specific weather station serialized as CSV",
+        "externalDocs": {
+          "description": "CSV Schema or Table Schema specifying the `text/csv`-representation of this resource",
+          "url": "tbd"
+        }
+      },
+      "ModelName": {
+        "type": "string",
+        "description": "The name of the weather prediction model to use; defaults to `cosmo-d2`",
+        "enum": ["cosmo-d2", "mosmix"],
+        "default": "cosmo-d2"
+      },
+      "ModelRun": {
+        "type": "string",
+        "description": "The hour at which the model was run in UTC; defaults to `21`. MOSMIX-forecasts are only available every six hours (03/09/15/21); COSMO-D2 forecasts are available every three hours.",
+        "enum": ["00", "03", "06", "09", "12", "15", "18", "21"],
+        "default": "21"
       }
     },
     "responses": {
@@ -277,6 +354,18 @@
       }
     },
     "parameters": {
+      "ModelName": {
+        "name": "model",
+        "in": "query",
+        "schema": { "$ref": "#/components/schemas/ModelName" },
+        "example": "cosmo-d2"
+      },
+      "ModelRun": {
+        "name": "model-run",
+        "in": "query",
+        "schema": { "$ref": "#/components/schemas/ModelRun" },
+        "example": "03"
+      },
       "StationId": {
         "name": "stationId",
         "in": "path",
