@@ -17,6 +17,16 @@ const ru = require('../lib/response_utils.js')
 // Instantiate logger
 const log = require('../lib/logger.js')
 
+const now = moment()
+const defaultStartTimestamp = now
+  .startOf('day')
+  .tz('Europe/Berlin')
+  .format('x')
+const defaultEndTimestamp = now
+  .endOf('day')
+  .tz('Europe/Berlin')
+  .format('x')
+
 // GET /weather-stations
 function getWeatherStations (stationCatalog) {
   return async function (c, req, res, next) {
@@ -369,18 +379,10 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   )
 
   return async function (c, req, res, next) {
-    const now = moment()
-    const defaultStartTimestamp = now
-      .startOf('day')
-      .tz('Europe/Berlin')
-      .format('x')
-    const defaultEndTimestamp = now
-      .endOf('day')
-      .tz('Europe/Berlin')
-      .format('x')
+
     const defaultParameter = ['t_2m']
-    let startTimestamp = parseInt(req.query.from)
-    let endTimestamp = parseInt(req.query.to)
+    let startTimestamp = parseInt(req.query.from) ? parseInt(req.query.from) : parseInt(defaultStartTimestamp)
+    let endTimestamp = parseInt(req.query.to) ? parseInt(req.query.from) : parseInt(defaultEndTimestamp)
     const voi = req.query.quantities
     let vois = defaultParameter
     if (voi) {
@@ -388,28 +390,10 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     const splitUrl = req.path.split('/')
-    const sid = splitUrl[2]
+    const stationId = splitUrl[2]
 
-    if (isNaN(startTimestamp)) {
-      startTimestamp = parseInt(defaultStartTimestamp)
-    }
 
-    if (isNaN(endTimestamp)) {
-      endTimestamp = parseInt(defaultEndTimestamp)
-    }
-
-    function getVoiConfigsAsArray (vois) {
-      const voiConfigs = []
-      _.forEach(vois, function (voi) {
-        const voiConfig = _.find(voisConfigs, (item) => {
-          return item.target.key === voi
-        })
-        voiConfigs.push(voiConfig)
-      })
-      return voiConfigs
-    }
-
-    const voiConfigs = getVoiConfigsAsArray(vois)
+    const voiConfigs = mvu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
     const checkedVois = mvu.checkValidityOfQuantityIds(voiConfigs)
     log.trace({ checkedVois })
@@ -429,7 +413,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       REPORT_DATA_BASE_PATH,
       startTimestamp,
       endTimestamp,
-      sid
+      stationId,
     )
     log.trace({ timeseriesDataCollection })
 
@@ -451,7 +435,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
           voiConfigs,
           timeseriesDataArray,
           vois,
-          sid
+          stationId,
         )
         res.status(200).send(measuredValues)
       },
@@ -479,10 +463,120 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 // model=...&model-run=...quantities=...&from=...&to=...
 function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
   return async function (c, req, res, next) {
+
+    const MOSMIX_DATA_BASE_PATH = path.join(
+      WEATHER_DATA_BASE_PATH,
+      'weather',
+      'local_forecasts'
+    )
+    
+    const REPORT_DATA_BASE_PATH = path.join(
+      WEATHER_DATA_BASE_PATH,
+      'weather',
+      'weather_reports'
+    )
     // Basically `getWeatherMosmix()`, but getting COSMO-D2 forecast at
     // coordinates of weather station shall also be supported later
     // In case you keep `getWeatherMosmix()`, please refactor to `getForecastMosmix()`
     // and do not expose if only used from within this file
+    
+    // models posible: cosmo-d2, mosmix
+    // model-run possible: 00, 03, ..., 21 (step is 3)
+    // quantities list is not validated explicitly
+
+    const allowed_mosmix_mr = ["03", "09", "15", "21"]
+    const allowed_cosmo_mr = []
+    function checkIfValidModelRunMosmix(modelRun) {
+      return allowed_mosmix_mr.includes(modelRun)
+    }
+
+    // Get all query parameters
+    const startTimestamp = parseInt(req.query.from) ? parseInt(req.query.from) : parseInt(defaultStartTimestamp)
+    const endTimestamp = parseInt(req.query.to) ? parseInt(req.query.to) : parseInt(defaultEndTimestamp)
+    
+    const defaultModel = "cosmo-d2"
+    // This Check here FOR COSMO-d2 which is default
+    const model = req.query.model ? req.query.model : defaultModel
+    const defaultModelRun = "21"
+    const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
+    if (!(checkIfValidModelRunMosmix(modelRun))) {
+      ru.sendProblemDetail(res, {
+        title: 'Schema validation Failed',
+        status: 400,
+        detail: 'Received request for unconfigured MODEL-RUN'
+      })
+      req.log.warn({ res: res }, 'received request for REPORT for unconfigured MODEL-RUN')
+      return
+    }
+    const vois = mvu.getVoisNamesFromQuery(req.query)
+    const stationId = mvu.getStationIdFromUrlPath(req.path)
+
+    const voiConfigs = mvu.getVoiConfigsAsArray(vois, voisConfigs)
+    log.trace({ voiConfigs })
+    const checkedVois = mvu.checkValidityOfQuantityIds(voiConfigs)
+    log.trace({ checkedVois })
+
+    if (_.includes(checkedVois, false)) {
+      ru.sendProblemDetail(res, {
+        title: 'Schema validation Failed',
+        status: 400,
+        detail: 'Received request for unconfigured VOI'
+      })
+      req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
+      return
+    }
+
+    log.debug('reading BEOB data from disk...')
+    const timeseriesDataCollection = await mvu.readMosmixTimeseriesData(
+      MOSMIX_DATA_BASE_PATH,
+      startTimestamp,
+      endTimestamp,
+      stationId,
+      modelRun,
+    )
+    log.trace({ timeseriesDataCollection })
+    
+
+
+    const timeseriesDataArrayUnformatted = mvu.dropNaN(
+      mvu.dropTimeseriesDataNotOfInteresWithParameter(voiConfigs, timeseriesDataCollection, "mosmix")
+    )
+    log.trace({ timeseriesDataArrayUnformatted })
+
+
+    // Check if conversion happening??
+    const timeseriesDataArray = mvu.convertUnitsFor(
+      voiConfigs,
+      timeseriesDataArrayUnformatted,
+      "mosmix"
+    )
+    log.trace({ timeseriesDataArray })
+
+    function createDescriptionString(vois, stationId, modelRun, model, startTimestamp, endTimestamp) {
+      const showStartTimestamp = moment(startTimestamp).format('YYYY-MM-DDTHH:MM')
+      const showEndTimestamp = moment(endTimestamp).format('YYYY-MM-DDTHH:MM')
+      return `Forecast for quantities ${vois.join(', ')} at station ${stationId} based on the ${modelRun} o'clock run of the ${model.toUpperCase()} model from ${showStartTimestamp} to ${showEndTimestamp}`
+    }
+
+    const descriptionString = createDescriptionString(vois, stationId, modelRun, model, startTimestamp, endTimestamp )
+
+    function renderMeasuredValuesAsJSON (voiConfigs, timeseriesDataArray) {
+      const result = {
+        description: descriptionString,
+        data: []
+      }
+    
+      _.forEach(voiConfigs, (voiConfig) => {
+        result.data.push({
+          label: voiConfig.target.key,
+          unit: voiConfig.target.unit,
+          timeseries: timeseriesDataArray[voiConfig.target.key]
+        })
+      })
+    
+      return result
+    }
+    res.send(renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray))
   }
 }
 
