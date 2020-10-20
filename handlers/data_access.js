@@ -14,6 +14,7 @@ const su = require('../lib/station_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
 const ru = require('../lib/response_utils.js')
 const fu = require('../lib/forecast_utils.js')
+const gu = require('../lib/general_utils.js')
 
 // Instantiate logger
 const log = require('../lib/logger.js')
@@ -394,9 +395,9 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     const stationId = splitUrl[2]
 
 
-    const voiConfigs = mvu.getVoiConfigsAsArray(vois, voisConfigs)
+    const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
-    const checkedVois = mvu.checkValidityOfQuantityIds(voiConfigs)
+    const checkedVois = gu.checkValidityOfQuantityIds(voiConfigs)
     log.trace({ checkedVois })
 
     if (_.includes(checkedVois, false)) {
@@ -423,7 +424,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     )
     log.trace({ timeseriesDataArrayUnformatted })
 
-    const timeseriesDataArray = mvu.convertUnits(
+    const timeseriesDataArray = gu.convertUnits(
       voiConfigs,
       timeseriesDataArrayUnformatted
     )
@@ -467,17 +468,13 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     const allowed_mosmix_mr = ["03", "09", "15", "21"]
     const allowed_cosmo_mr = []
-
-    function checkIfValidModelRunMosmix(modelRun) {
-      return allowed_mosmix_mr.includes(modelRun)
-    }
+    const defaultModel = "cosmo-d2"
+    const defaultModelRun = "21"
 
     // Get all query parameters
     const startTimestamp = parseInt(req.query.from) ? parseInt(req.query.from) : parseInt(defaultStartTimestamp)
     const endTimestamp = parseInt(req.query.to) ? parseInt(req.query.to) : parseInt(defaultEndTimestamp)
-    const defaultModel = "cosmo-d2"
     const model = req.query.model ? req.query.model : defaultModel
-    const defaultModelRun = "21"
     const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
 
     const COSMO_DATA_BASE_PATH = fu.getGribDirectory(startTimestamp, WEATHER_DATA_BASE_PATH)
@@ -487,7 +484,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
       'local_forecasts'
     )
 
-    if (!(checkIfValidModelRunMosmix(modelRun))) {
+    if (!(fu.checkIfValidModelRunMosmix(allowed_mosmix_mr, modelRun))) {
       ru.sendProblemDetail(res, {
         title: 'Schema validation Failed',
         status: 400,
@@ -496,12 +493,12 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
       req.log.warn({ res: res }, 'received request for REPORT for unconfigured MODEL-RUN')
       return
     }
-    const vois = mvu.getVoisNamesFromQuery(req.query)
-    const stationId = mvu.getStationIdFromUrlPath(req.path)
+    const vois = gu.getVoisNamesFromQuery(req.query)
+    const stationId = gu.getStationIdFromUrlPath(req.path)
 
-    const voiConfigs = mvu.getVoiConfigsAsArray(vois, voisConfigs)
+    const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
-    const checkedVois = mvu.checkValidityOfQuantityIds(voiConfigs)
+    const checkedVois = gu.checkValidityOfQuantityIds(voiConfigs)
     log.trace({ checkedVois })
 
     if (_.includes(checkedVois, false)) {
@@ -515,7 +512,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     log.debug('reading BEOB data from disk...')
-    const timeseriesDataCollection = await mvu.readMosmixTimeseriesData(
+    const timeseriesDataCollection = await fu.readMosmixTimeseriesData(
       MOSMIX_DATA_BASE_PATH,
       startTimestamp,
       endTimestamp,
@@ -530,7 +527,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
     // log.trace({ timeseriesDataArrayUnformatted })
 
 
-    const timeseriesDataArray = mvu.convertUnitsFor(
+    const timeseriesDataArray = gu.convertUnitsFor(
       voiConfigs,
       timeseriesDataCollection,
       "mosmix"
@@ -546,7 +543,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
       },
 
       'text/csv': function () {
-        const localForecast = mvu.renderMeasuredValuesAsCSV(voiConfigs, timeseriesDataArray)
+        const localForecast = fu.renderMeasuredValuesAsCSV(voiConfigs, timeseriesDataArray)
         res.status(200).send(localForecast)
       },
 
