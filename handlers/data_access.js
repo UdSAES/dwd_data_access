@@ -381,10 +381,13 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   )
 
   return async function (c, req, res, next) {
-
     const defaultParameter = ['t_2m']
-    let startTimestamp = parseInt(req.query.from) ? parseInt(req.query.from) : parseInt(defaultStartTimestamp)
-    let endTimestamp = parseInt(req.query.to) ? parseInt(req.query.from) : parseInt(defaultEndTimestamp)
+    const startTimestamp = parseInt(req.query.from)
+      ? parseInt(req.query.from)
+      : parseInt(defaultStartTimestamp)
+    const endTimestamp = parseInt(req.query.to)
+      ? parseInt(req.query.from)
+      : parseInt(defaultEndTimestamp)
     const voi = req.query.quantities
     let vois = defaultParameter
     if (voi) {
@@ -393,7 +396,6 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     const splitUrl = req.path.split('/')
     const stationId = splitUrl[2]
-
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
@@ -415,7 +417,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       REPORT_DATA_BASE_PATH,
       startTimestamp,
       endTimestamp,
-      stationId,
+      stationId
     )
     log.trace({ timeseriesDataCollection })
 
@@ -437,7 +439,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
           voiConfigs,
           timeseriesDataArray,
           vois,
-          stationId,
+          stationId
         )
         res.status(200).send(measuredValues)
       },
@@ -465,32 +467,44 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 // model=...&model-run=...quantities=...&from=...&to=...
 function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
   return async function (c, req, res, next) {
-
-    const allowed_mosmix_mr = ["03", "09", "15", "21"]
-    const allowed_cosmo_mr = []
-    const defaultModel = "cosmo-d2"
-    const defaultModelRun = "21"
-
+    const defaultModel = 'cosmo-d2'
+    const defaultModelRun = '21'
     // Get all query parameters
-    const startTimestamp = parseInt(req.query.from) ? parseInt(req.query.from) : parseInt(defaultStartTimestamp)
-    const endTimestamp = parseInt(req.query.to) ? parseInt(req.query.to) : parseInt(defaultEndTimestamp)
-    const model = req.query.model ? req.query.model : defaultModel
-    const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
+    const startTimestamp = parseInt(req.query.from)
+      ? parseInt(req.query.from)
+      : parseInt(defaultStartTimestamp)
+    const endTimestamp = parseInt(req.query.to)
+      ? parseInt(req.query.to)
+      : parseInt(defaultEndTimestamp)
 
-    const COSMO_DATA_BASE_PATH = fu.getGribDirectory(startTimestamp, WEATHER_DATA_BASE_PATH)
+    const COSMO_DATA_BASE_PATH = fu.getGribDirectory(
+      startTimestamp,
+      WEATHER_DATA_BASE_PATH
+    )
     const MOSMIX_DATA_BASE_PATH = path.join(
       WEATHER_DATA_BASE_PATH,
       'weather',
       'local_forecasts'
     )
 
-    if (!(fu.checkIfValidModelRunMosmix(allowed_mosmix_mr, modelRun))) {
+    const model = req.query.model ? req.query.model : defaultModel
+    const config = fu.getConfigFromModel(
+      model,
+      COSMO_DATA_BASE_PATH,
+      MOSMIX_DATA_BASE_PATH
+    )
+    const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
+
+    if (!fu.checkIfValidModelRun(config.allowedModelRuns, modelRun)) {
       ru.sendProblemDetail(res, {
         title: 'Schema validation Failed',
         status: 400,
         detail: 'Received request for unconfigured MODEL-RUN'
       })
-      req.log.warn({ res: res }, 'received request for REPORT for unconfigured MODEL-RUN')
+      req.log.warn(
+        { res: res },
+        'received request for REPORT for unconfigured MODEL-RUN'
+      )
       return
     }
     const vois = gu.getVoisNamesFromQuery(req.query)
@@ -512,38 +526,48 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     log.debug('reading BEOB data from disk...')
-    const timeseriesDataCollection = await fu.readMosmixTimeseriesData(
-      MOSMIX_DATA_BASE_PATH,
+    const timeseriesDataCollection = await config.functionToReadData(
+      config.MODEL_DATA_PATH,
       startTimestamp,
       endTimestamp,
       stationId,
-      modelRun,
+      modelRun
     )
     log.trace({ timeseriesDataCollection })
-    
+
     // const timeseriesDataArrayUnformatted = mvu.dropNaN(
     //   mvu.dropTimeseriesDataNotOfInteresWithParameter(voiConfigs, timeseriesDataCollection, "mosmix")
     // )
     // log.trace({ timeseriesDataArrayUnformatted })
 
-
     const timeseriesDataArray = gu.convertUnitsFor(
       voiConfigs,
       timeseriesDataCollection,
-      "mosmix"
+      config.model
     )
     log.trace({ timeseriesDataArray })
 
-    //res.send(fu.renderMeasuredValuesAsJSON(vois, stationId, modelRun, model, startTimestamp, endTimestamp, voiConfigs, timeseriesDataArray))
     log.debug('rendering and sending response now')
     res.format({
       'application/json': function () {
-        const localForecast = fu.renderMeasuredValuesAsJSON(vois, stationId, modelRun, model, startTimestamp, endTimestamp, voiConfigs, timeseriesDataArray)
+        const localForecast = fu.renderMeasuredValuesAsJSON(
+          vois,
+          stationId,
+          modelRun,
+          model,
+          startTimestamp,
+          endTimestamp,
+          voiConfigs,
+          timeseriesDataArray
+        )
         res.status(200).send(localForecast)
       },
 
       'text/csv': function () {
-        const localForecast = fu.renderMeasuredValuesAsCSV(voiConfigs, timeseriesDataArray)
+        const localForecast = fu.renderMeasuredValuesAsCSV(
+          voiConfigs,
+          timeseriesDataArray
+        )
         res.status(200).send(localForecast)
       },
 
