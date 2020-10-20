@@ -13,6 +13,7 @@ const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
 const ru = require('../lib/response_utils.js')
+const fu = require('../lib/forecast_utils.js')
 
 // Instantiate logger
 const log = require('../lib/logger.js')
@@ -464,28 +465,9 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
   return async function (c, req, res, next) {
 
-    const MOSMIX_DATA_BASE_PATH = path.join(
-      WEATHER_DATA_BASE_PATH,
-      'weather',
-      'local_forecasts'
-    )
-    
-    const REPORT_DATA_BASE_PATH = path.join(
-      WEATHER_DATA_BASE_PATH,
-      'weather',
-      'weather_reports'
-    )
-    // Basically `getWeatherMosmix()`, but getting COSMO-D2 forecast at
-    // coordinates of weather station shall also be supported later
-    // In case you keep `getWeatherMosmix()`, please refactor to `getForecastMosmix()`
-    // and do not expose if only used from within this file
-    
-    // models posible: cosmo-d2, mosmix
-    // model-run possible: 00, 03, ..., 21 (step is 3)
-    // quantities list is not validated explicitly
-
     const allowed_mosmix_mr = ["03", "09", "15", "21"]
     const allowed_cosmo_mr = []
+
     function checkIfValidModelRunMosmix(modelRun) {
       return allowed_mosmix_mr.includes(modelRun)
     }
@@ -493,12 +475,18 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
     // Get all query parameters
     const startTimestamp = parseInt(req.query.from) ? parseInt(req.query.from) : parseInt(defaultStartTimestamp)
     const endTimestamp = parseInt(req.query.to) ? parseInt(req.query.to) : parseInt(defaultEndTimestamp)
-    
     const defaultModel = "cosmo-d2"
-    // This Check here FOR COSMO-d2 which is default
     const model = req.query.model ? req.query.model : defaultModel
     const defaultModelRun = "21"
     const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
+
+    const COSMO_DATA_BASE_PATH = fu.getGribDirectory(startTimestamp, WEATHER_DATA_BASE_PATH)
+    const MOSMIX_DATA_BASE_PATH = path.join(
+      WEATHER_DATA_BASE_PATH,
+      'weather',
+      'local_forecasts'
+    )
+
     if (!(checkIfValidModelRunMosmix(modelRun))) {
       ru.sendProblemDetail(res, {
         title: 'Schema validation Failed',
@@ -542,7 +530,6 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
     // log.trace({ timeseriesDataArrayUnformatted })
 
 
-    // // Check if conversion happening??
     const timeseriesDataArray = mvu.convertUnitsFor(
       voiConfigs,
       timeseriesDataCollection,
@@ -550,31 +537,27 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
     )
     log.trace({ timeseriesDataArray })
 
-    function createDescriptionString(vois, stationId, modelRun, model, startTimestamp, endTimestamp) {
-      const showStartTimestamp = moment(startTimestamp).format('YYYY-MM-DDTHH:MM')
-      const showEndTimestamp = moment(endTimestamp).format('YYYY-MM-DDTHH:MM')
-      return `Forecast for quantities ${vois.join(', ')} at station ${stationId} based on the ${modelRun} o'clock run of the ${model.toUpperCase()} model from ${showStartTimestamp} to ${showEndTimestamp}`
-    }
+    //res.send(fu.renderMeasuredValuesAsJSON(vois, stationId, modelRun, model, startTimestamp, endTimestamp, voiConfigs, timeseriesDataArray))
+    log.debug('rendering and sending response now')
+    res.format({
+      'application/json': function () {
+        const localForecast = fu.renderMeasuredValuesAsJSON(vois, stationId, modelRun, model, startTimestamp, endTimestamp, voiConfigs, timeseriesDataArray)
+        res.status(200).send(localForecast)
+      },
 
-    const descriptionString = createDescriptionString(vois, stationId, modelRun, model, startTimestamp, endTimestamp )
+      'text/csv': function () {
+        const localForecast = mvu.renderMeasuredValuesAsCSV(voiConfigs, timeseriesDataArray)
+        res.status(200).send(localForecast)
+      },
 
-    function renderMeasuredValuesAsJSON (voiConfigs, timeseriesDataArray) {
-      const result = {
-        description: descriptionString,
-        data: []
-      }
-    
-      _.forEach(voiConfigs, (voiConfig) => {
-        result.data.push({
-          label: voiConfig.target.key,
-          unit: voiConfig.target.unit,
-          timeseries: timeseriesDataArray[voiConfig.target.key]
+      default: function () {
+        ru.sendProblemDetail(res, {
+          title: 'Not acceptable',
+          status: 406,
+          detail: 'The requested (hyper-) media type is not supported for this resource'
         })
-      })
-    
-      return result
-    }
-    res.send(renderMeasuredValuesAsJSON(voiConfigs, timeseriesDataArray))
+      }
+    })
   }
 }
 
