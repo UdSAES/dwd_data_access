@@ -536,18 +536,16 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs) {
     )
     log.trace({ timeseriesDataCollection })
     
+    // const timeseriesDataArrayUnformatted = mvu.dropNaN(
+    //   mvu.dropTimeseriesDataNotOfInteresWithParameter(voiConfigs, timeseriesDataCollection, "mosmix")
+    // )
+    // log.trace({ timeseriesDataArrayUnformatted })
 
 
-    const timeseriesDataArrayUnformatted = mvu.dropNaN(
-      mvu.dropTimeseriesDataNotOfInteresWithParameter(voiConfigs, timeseriesDataCollection, "mosmix")
-    )
-    log.trace({ timeseriesDataArrayUnformatted })
-
-
-    // Check if conversion happening??
+    // // Check if conversion happening??
     const timeseriesDataArray = mvu.convertUnitsFor(
       voiConfigs,
-      timeseriesDataArrayUnformatted,
+      timeseriesDataCollection,
       "mosmix"
     )
     log.trace({ timeseriesDataArray })
