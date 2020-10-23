@@ -295,7 +295,7 @@ async function init () {
   )
   backend.register(
     'getForecastAtStation',
-    hda.getForecastAtStation(DATA_ROOT_PATH, voisDataAccessConfigs)
+    hda.getForecastAtStation(DATA_ROOT_PATH, voisDataAccessConfigs, stationCatalog)
   )
 
   // Handle unsuccessful requests
