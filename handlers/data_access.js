@@ -467,6 +467,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 // model=...&model-run=...quantities=...&from=...&to=...
 function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatalog) {
   return async function (c, req, res, next) {
+
     const defaultModel = 'cosmo-d2'
     const defaultModelRun = '21'
     const stationId = gu.getStationIdFromUrlPath(req.path)
@@ -477,6 +478,9 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     const endTimestamp = parseInt(req.query.to)
       ? parseInt(req.query.to)
       : parseInt(defaultEndTimestamp)
+    
+    const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
+    const model = req.query.model ? req.query.model : defaultModel
 
     const MOSMIX_DATA_BASE_PATH = path.join(
       WEATHER_DATA_BASE_PATH,
@@ -484,13 +488,11 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       'local_forecasts'
     )
 
-    const model = req.query.model ? req.query.model : defaultModel
     const config = fu.getConfigFromModel(
       model,
       WEATHER_DATA_BASE_PATH,
       MOSMIX_DATA_BASE_PATH
     )
-    const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
 
     if (!fu.checkIfValidModelRun(config.allowedModelRuns, modelRun)) {
       ru.sendProblemDetail(res, {
@@ -505,6 +507,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       return
     }
     const vois = gu.getVoisNamesFromQuery(req.query)
+
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
@@ -521,48 +524,49 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       return
     }
 
-    // log.debug('reading BEOB data from disk...')
-    // const timeseriesDataCollection = await config.functionToReadData(
-    //   config.MODEL_DATA_PATH,
-    //   voiConfigs,
-    //   startTimestamp,
-    //   endTimestamp,
-    //   stationId,
-    //   modelRun,
-    //   stationCatalog
-    // )
-    // log.trace({ timeseriesDataCollection })
+    
+    log.debug('reading BEOB data from disk...')
+    const timeseriesDataCollection = await config.functionToReadData(
+      config.MODEL_DATA_PATH,
+      voiConfigs,
+      startTimestamp,
+      endTimestamp,
+      stationId,
+      modelRun,
+      stationCatalog
+    )
+    log.trace({ timeseriesDataCollection })
 
     // const timeseriesDataArrayUnformatted = mvu.dropNaN(
     //   mvu.dropTimeseriesDataNotOfInteresWithParameter(voiConfigs, timeseriesDataCollection, "mosmix")
     // )
     // log.trace({ timeseriesDataArrayUnformatted })
 
-    // const timeseriesDataArray = gu.convertUnitsFor(
-    //   voiConfigs,
-    //   timeseriesDataCollection,
-    //   config.model
-    // )
-    // log.trace({ timeseriesDataArray })
+    const timeseriesDataArray = config.unitsConverter(
+      voiConfigs,
+      timeseriesDataCollection,
+      config.model
+    )
+    log.trace({ timeseriesDataArray })
 
     log.debug('rendering and sending response now')
     res.format({
-      'application/json': function () {
-        // const localForecast = fu.renderForecastAsJSON(
-        //   vois,
-        //   stationId,
-        //   modelRun,
-        //   model,
-        //   startTimestamp,
-        //   endTimestamp,
-        //   voiConfigs,
-        //   timeseriesDataArray
-        // )
-        res.status(200).send(fu.readDataCosmoD2(WEATHER_DATA_BASE_PATH, voiConfigs, startTimestamp, endTimestamp, stationId, modelRun, stationCatalog))
+      'application/json': async function () {
+        const localForecast = config.jsonRenderer(
+          vois,
+          stationId,
+          modelRun,
+          model,
+          startTimestamp,
+          endTimestamp,
+          voiConfigs,
+          timeseriesDataArray
+        )
+        res.status(200).send(localForecast)
       },
 
       'text/csv': function () {
-        const localForecast = fu.renderForecastAsCSV(
+        const localForecast = config.csvRenderer(
           voiConfigs,
           timeseriesDataArray
         )
