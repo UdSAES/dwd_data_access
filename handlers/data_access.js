@@ -467,7 +467,6 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 // model=...&model-run=...quantities=...&from=...&to=...
 function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatalog) {
   return async function (c, req, res, next) {
-
     const defaultModel = 'cosmo-d2'
     const defaultModelRun = '21'
     const stationId = gu.getStationIdFromUrlPath(req.path)
@@ -478,7 +477,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     const endTimestamp = parseInt(req.query.to)
       ? parseInt(req.query.to)
       : parseInt(defaultEndTimestamp)
-    
+
     const modelRun = req.query['model-run'] ? req.query['model-run'] : defaultModelRun
     const model = req.query.model ? req.query.model : defaultModel
 
@@ -508,7 +507,6 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     }
     const vois = gu.getVoisNamesFromQuery(req.query)
 
-
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
     const checkedVois = gu.checkValidityOfQuantityIds(voiConfigs)
@@ -524,7 +522,6 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       return
     }
 
-    
     log.debug('reading BEOB data from disk...')
     const timeseriesDataCollection = await config.functionToReadData(
       config.MODEL_DATA_PATH,
@@ -542,7 +539,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     // )
     // log.trace({ timeseriesDataArrayUnformatted })
 
-    const timeseriesDataArray = config.unitsConverter(
+    const timeseriesDataArray = await config.unitsConverter(
       voiConfigs,
       timeseriesDataCollection,
       config.model
@@ -552,7 +549,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     log.debug('rendering and sending response now')
     res.format({
       'application/json': async function () {
-        const localForecast = config.jsonRenderer(
+        const localForecast = await config.jsonRenderer(
           vois,
           stationId,
           modelRun,
@@ -562,14 +559,14 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
           voiConfigs,
           timeseriesDataArray
         )
+        // res.status(200).send(await gu.convertUnitsForCosmo(voiConfigs, timeseriesDataCollection))
+        // res.status(200).send(await timeseriesDataArray)
+        // res.status(200).send(Object.keys(timeseriesDataCollection)
         res.status(200).send(localForecast)
       },
 
       'text/csv': function () {
-        const localForecast = config.csvRenderer(
-          voiConfigs,
-          timeseriesDataArray
-        )
+        const localForecast = config.csvRenderer(voiConfigs, timeseriesDataArray)
         res.status(200).send(localForecast)
       },
 
