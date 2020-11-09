@@ -559,9 +559,6 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
           voiConfigs,
           timeseriesDataArray
         )
-        // res.status(200).send(await gu.convertUnitsForCosmo(voiConfigs, timeseriesDataCollection))
-        // res.status(200).send(await timeseriesDataArray)
-        // res.status(200).send(Object.keys(timeseriesDataCollection)
         res.status(200).send(localForecast)
       },
 
