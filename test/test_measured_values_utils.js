@@ -8,8 +8,10 @@ const describe = require('mocha').describe
 const it = require('mocha').it
 const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
-const mvu = require('../lib/measured_values_utils')
 const _ = require('lodash')
+
+const mvu = require('../lib/measured_values_utils')
+const reqU = require('../lib/request_utils.js')
 
 describe('Validate correctness of utility functions for loading BEOB data', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
@@ -42,7 +44,7 @@ describe('Validate correctness of utility functions for loading BEOB data', asyn
           value: expected
         })
 
-        const actual = mvu.checkValidityOfQuantityIds(voisDataAccessConfigs)
+        const actual = reqU.checkValidityOfQuantityIds(voisDataAccessConfigs)
         addContext(this, {
           title: 'actual output',
           value: actual

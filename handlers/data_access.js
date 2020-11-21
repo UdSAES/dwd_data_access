@@ -12,6 +12,7 @@ const { convertUnit } = require('../lib/unit_conversion.js')
 const gf = require('../lib/grib_functions')
 const su = require('../lib/station_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
+const reqU = require('../lib/request_utils.js')
 const ru = require('../lib/response_utils.js')
 const fu = require('../lib/forecast_utils.js')
 const gu = require('../lib/general_utils.js')
@@ -399,7 +400,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
-    const checkedVois = gu.checkValidityOfQuantityIds(voiConfigs)
+    const checkedVois = reqU.checkValidityOfQuantityIds(voiConfigs)
     log.trace({ checkedVois })
 
     if (_.includes(checkedVois, false)) {
@@ -469,7 +470,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
   return async function (c, req, res, next) {
     const defaultModel = 'cosmo-d2'
     const defaultModelRun = '21'
-    const stationId = gu.getStationIdFromUrlPath(req.path)
+    const stationId = reqU.getStationIdFromUrlPath(req.path)
     // Get all query parameters
     const startTimestamp = parseInt(req.query.from)
       ? parseInt(req.query.from)
@@ -505,11 +506,11 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       )
       return
     }
-    const vois = gu.getVoisNamesFromQuery(req.query)
+    const vois = reqU.getVoisNamesFromQuery(req.query)
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
-    const checkedVois = gu.checkValidityOfQuantityIds(voiConfigs)
+    const checkedVois = reqU.checkValidityOfQuantityIds(voiConfigs)
     log.trace({ checkedVois })
 
     if (_.includes(checkedVois, false)) {
