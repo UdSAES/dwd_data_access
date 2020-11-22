@@ -209,114 +209,6 @@ function getSingleWeatherStation (stationCatalog) {
   }
 }
 
-// GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
-function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  return async function (req, res, next) {
-    const referenceTimestamp = parseInt(req.params.referenceTimestamp)
-    const voi = req.params.voi
-    const lat = parseFloat(req.query.lat)
-    const lon = parseFloat(req.query.lon)
-    const cosmoD2AvailableFrom = moment.utc('2018051509', 'YYYYMMDDHH')
-
-    let gribBaseDirectory = null
-    if (moment.utc(referenceTimestamp).isBefore(cosmoD2AvailableFrom)) {
-      gribBaseDirectory = path.join(
-        WEATHER_DATA_BASE_PATH,
-        'weather',
-        'cosmo',
-        'de',
-        'grib'
-      )
-    } else {
-      gribBaseDirectory = path.join(
-        WEATHER_DATA_BASE_PATH,
-        'weather',
-        'cosmo-d2',
-        'grib'
-      )
-    }
-
-    try {
-      const voiConfig = _.find(voisConfigs, (item) => {
-        return item.target.key === voi
-      })
-
-      let timeseriesData
-      if (voiConfig.cosmo.functionType === 'loadBaseValue') {
-        timeseriesData = await gf.loadBaseValue({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi: voiConfig.cosmo.options.key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit: voiConfig.cosmo.options.unit,
-          targetUnit: voiConfig.target.unit
-        })
-      } else if (voiConfig.cosmo.functionType === 'loadRadiationValue') {
-        timeseriesData = await gf.loadRadiationValue({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi: voiConfig.cosmo.options.key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit: voiConfig.cosmo.options.unit,
-          targetUnit: voiConfig.target.unit
-        })
-      } else if (voiConfig.cosmo.functionType === 'load2DVectorNorm') {
-        timeseriesData = await gf.load2DVectorNorm({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi1: voiConfig.cosmo.options.voi1_key,
-          voi2: voiConfig.cosmo.options.voi2_key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit1: voiConfig.cosmo.options.voi1_unit,
-          sourceUnit2: voiConfig.cosmo.options.voi2_unit,
-          targetUnit: voiConfig.target.unit
-        })
-      } else if (voiConfig.cosmo.functionType === 'load2DVectorAngle') {
-        timeseriesData = await gf.load2DVectorAngle({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi1: voiConfig.cosmo.options.voi1_key,
-          voi2: voiConfig.cosmo.options.voi2_key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit1: voiConfig.cosmo.options.voi1_unit,
-          sourceUnit2: voiConfig.cosmo.options.voi2_unit,
-          targetUnit: voiConfig.target.unit
-        })
-      }
-
-      const result = {
-        label: voiConfig.target.key,
-        unit: voiConfig.target.unit,
-        data: timeseriesData.timeseriesData,
-        location: timeseriesData.location
-      }
-      res.status(200).send(result)
-      req.log.info(
-        { res: res },
-        `successfully handled ${req.method}-request on ${req.path}`
-      )
-    } catch (error) {
-      res.status(500).send()
-      req.log.warn(
-        { err: error, res: res },
-        `error while handling ${req.method}-request on ${req.path}`
-      )
-    }
-  }
-}
-
 // GET /weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi
 function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
   const MOSMIX_DATA_BASE_PATH = path.join(
@@ -581,7 +473,6 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
 
 exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
-exports.getWeatherCosmoD2 = getWeatherCosmoD2
 exports.getWeatherMosmix = getWeatherMosmix
 exports.getMeasuredValues = getMeasuredValues
 exports.getForecastAtStation = getForecastAtStation
