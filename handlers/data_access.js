@@ -16,6 +16,7 @@ const reqU = require('../lib/request_utils.js')
 const ru = require('../lib/response_utils.js')
 const fu = require('../lib/forecast_utils.js')
 const gu = require('../lib/general_utils.js')
+const tsCsv = require('../lib/timeseries_as_csv')
 
 // Instantiate logger
 const log = require('../lib/logger.js')
@@ -338,7 +339,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       },
 
       'text/csv': function () {
-        const measuredValues = mvu.renderMeasuredValuesAsCSV(
+        const measuredValues = tsCsv.renderTimeseriesAsCSV(
           voiConfigs,
           timeseriesDataArray
         )
