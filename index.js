@@ -16,7 +16,7 @@ const { OpenAPIBackend } = require('openapi-backend')
 const fs = require('fs-extra')
 // const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
-const sc = require('./lib/weather_stations')
+const si = require('./lib/stations_import')
 var jwt = require('express-jwt')
 const addRequestId = require('express-request-id')()
 const ru = require('./lib/response_utils.js')
@@ -281,7 +281,7 @@ async function init () {
   app.use((req, res, next) => backend.handleRequest(req, req, res, next))
 
   // Load configuration
-  const stationCatalog = await sc.getAllStations('./config/')
+  const stationCatalog = await si.getAllStations('./config/')
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
   })

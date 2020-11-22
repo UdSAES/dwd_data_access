@@ -11,7 +11,7 @@ const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
 
 const su = require('../lib/station_utils')
-const sc = require('../lib/weather_stations')
+const si = require('../lib/stations_import')
 
 describe('Test correct parsing of station catalogue(s)', function () {
   const dwdStationsBeobHaAsCSV = './test/data/dwd2017_stations_beob_ha.csv'
@@ -29,7 +29,7 @@ describe('Test correct parsing of station catalogue(s)', function () {
       })
 
       // Parse test file (shortened to a few lines)
-      const actual = await sc.readStationsBeobHa(dwdStationsBeobHaAsCSV)
+      const actual = await si.readStationsBeobHa(dwdStationsBeobHaAsCSV)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -52,7 +52,7 @@ describe('Test correct parsing of station catalogue(s)', function () {
       })
 
       // Parse test file (shortened to a few lines)
-      const actual = await sc.readStationsBeobNa(dwdStationsBeobNaAsCSV)
+      const actual = await si.readStationsBeobNa(dwdStationsBeobNaAsCSV)
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -75,7 +75,7 @@ describe('Test correct parsing of station catalogue(s)', function () {
       })
 
       // Read stations from files
-      const actual = await sc.getAllStations('./test/data')
+      const actual = await si.getAllStations('./test/data')
       addContext(this, {
         title: 'actual output',
         value: actual
@@ -90,8 +90,8 @@ describe('Test correct parsing of station catalogue(s)', function () {
 describe('Test correct filtering of station list', function () {
   let stations = null
   before(async function () {
-    // stations = await sc.getAllStations('./test/data') // from raw data
     stations = await fs.readJson('./test/data/station_utils/test_stations.json')
+    // stations = await si.getAllStations('./test/data') // from raw data
   })
 
   describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
