@@ -10,7 +10,7 @@ const it = require('mocha').it
 const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
 
-const su = require('../lib/station_utils')
+const su = require('../lib/stations_utils')
 const si = require('../lib/stations_import')
 
 describe('Test correct parsing of station catalogue(s)', function () {
@@ -90,14 +90,14 @@ describe('Test correct parsing of station catalogue(s)', function () {
 describe('Test correct filtering of station list', function () {
   let stations = null
   before(async function () {
-    stations = await fs.readJson('./test/data/station_utils/test_stations.json')
     // stations = await si.getAllStations('./test/data') // from raw data
+    stations = await fs.readJson('./test/data/stations_utils/test_stations.json')
   })
 
   describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_sorted_by_name.json'
+        './test/data/stations_utils/test_stations_sorted_by_name.json'
       )
 
       addContext(this, {
@@ -124,7 +124,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return five stations from stations sorted by name if coordinates and radius are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json'
+        './test/data/stations_utils/test_stations_sorted_by_name_limited_to_five.json'
       )
 
       addContext(this, {
@@ -151,7 +151,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by name if coordinates and limit are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_sorted_by_name.json'
+        './test/data/stations_utils/test_stations_sorted_by_name.json'
       )
 
       addContext(this, {
@@ -178,7 +178,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return five stations from stations sorted by name if coordinates are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_sorted_by_name_limited_to_five.json'
+        './test/data/stations_utils/test_stations_sorted_by_name_limited_to_five.json'
       )
 
       addContext(this, {
@@ -200,7 +200,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when only coordinates specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_sorted_by_distance.json'
+        './test/data/stations_utils/test_stations_sorted_by_distance.json'
       )
 
       addContext(this, {
@@ -227,7 +227,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when coordinates and limit specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_sorted_by_distance_limited_to_five.json'
+        './test/data/stations_utils/test_stations_sorted_by_distance_limited_to_five.json'
       )
 
       addContext(this, {
@@ -255,7 +255,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when coordinates and radius specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_in_1000km_radius.json'
+        './test/data/stations_utils/test_stations_in_1000km_radius.json'
       )
 
       addContext(this, {
@@ -282,7 +282,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when coordinates, radius and limit are specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/station_utils/test_stations_in_1000km_limited_to_five.json'
+        './test/data/stations_utils/test_stations_in_1000km_limited_to_five.json'
       )
 
       addContext(this, {
