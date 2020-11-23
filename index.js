@@ -181,6 +181,8 @@ app.use((req, res, next) => {
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
   }
+
+  // Log all incoming requests
   req.log.info(
     { req: req },
     `received ${req.method}-request on ${req.originalUrl} from user ${sub}`
@@ -270,12 +272,6 @@ async function init () {
       res.redirect(UI_URL_PATH)
     })
   }
-
-  // Log all incoming requests
-  app.use((req, res, next) => {
-    log.info(`received ${req.method}-request on ${req.originalUrl}`)
-    next()
-  })
 
   // Pass requests to middleware
   app.use((req, res, next) => backend.handleRequest(req, req, res, next))
