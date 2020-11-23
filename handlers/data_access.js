@@ -323,7 +323,8 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
 
     const timeseriesDataArray = gu.convertUnits(
       voiConfigs,
-      timeseriesDataArrayUnformatted
+      [timeseriesDataArrayUnformatted],
+      'report'
     )
     log.trace({ timeseriesDataArray })
 
