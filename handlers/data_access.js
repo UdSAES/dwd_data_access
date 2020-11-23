@@ -17,6 +17,7 @@ const ru = require('../lib/response_utils.js')
 const fu = require('../lib/forecast_utils.js')
 const gu = require('../lib/general_utils.js')
 const tsCsv = require('../lib/timeseries_as_csv')
+const tsJson = require('../lib/timeseries_as_json')
 
 // Instantiate logger
 const log = require('../lib/logger.js')
@@ -329,11 +330,15 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     log.debug('rendering and sending response now')
     res.format({
       'application/json': function () {
-        const measuredValues = mvu.renderMeasuredValuesAsJSON(
+        const measuredValues = tsJson.renderTimeseriesAsJSON(
           voiConfigs,
           timeseriesDataArray,
           vois,
-          stationId
+          stationId,
+          'beob',
+          null,
+          startTimestamp,
+          endTimestamp
         )
         res.status(200).send(measuredValues)
       },
@@ -444,14 +449,14 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     res.format({
       'application/json': async function () {
         const localForecast = await config.jsonRenderer(
+          voiConfigs,
+          timeseriesDataArray,
           vois,
           stationId,
-          modelRun,
           model,
+          modelRun,
           startTimestamp,
-          endTimestamp,
-          voiConfigs,
-          timeseriesDataArray
+          endTimestamp
         )
         res.status(200).send(localForecast)
       },
