@@ -29,7 +29,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     timeout: 2000 // https://www.npmjs.com/package/got#timeout
   })
 
-  // Define test configurations -- only 2xx, got throws otherwise
+  // Define test configurations -- only 2xx, `got` throws otherwise
   const tests = [
     {
       stationId: '10704',
