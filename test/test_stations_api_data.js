@@ -32,6 +32,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
   const tests = [
     {
       stationId: '10704',
+      resource: 'measured-values',
       quantities: null,
       from: null,
       to: null,
@@ -43,7 +44,8 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     },
     {
       stationId: '10708',
-      quantities: 'pmsl,relhum_2m',
+      resource: 'measured-values',
+      quantities: 'pmsl,relhum_2m,ws_10m',
       from: BEOB_FROM,
       to: BEOB_TO,
       type: 'application/json',
@@ -54,7 +56,36 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     },
     {
       stationId: '10505',
+      resource: 'measured-values',
       quantities: 'aswdir_s,aswdifd_s',
+      from: BEOB_FROM,
+      to: BEOB_TO,
+      type: 'text/csv',
+      expected: {
+        statusCode: 200,
+        type: 'text/csv'
+      }
+    },
+    {
+      stationId: '10675',
+      resource: 'forecast',
+      model: 'cosmo-d2',
+      modelRun: '03',
+      quantities: 'aswdir_s,aswdifd_s',
+      from: BEOB_FROM,
+      to: BEOB_TO,
+      type: 'application/json',
+      expected: {
+        statusCode: 200,
+        type: 'application/json'
+      }
+    },
+    {
+      stationId: '10686',
+      resource: 'forecast',
+      model: 'mosmix',
+      modelRun: '15',
+      quantities: 't_2m',
       from: BEOB_FROM,
       to: BEOB_TO,
       type: 'text/csv',
@@ -67,8 +98,16 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
 
   // Execute properly named tests
   tests.forEach(function (test) {
-    let testTitle = `GET /weather-stations/${test.stationId}/measured-values`
+    let testTitle = `GET /weather-stations/${test.stationId}/${test.resource}`
     let concatSymbol = '?'
+    if (!_.isNil(test.model)) {
+      testTitle += `${concatSymbol}model=${test.model}`
+      concatSymbol = '&'
+    }
+    if (!_.isNil(test.modelRun)) {
+      testTitle += `${concatSymbol}model-run=${test.modelRun}`
+      concatSymbol = '&'
+    }
     if (!_.isNil(test.quantities)) {
       testTitle += `${concatSymbol}quantities=${test.quantities}`
       concatSymbol = '&'
@@ -90,8 +129,14 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
         headers: {
           Accept: test.type
         },
-        url: `weather-stations/${test.stationId}/measured-values`,
+        url: `weather-stations/${test.stationId}/${test.resource}`,
         searchParams: {}
+      }
+      if (!_.isNil(test.model)) {
+        options.searchParams.model = test.model
+      }
+      if (!_.isNil(test.modelRun)) {
+        options.searchParams['model-run'] = test.modelRun
       }
       if (!_.isNil(test.quantities)) {
         options.searchParams.quantities = test.quantities
