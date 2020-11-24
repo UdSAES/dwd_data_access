@@ -205,21 +205,15 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   )
 
   return async function (c, req, res, next) {
-    const defaultParameter = ['t_2m']
     const startTimestamp = parseInt(req.query.from)
       ? parseInt(req.query.from)
       : parseInt(defaultStartTimestamp)
     const endTimestamp = parseInt(req.query.to)
       ? parseInt(req.query.from)
       : parseInt(defaultEndTimestamp)
-    const voi = req.query.quantities
-    let vois = defaultParameter
-    if (voi) {
-      vois = voi.split(',')
-    }
 
-    const splitUrl = req.path.split('/')
-    const stationId = splitUrl[2]
+    const vois = reqU.getVoisNamesFromQuery(req.query)
+    const stationId = reqU.getStationIdFromUrlPath(req.path)
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
