@@ -45,7 +45,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     {
       stationId: '10708',
       resource: 'measured-values',
-      quantities: 'pmsl,relhum_2m,ws_10m',
+      quantities: 'clct,relhum_2m,ws_10m',
       from: BEOB_FROM,
       to: BEOB_TO,
       type: 'application/json',
@@ -57,7 +57,7 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     {
       stationId: '10505',
       resource: 'measured-values',
-      quantities: 'aswdir_s,aswdifd_s',
+      quantities: 'asob_s,aswdifd_s',
       from: BEOB_FROM,
       to: BEOB_TO,
       type: 'text/csv',
@@ -84,8 +84,8 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       stationId: '10686',
       resource: 'forecast',
       model: 'mosmix',
-      modelRun: '15',
-      quantities: 't_2m',
+      modelRun: '09',
+      quantities: 'td_2m,pmsl',
       from: BEOB_FROM,
       to: BEOB_TO,
       type: 'text/csv',
