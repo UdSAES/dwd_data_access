@@ -98,30 +98,31 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
 
   // Execute properly named tests
   tests.forEach(function (test) {
-    let testTitle = `GET /weather-stations/${test.stationId}/${test.resource}`
+    const verb = 'GET'
+    let path = `/weather-stations/${test.stationId}/${test.resource}`
     let concatSymbol = '?'
     if (!_.isNil(test.model)) {
-      testTitle += `${concatSymbol}model=${test.model}`
+      path += `${concatSymbol}model=${test.model}`
       concatSymbol = '&'
     }
     if (!_.isNil(test.modelRun)) {
-      testTitle += `${concatSymbol}model-run=${test.modelRun}`
+      path += `${concatSymbol}model-run=${test.modelRun}`
       concatSymbol = '&'
     }
     if (!_.isNil(test.quantities)) {
-      testTitle += `${concatSymbol}quantities=${test.quantities}`
+      path += `${concatSymbol}quantities=${test.quantities}`
       concatSymbol = '&'
     }
     if (!_.isNil(test.from)) {
-      testTitle += `${concatSymbol}from=${test.from}`
+      path += `${concatSymbol}from=${test.from}`
       concatSymbol = '&'
     }
     if (!_.isNil(test.to)) {
-      testTitle += `${concatSymbol}to=${test.to}`
+      path += `${concatSymbol}to=${test.to}`
       concatSymbol = '&'
     }
 
-    testTitle += ` as \`${test.type}\``
+    const testTitle = `${verb} ${path} as \`${test.type}\``
 
     describe(testTitle, function () {
       const options = {
@@ -165,6 +166,10 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       })
 
       it(`should return \`${test.expected.statusCode}\` with content-type \`${test.expected.type}\``, function () {
+        addContext(this, {
+          title: 'hyperlink',
+          value: `${instanceURL.origin}${path}`
+        })
         addContext(this, {
           title: 'test configuration',
           value: test
