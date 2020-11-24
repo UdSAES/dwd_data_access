@@ -149,7 +149,7 @@ function getSingleWeatherStation (stationCatalog) {
       undefined,
       undefined
     )
-    const stationId = urlString.split('/')[2]
+    const stationId = reqU.getStationIdFromUrlPath(urlString)
     const station = getStationById(stations, stationId)[0]
 
     function getStationById (stations, stationId) {
