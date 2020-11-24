@@ -216,9 +216,9 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     const stationId = reqU.getStationIdFromUrlPath(req.path)
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
-    log.trace({ voiConfigs })
+    log.trace({ voiConfigs }, 'see internal object `{ voiConfigs }`')
     const checkedVois = reqU.checkValidityOfQuantityIds(voiConfigs)
-    log.trace({ checkedVois })
+    log.trace({ checkedVois }, 'see internal object `{ checkedVois }`')
 
     if (_.includes(checkedVois, false)) {
       ru.sendProblemDetail(res, {
@@ -226,7 +226,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         status: 400,
         detail: 'Received request for unconfigured VOI'
       })
-      req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
+      req.log.warn({ res: res }, 'Received request for unconfigured VOI')
       return
     }
 
@@ -237,19 +237,25 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       endTimestamp,
       stationId
     )
-    log.trace({ timeseriesDataCollection })
+    log.trace(
+      { timeseriesDataCollection },
+      'see internal object `{ timeseriesDataCollection }`'
+    )
 
     const timeseriesDataArrayUnformatted = mvu.dropNaN(
       mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection)
     )
-    log.trace({ timeseriesDataArrayUnformatted })
+    log.trace(
+      { timeseriesDataArrayUnformatted },
+      'see internal object `{ timeseriesDataArrayUnformatted }`'
+    )
 
     const timeseriesDataArray = gu.convertUnits(
       voiConfigs,
       [timeseriesDataArrayUnformatted],
       'report'
     )
-    log.trace({ timeseriesDataArray })
+    log.trace({ timeseriesDataArray }, 'see internal object `{ timeseriesDataArray }`')
 
     log.debug('rendering and sending response now')
     res.format({
