@@ -8,27 +8,16 @@ const describe = require('mocha').describe
 const it = require('mocha').it
 const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
-const _ = require('lodash')
 
 const mvu = require('../lib/measured_values_utils')
+const gu = require('../lib/general_utils')
 const reqU = require('../lib/request_utils.js')
 
 describe('Validate correctness of utility functions for loading BEOB data', async function () {
   const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
-  const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
+  const voiConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
   })
-
-  function getVoiConfigsAsArray (vois) {
-    const voiConfigs = []
-    _.forEach(vois, function (voi) {
-      const voiConfig = _.find(voisDataAccessConfigs, (item) => {
-        return item.target.key === voi
-      })
-      voiConfigs.push(voiConfig)
-    })
-    return voiConfigs
-  }
 
   describe('Identify unconfigured VOIs', async function () {
     const testCases = [
@@ -37,7 +26,7 @@ describe('Validate correctness of utility functions for loading BEOB data', asyn
     ]
     testCases.forEach(function (test) {
       it('should return the expected output', async function () {
-        const voisDataAccessConfigs = getVoiConfigsAsArray(test.input)
+        const voisDataAccessConfigs = gu.getVoiConfigsAsArray(test.input, voiConfigs)
         const expected = test.expected
         addContext(this, {
           title: 'expected output',
