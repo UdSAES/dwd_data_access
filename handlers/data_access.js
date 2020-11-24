@@ -134,13 +134,7 @@ function getWeatherStations (stationCatalog) {
         res.status(200).send(renderStationListAsCSV(stations))
       },
 
-      default: function () {
-        ru.sendProblemDetail(res, {
-          title: 'Not acceptable',
-          status: 406,
-          detail: 'The requested (hyper-) media type is not supported for this resource'
-        })
-      }
+      default: ru.respondWithNotAcceptable
     })
   }
 }
@@ -194,14 +188,7 @@ function getSingleWeatherStation (stationCatalog) {
           res.status(200).send(renderStationAsJSON(station))
         },
 
-        default: function () {
-          ru.sendProblemDetail(res, {
-            title: 'Not acceptable',
-            status: 406,
-            detail:
-              'The requested (hyper-) media type is not supported for this resource'
-          })
-        }
+        default: ru.respondWithNotAcceptable
       })
     } else {
       ru.respondWithNotFound(c, req, res, next)
@@ -294,13 +281,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         res.status(200).send(measuredValues)
       },
 
-      default: function () {
-        ru.sendProblemDetail(res, {
-          title: 'Not acceptable',
-          status: 406,
-          detail: 'The requested (hyper-) media type is not supported for this resource'
-        })
-      }
+      default: ru.respondWithNotAcceptable
     })
   }
 }
@@ -409,13 +390,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
         res.status(200).send(localForecast)
       },
 
-      default: function () {
-        ru.sendProblemDetail(res, {
-          title: 'Not acceptable',
-          status: 406,
-          detail: 'The requested (hyper-) media type is not supported for this resource'
-        })
-      }
+      default: ru.respondWithNotAcceptable
     })
   }
 }
