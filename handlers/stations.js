@@ -209,7 +209,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       ? parseInt(req.query.from)
       : parseInt(defaultStartTimestamp)
     const endTimestamp = parseInt(req.query.to)
-      ? parseInt(req.query.from)
+      ? parseInt(req.query.to)
       : parseInt(defaultEndTimestamp)
 
     const vois = reqU.getVoisNamesFromQuery(req.query)
