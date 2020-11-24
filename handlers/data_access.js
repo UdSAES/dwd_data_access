@@ -8,8 +8,6 @@ const path = require('path')
 const moment = require('moment')
 const csv = require('dwd-csv-helper')
 const _ = require('lodash')
-const { convertUnit } = require('../lib/unit_conversion.js')
-const gf = require('../lib/grib_functions')
 const su = require('../lib/stations_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
 const reqU = require('../lib/request_utils.js')
@@ -207,62 +205,6 @@ function getSingleWeatherStation (stationCatalog) {
       })
     } else {
       ru.respondWithNotFound(c, req, res, next)
-    }
-  }
-}
-
-// GET /weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi
-function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  const MOSMIX_DATA_BASE_PATH = path.join(
-    WEATHER_DATA_BASE_PATH,
-    'weather',
-    'local_forecasts'
-  )
-
-  return async function (req, res, next) {
-    const referenceTimestamp = parseInt(req.params.referenceTimestamp)
-    const sid = req.params.sid
-    const voi = req.params.voi
-
-    try {
-      const timeseriesDataCollection = await csv.readTimeseriesDataMosmix(
-        MOSMIX_DATA_BASE_PATH,
-        referenceTimestamp,
-        sid
-      )
-      const voiConfig = _.find(voisConfigs, (item) => {
-        return item.target.key === voi
-      })
-
-      let timeseriesData
-      if (!_.isNil(_.get(voiConfig, ['mosmix', 'key']))) {
-        timeseriesData = timeseriesDataCollection[voiConfig.mosmix.key]
-        timeseriesData = _.map(timeseriesData, (item) => {
-          return {
-            timestamp: item.timestamp,
-            value: convertUnit(item.value, voiConfig.mosmix.unit, voiConfig.target.unit)
-          }
-        })
-      } else {
-        res.status(500).send()
-      }
-
-      const result = {
-        label: voiConfig.target.key,
-        unit: voiConfig.target.unit,
-        data: timeseriesData
-      }
-      res.status(200).send(result)
-      req.log.info(
-        { res: res },
-        `successfully handled ${req.method}-request on ${req.path}`
-      )
-    } catch (error) {
-      res.status(500).send()
-      req.log.warn(
-        { err: error, res: res },
-        `error while handling ${req.method}-request on ${req.path}`
-      )
     }
   }
 }
@@ -480,6 +422,5 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
 
 exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
-exports.getWeatherMosmix = getWeatherMosmix
 exports.getMeasuredValues = getMeasuredValues
 exports.getForecastAtStation = getForecastAtStation
