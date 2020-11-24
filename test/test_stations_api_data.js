@@ -11,16 +11,15 @@ const describe = require('mocha').describe
 const it = require('mocha').it
 const processenv = require('processenv')
 const addContext = require('mochawesome/addContext')
-const chaiResponseValidator = require('chai-openapi-response-validator')
 
-const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI')
-const API_ORIGIN = processenv('API_ORIGIN') // requires absolute path!
-
+const API_ORIGIN = processenv('API_ORIGIN')
 const BEOB_FROM = parseInt(processenv('BEOB_FROM'))
 const BEOB_TO = parseInt(processenv('BEOB_TO'))
 
-// Load an OpenAPI file (YAML or JSON) into this plugin
-chai.use(chaiResponseValidator(PATH_TO_OPENAPI))
+// // Attempt to validate responses against OAS using a plugin for Chai
+// const chaiResponseValidator = require('chai-openapi-response-validator')
+// const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI') // requires absolute path!
+// chai.use(chaiResponseValidator(PATH_TO_OPENAPI))
 
 describe('Verify behaviour of API-instance against OAS and/or expectations', function () {
   const instanceURL = new url.URL(API_ORIGIN)
