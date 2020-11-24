@@ -139,7 +139,7 @@ function getWeatherStations (stationCatalog) {
   }
 }
 
-// GET /weather-stations/:stationId
+// GET /weather-stations/{stationId}
 function getSingleWeatherStation (stationCatalog) {
   return async function (c, req, res, next) {
     const urlString = req.originalUrl
