@@ -20,16 +20,6 @@ const tsJson = require('../lib/timeseries_as_json')
 // Instantiate logger
 const log = require('../lib/logger.js')
 
-const now = moment()
-const defaultStartTimestamp = now
-  .startOf('day')
-  .tz('Europe/Berlin')
-  .format('x')
-const defaultEndTimestamp = now
-  .endOf('day')
-  .tz('Europe/Berlin')
-  .format('x')
-
 // GET /weather-stations
 function getWeatherStations (stationCatalog) {
   return async function (c, req, res, next) {
@@ -204,6 +194,16 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     'weather_reports'
   )
 
+  const now = moment()
+  const defaultStartTimestamp = now
+    .startOf('day')
+    .tz('Europe/Berlin')
+    .format('x')
+  const defaultEndTimestamp = now
+    .endOf('day')
+    .tz('Europe/Berlin')
+    .format('x')
+
   return async function (c, req, res, next) {
     const startTimestamp = parseInt(req.query.from)
       ? parseInt(req.query.from)
@@ -230,7 +230,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       return
     }
 
-    log.debug('reading BEOB data from disk...')
+    log.debug('reading timeseries data from disk...')
     const timeseriesDataCollection = await csv.readTimeseriesDataReport(
       REPORT_DATA_BASE_PATH,
       startTimestamp,
@@ -293,7 +293,17 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     const defaultModel = 'cosmo-d2'
     const defaultModelRun = '21'
     const stationId = reqU.getStationIdFromUrlPath(req.path)
-    // Get all query parameters
+    
+    const now = moment()
+    const defaultStartTimestamp = now
+      .startOf('day')
+      .tz('Europe/Berlin')
+      .format('x')
+    const defaultEndTimestamp = now
+      .endOf('day')
+      .tz('Europe/Berlin')
+      .format('x')
+
     const startTimestamp = parseInt(req.query.from)
       ? parseInt(req.query.from)
       : parseInt(defaultStartTimestamp)
@@ -316,7 +326,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       MOSMIX_DATA_BASE_PATH
     )
 
-    if (!fu.checkIfValidModelRun(config.allowedModelRuns, modelRun)) {
+    if (!fu.isValidModelRun(config.allowedModelRuns, modelRun)) {
       ru.sendProblemDetail(res, {
         title: 'Schema validation Failed',
         status: 400,
@@ -324,12 +334,12 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       })
       req.log.warn(
         { res: res },
-        'received request for REPORT for unconfigured MODEL-RUN'
+        `User supplied value for parameter "model-run" does not match available choices for model ${modelRun}`
       )
       return
     }
-    const vois = reqU.getVoisNamesFromQuery(req.query)
 
+    const vois = reqU.getVoisNamesFromQuery(req.query)
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
     const checkedVois = reqU.checkValidityOfQuantityIds(voiConfigs)
@@ -355,12 +365,8 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       modelRun,
       stationCatalog
     )
-    log.trace({ timeseriesDataCollection })
 
-    // const timeseriesDataArrayUnformatted = mvu.dropNaN(
-    //   mvu.dropTimeseriesDataNotOfInteresWithParameter(voiConfigs, timeseriesDataCollection, "mosmix")
-    // )
-    // log.trace({ timeseriesDataArrayUnformatted })
+    log.trace({ timeseriesDataCollection })
 
     const timeseriesDataArray = await config.unitsConverter(
       voiConfigs,
@@ -372,7 +378,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     log.debug('rendering and sending response now')
     res.format({
       'application/json': async function () {
-        const localForecast = await config.jsonRenderer(
+        const forecastRepresentation = await config.jsonRenderer(
           voiConfigs,
           timeseriesDataArray,
           vois,
@@ -382,12 +388,12 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
           startTimestamp,
           endTimestamp
         )
-        res.status(200).send(localForecast)
+        res.status(200).send(forecastRepresentation)
       },
 
       'text/csv': function () {
-        const localForecast = config.csvRenderer(voiConfigs, timeseriesDataArray)
-        res.status(200).send(localForecast)
+        const forecastRepresentation = config.csvRenderer(voiConfigs, timeseriesDataArray)
+        res.status(200).send(forecastRepresentation)
       },
 
       default: ru.respondWithNotAcceptable
