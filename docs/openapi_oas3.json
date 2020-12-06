@@ -248,7 +248,7 @@
       "QuantitiesOfInterest": {
         "type": "string",
         "description": "A comma-separated list of quantity identifiers",
-        "pattern": "^([a-z_1-9]+,?)+$",
+        "pattern": "^([a-z_0-9]+,?)+$",
         "default": "t_2m"
       },
       "Timestamp": {

@@ -7,7 +7,7 @@ const express = require('express')
 const _ = require('lodash')
 const processenv = require('processenv')
 // const hfc = require('./handlers/forecast')
-const hda = require('./handlers/data_access')
+const sh = require('./handlers/stations')
 // const hm = require('./handlers/measurements')
 // const hpoi = require('./handlers/poi')
 // const poifce = require('./lib/poi_forecast_engine')
@@ -16,7 +16,7 @@ const { OpenAPIBackend } = require('openapi-backend')
 const fs = require('fs-extra')
 // const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
-const sc = require('./lib/weather_stations')
+const si = require('./lib/stations_import')
 var jwt = require('express-jwt')
 const addRequestId = require('express-request-id')()
 const ru = require('./lib/response_utils.js')
@@ -181,6 +181,8 @@ app.use((req, res, next) => {
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
   }
+
+  // Log all incoming requests
   req.log.info(
     { req: req },
     `received ${req.method}-request on ${req.originalUrl} from user ${sub}`
@@ -271,31 +273,25 @@ async function init () {
     })
   }
 
-  // Log all incoming requests
-  app.use((req, res, next) => {
-    log.info(`received ${req.method}-request on ${req.originalUrl}`)
-    next()
-  })
-
   // Pass requests to middleware
   app.use((req, res, next) => backend.handleRequest(req, req, res, next))
 
   // Load configuration
-  const stationCatalog = await sc.getAllStations('./config/')
+  const stationCatalog = await si.getAllStations('./config/')
   const voisDataAccessConfigs = await fs.readJson(VOIS_DATA_ACCESS_CONFIGS_PATH, {
     encoding: 'utf8'
   })
 
   // Define routing
-  backend.register('getFilteredListOfStations', hda.getWeatherStations(stationCatalog))
-  backend.register('getStation', hda.getSingleWeatherStation(stationCatalog))
+  backend.register('getFilteredListOfStations', sh.getWeatherStations(stationCatalog))
+  backend.register('getStation', sh.getSingleWeatherStation(stationCatalog))
   backend.register(
     'getMeasuredValues',
-    hda.getMeasuredValues(DATA_ROOT_PATH, voisDataAccessConfigs)
+    sh.getMeasuredValues(DATA_ROOT_PATH, voisDataAccessConfigs)
   )
   backend.register(
     'getForecastAtStation',
-    hda.getForecastAtStation(DATA_ROOT_PATH, voisDataAccessConfigs, stationCatalog)
+    sh.getForecastAtStation(DATA_ROOT_PATH, voisDataAccessConfigs, stationCatalog)
   )
 
   // Handle unsuccessful requests

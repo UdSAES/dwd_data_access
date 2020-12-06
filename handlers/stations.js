@@ -8,13 +8,14 @@ const path = require('path')
 const moment = require('moment')
 const csv = require('dwd-csv-helper')
 const _ = require('lodash')
-const { convertUnit } = require('../lib/unit_conversion.js')
-const gf = require('../lib/grib_functions')
-const su = require('../lib/station_utils.js')
+const su = require('../lib/stations_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
+const reqU = require('../lib/request_utils.js')
 const ru = require('../lib/response_utils.js')
 const fu = require('../lib/forecast_utils.js')
 const gu = require('../lib/general_utils.js')
+const tsCsv = require('../lib/timeseries_as_csv')
+const tsJson = require('../lib/timeseries_as_json')
 
 // Instantiate logger
 const log = require('../lib/logger.js')
@@ -133,18 +134,12 @@ function getWeatherStations (stationCatalog) {
         res.status(200).send(renderStationListAsCSV(stations))
       },
 
-      default: function () {
-        ru.sendProblemDetail(res, {
-          title: 'Not acceptable',
-          status: 406,
-          detail: 'The requested (hyper-) media type is not supported for this resource'
-        })
-      }
+      default: ru.respondWithNotAcceptable
     })
   }
 }
 
-// GET /weather-stations/:stationId
+// GET /weather-stations/{stationId}
 function getSingleWeatherStation (stationCatalog) {
   return async function (c, req, res, next) {
     const urlString = req.originalUrl
@@ -154,7 +149,7 @@ function getSingleWeatherStation (stationCatalog) {
       undefined,
       undefined
     )
-    const stationId = urlString.split('/')[2]
+    const stationId = reqU.getStationIdFromUrlPath(urlString)
     const station = getStationById(stations, stationId)[0]
 
     function getStationById (stations, stationId) {
@@ -193,181 +188,10 @@ function getSingleWeatherStation (stationCatalog) {
           res.status(200).send(renderStationAsJSON(station))
         },
 
-        default: function () {
-          ru.sendProblemDetail(res, {
-            title: 'Not acceptable',
-            status: 406,
-            detail:
-              'The requested (hyper-) media type is not supported for this resource'
-          })
-        }
+        default: ru.respondWithNotAcceptable
       })
     } else {
       ru.respondWithNotFound(c, req, res, next)
-    }
-  }
-}
-
-// GET /weather/cosmo/d2/:referenceTimestamp/:voi?lat=...&lon=...
-function getWeatherCosmoD2 (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  return async function (req, res, next) {
-    const referenceTimestamp = parseInt(req.params.referenceTimestamp)
-    const voi = req.params.voi
-    const lat = parseFloat(req.query.lat)
-    const lon = parseFloat(req.query.lon)
-    const cosmoD2AvailableFrom = moment.utc('2018051509', 'YYYYMMDDHH')
-
-    let gribBaseDirectory = null
-    if (moment.utc(referenceTimestamp).isBefore(cosmoD2AvailableFrom)) {
-      gribBaseDirectory = path.join(
-        WEATHER_DATA_BASE_PATH,
-        'weather',
-        'cosmo',
-        'de',
-        'grib'
-      )
-    } else {
-      gribBaseDirectory = path.join(
-        WEATHER_DATA_BASE_PATH,
-        'weather',
-        'cosmo-d2',
-        'grib'
-      )
-    }
-
-    try {
-      const voiConfig = _.find(voisConfigs, (item) => {
-        return item.target.key === voi
-      })
-
-      let timeseriesData
-      if (voiConfig.cosmo.functionType === 'loadBaseValue') {
-        timeseriesData = await gf.loadBaseValue({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi: voiConfig.cosmo.options.key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit: voiConfig.cosmo.options.unit,
-          targetUnit: voiConfig.target.unit
-        })
-      } else if (voiConfig.cosmo.functionType === 'loadRadiationValue') {
-        timeseriesData = await gf.loadRadiationValue({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi: voiConfig.cosmo.options.key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit: voiConfig.cosmo.options.unit,
-          targetUnit: voiConfig.target.unit
-        })
-      } else if (voiConfig.cosmo.functionType === 'load2DVectorNorm') {
-        timeseriesData = await gf.load2DVectorNorm({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi1: voiConfig.cosmo.options.voi1_key,
-          voi2: voiConfig.cosmo.options.voi2_key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit1: voiConfig.cosmo.options.voi1_unit,
-          sourceUnit2: voiConfig.cosmo.options.voi2_unit,
-          targetUnit: voiConfig.target.unit
-        })
-      } else if (voiConfig.cosmo.functionType === 'load2DVectorAngle') {
-        timeseriesData = await gf.load2DVectorAngle({
-          gribBaseDirectory,
-          referenceTimestamp,
-          voi1: voiConfig.cosmo.options.voi1_key,
-          voi2: voiConfig.cosmo.options.voi2_key,
-          location: {
-            lat,
-            lon
-          },
-          sourceUnit1: voiConfig.cosmo.options.voi1_unit,
-          sourceUnit2: voiConfig.cosmo.options.voi2_unit,
-          targetUnit: voiConfig.target.unit
-        })
-      }
-
-      const result = {
-        label: voiConfig.target.key,
-        unit: voiConfig.target.unit,
-        data: timeseriesData.timeseriesData,
-        location: timeseriesData.location
-      }
-      res.status(200).send(result)
-      req.log.info(
-        { res: res },
-        `successfully handled ${req.method}-request on ${req.path}`
-      )
-    } catch (error) {
-      res.status(500).send()
-      req.log.warn(
-        { err: error, res: res },
-        `error while handling ${req.method}-request on ${req.path}`
-      )
-    }
-  }
-}
-
-// GET /weather/local_forecasts/poi/:referenceTimestamp/:sid/:voi
-function getWeatherMosmix (WEATHER_DATA_BASE_PATH, voisConfigs) {
-  const MOSMIX_DATA_BASE_PATH = path.join(
-    WEATHER_DATA_BASE_PATH,
-    'weather',
-    'local_forecasts'
-  )
-
-  return async function (req, res, next) {
-    const referenceTimestamp = parseInt(req.params.referenceTimestamp)
-    const sid = req.params.sid
-    const voi = req.params.voi
-
-    try {
-      const timeseriesDataCollection = await csv.readTimeseriesDataMosmix(
-        MOSMIX_DATA_BASE_PATH,
-        referenceTimestamp,
-        sid
-      )
-      const voiConfig = _.find(voisConfigs, (item) => {
-        return item.target.key === voi
-      })
-
-      let timeseriesData
-      if (!_.isNil(_.get(voiConfig, ['mosmix', 'key']))) {
-        timeseriesData = timeseriesDataCollection[voiConfig.mosmix.key]
-        timeseriesData = _.map(timeseriesData, (item) => {
-          return {
-            timestamp: item.timestamp,
-            value: convertUnit(item.value, voiConfig.mosmix.unit, voiConfig.target.unit)
-          }
-        })
-      } else {
-        res.status(500).send()
-      }
-
-      const result = {
-        label: voiConfig.target.key,
-        unit: voiConfig.target.unit,
-        data: timeseriesData
-      }
-      res.status(200).send(result)
-      req.log.info(
-        { res: res },
-        `successfully handled ${req.method}-request on ${req.path}`
-      )
-    } catch (error) {
-      res.status(500).send()
-      req.log.warn(
-        { err: error, res: res },
-        `error while handling ${req.method}-request on ${req.path}`
-      )
     }
   }
 }
@@ -381,26 +205,20 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
   )
 
   return async function (c, req, res, next) {
-    const defaultParameter = ['t_2m']
     const startTimestamp = parseInt(req.query.from)
       ? parseInt(req.query.from)
       : parseInt(defaultStartTimestamp)
     const endTimestamp = parseInt(req.query.to)
-      ? parseInt(req.query.from)
+      ? parseInt(req.query.to)
       : parseInt(defaultEndTimestamp)
-    const voi = req.query.quantities
-    let vois = defaultParameter
-    if (voi) {
-      vois = voi.split(',')
-    }
 
-    const splitUrl = req.path.split('/')
-    const stationId = splitUrl[2]
+    const vois = reqU.getVoisNamesFromQuery(req.query)
+    const stationId = reqU.getStationIdFromUrlPath(req.path)
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
-    log.trace({ voiConfigs })
-    const checkedVois = gu.checkValidityOfQuantityIds(voiConfigs)
-    log.trace({ checkedVois })
+    log.trace({ voiConfigs }, 'see internal object `{ voiConfigs }`')
+    const checkedVois = reqU.checkValidityOfQuantityIds(voiConfigs)
+    log.trace({ checkedVois }, 'see internal object `{ checkedVois }`')
 
     if (_.includes(checkedVois, false)) {
       ru.sendProblemDetail(res, {
@@ -408,7 +226,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
         status: 400,
         detail: 'Received request for unconfigured VOI'
       })
-      req.log.warn({ res: res }, 'received request for REPORT for unconfigured VOI')
+      req.log.warn({ res: res }, 'Received request for unconfigured VOI')
       return
     }
 
@@ -419,46 +237,51 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       endTimestamp,
       stationId
     )
-    log.trace({ timeseriesDataCollection })
+    log.trace(
+      { timeseriesDataCollection },
+      'see internal object `{ timeseriesDataCollection }`'
+    )
 
     const timeseriesDataArrayUnformatted = mvu.dropNaN(
       mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection)
     )
-    log.trace({ timeseriesDataArrayUnformatted })
+    log.trace(
+      { timeseriesDataArrayUnformatted },
+      'see internal object `{ timeseriesDataArrayUnformatted }`'
+    )
 
     const timeseriesDataArray = gu.convertUnits(
       voiConfigs,
-      timeseriesDataArrayUnformatted
+      [timeseriesDataArrayUnformatted],
+      'report'
     )
-    log.trace({ timeseriesDataArray })
+    log.trace({ timeseriesDataArray }, 'see internal object `{ timeseriesDataArray }`')
 
     log.debug('rendering and sending response now')
     res.format({
       'application/json': function () {
-        const measuredValues = mvu.renderMeasuredValuesAsJSON(
+        const measuredValues = tsJson.renderTimeseriesAsJSON(
           voiConfigs,
           timeseriesDataArray,
           vois,
-          stationId
+          stationId,
+          'beob',
+          null,
+          startTimestamp,
+          endTimestamp
         )
         res.status(200).send(measuredValues)
       },
 
       'text/csv': function () {
-        const measuredValues = mvu.renderMeasuredValuesAsCSV(
+        const measuredValues = tsCsv.renderTimeseriesAsCSV(
           voiConfigs,
           timeseriesDataArray
         )
         res.status(200).send(measuredValues)
       },
 
-      default: function () {
-        ru.sendProblemDetail(res, {
-          title: 'Not acceptable',
-          status: 406,
-          detail: 'The requested (hyper-) media type is not supported for this resource'
-        })
-      }
+      default: ru.respondWithNotAcceptable
     })
   }
 }
@@ -469,7 +292,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
   return async function (c, req, res, next) {
     const defaultModel = 'cosmo-d2'
     const defaultModelRun = '21'
-    const stationId = gu.getStationIdFromUrlPath(req.path)
+    const stationId = reqU.getStationIdFromUrlPath(req.path)
     // Get all query parameters
     const startTimestamp = parseInt(req.query.from)
       ? parseInt(req.query.from)
@@ -505,11 +328,11 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       )
       return
     }
-    const vois = gu.getVoisNamesFromQuery(req.query)
+    const vois = reqU.getVoisNamesFromQuery(req.query)
 
     const voiConfigs = gu.getVoiConfigsAsArray(vois, voisConfigs)
     log.trace({ voiConfigs })
-    const checkedVois = gu.checkValidityOfQuantityIds(voiConfigs)
+    const checkedVois = reqU.checkValidityOfQuantityIds(voiConfigs)
     log.trace({ checkedVois })
 
     if (_.includes(checkedVois, false)) {
@@ -550,14 +373,14 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     res.format({
       'application/json': async function () {
         const localForecast = await config.jsonRenderer(
+          voiConfigs,
+          timeseriesDataArray,
           vois,
           stationId,
-          modelRun,
           model,
+          modelRun,
           startTimestamp,
-          endTimestamp,
-          voiConfigs,
-          timeseriesDataArray
+          endTimestamp
         )
         res.status(200).send(localForecast)
       },
@@ -567,20 +390,12 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
         res.status(200).send(localForecast)
       },
 
-      default: function () {
-        ru.sendProblemDetail(res, {
-          title: 'Not acceptable',
-          status: 406,
-          detail: 'The requested (hyper-) media type is not supported for this resource'
-        })
-      }
+      default: ru.respondWithNotAcceptable
     })
   }
 }
 
 exports.getWeatherStations = getWeatherStations
 exports.getSingleWeatherStation = getSingleWeatherStation
-exports.getWeatherCosmoD2 = getWeatherCosmoD2
-exports.getWeatherMosmix = getWeatherMosmix
 exports.getMeasuredValues = getMeasuredValues
 exports.getForecastAtStation = getForecastAtStation

@@ -7,8 +7,8 @@
     "lint": "standard",
     "format": "prettier-standard --lint '**/*.{js,json}'",
     "api-serve": "speccy serve ./docs/openapi_oas3.json",
-    "test-unit": "mocha  --grep 'GET' --invert --reporter mochawesome --reporter-options reportDir=./local",
-    "test-api": "mocha  --grep 'GET' --reporter mochawesome --reporter-options reportDir=./local",
+    "test-unit": "mocha --reporter mochawesome --reporter-options reportDir=./local test/test_!\\(*_api_*.js\\)",
+    "test-api": "mocha --reporter mochawesome --reporter-options reportDir=./local test/test_*_api_*",
     "test-all": "npm run lint && npm run test-unit && test-api"
   },
   "repository": {
@@ -30,7 +30,6 @@
     "csvtojson": "^2.0.10",
     "delay": "^4.4.0",
     "dwd-csv-helper": "^0.2.4",
-    "dwd-grib-helper": "^0.3.2",
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "express-request-id": "^1.4.1",

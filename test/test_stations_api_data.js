@@ -11,16 +11,15 @@ const describe = require('mocha').describe
 const it = require('mocha').it
 const processenv = require('processenv')
 const addContext = require('mochawesome/addContext')
-const chaiResponseValidator = require('chai-openapi-response-validator')
 
-const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI')
-const API_ORIGIN = processenv('API_ORIGIN') // requires absolute path!
-
+const API_ORIGIN = processenv('API_ORIGIN')
 const BEOB_FROM = parseInt(processenv('BEOB_FROM'))
 const BEOB_TO = parseInt(processenv('BEOB_TO'))
 
-// Load an OpenAPI file (YAML or JSON) into this plugin
-chai.use(chaiResponseValidator(PATH_TO_OPENAPI))
+// // Attempt to validate responses against OAS using a plugin for Chai
+// const chaiResponseValidator = require('chai-openapi-response-validator')
+// const PATH_TO_OPENAPI = processenv('PATH_TO_OPENAPI') // requires absolute path!
+// chai.use(chaiResponseValidator(PATH_TO_OPENAPI))
 
 describe('Verify behaviour of API-instance against OAS and/or expectations', function () {
   const instanceURL = new url.URL(API_ORIGIN)
@@ -29,10 +28,11 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     timeout: 2000 // https://www.npmjs.com/package/got#timeout
   })
 
-  // Define test configurations -- only 2xx, got throws otherwise
+  // Define test configurations -- only 2xx, `got` throws otherwise
   const tests = [
     {
       stationId: '10704',
+      resource: 'measured-values',
       quantities: null,
       from: null,
       to: null,
@@ -44,7 +44,8 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     },
     {
       stationId: '10708',
-      quantities: 'pmsl,relhum_2m',
+      resource: 'measured-values',
+      quantities: 'clct,relhum_2m,ws_10m',
       from: BEOB_FROM,
       to: BEOB_TO,
       type: 'application/json',
@@ -55,7 +56,36 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
     },
     {
       stationId: '10505',
+      resource: 'measured-values',
+      quantities: 'asob_s,aswdifd_s',
+      from: BEOB_FROM,
+      to: BEOB_TO,
+      type: 'text/csv',
+      expected: {
+        statusCode: 200,
+        type: 'text/csv'
+      }
+    },
+    {
+      stationId: '10675',
+      resource: 'forecast',
+      model: 'cosmo-d2',
+      modelRun: '03',
       quantities: 'aswdir_s,aswdifd_s',
+      from: BEOB_FROM,
+      to: BEOB_TO,
+      type: 'application/json',
+      expected: {
+        statusCode: 200,
+        type: 'application/json'
+      }
+    },
+    {
+      stationId: '10686',
+      resource: 'forecast',
+      model: 'mosmix',
+      modelRun: '09',
+      quantities: 'td_2m,pmsl',
       from: BEOB_FROM,
       to: BEOB_TO,
       type: 'text/csv',
@@ -68,22 +98,31 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
 
   // Execute properly named tests
   tests.forEach(function (test) {
-    let testTitle = `GET /weather-stations/${test.stationId}/measured-values`
+    const verb = 'GET'
+    let path = `/weather-stations/${test.stationId}/${test.resource}`
     let concatSymbol = '?'
+    if (!_.isNil(test.model)) {
+      path += `${concatSymbol}model=${test.model}`
+      concatSymbol = '&'
+    }
+    if (!_.isNil(test.modelRun)) {
+      path += `${concatSymbol}model-run=${test.modelRun}`
+      concatSymbol = '&'
+    }
     if (!_.isNil(test.quantities)) {
-      testTitle += `${concatSymbol}quantities=${test.quantities}`
+      path += `${concatSymbol}quantities=${test.quantities}`
       concatSymbol = '&'
     }
     if (!_.isNil(test.from)) {
-      testTitle += `${concatSymbol}from=${test.from}`
+      path += `${concatSymbol}from=${test.from}`
       concatSymbol = '&'
     }
     if (!_.isNil(test.to)) {
-      testTitle += `${concatSymbol}to=${test.to}`
+      path += `${concatSymbol}to=${test.to}`
       concatSymbol = '&'
     }
 
-    testTitle += ` as \`${test.type}\``
+    const testTitle = `${verb} ${path} as \`${test.type}\``
 
     describe(testTitle, function () {
       const options = {
@@ -91,8 +130,14 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
         headers: {
           Accept: test.type
         },
-        url: `weather-stations/${test.stationId}/measured-values`,
+        url: `weather-stations/${test.stationId}/${test.resource}`,
         searchParams: {}
+      }
+      if (!_.isNil(test.model)) {
+        options.searchParams.model = test.model
+      }
+      if (!_.isNil(test.modelRun)) {
+        options.searchParams['model-run'] = test.modelRun
       }
       if (!_.isNil(test.quantities)) {
         options.searchParams.quantities = test.quantities
@@ -121,6 +166,10 @@ describe('Verify behaviour of API-instance against OAS and/or expectations', fun
       })
 
       it(`should return \`${test.expected.statusCode}\` with content-type \`${test.expected.type}\``, function () {
+        addContext(this, {
+          title: 'hyperlink',
+          value: `${instanceURL.origin}${path}`
+        })
         addContext(this, {
           title: 'test configuration',
           value: test
