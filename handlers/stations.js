@@ -376,6 +376,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     log.trace({ timeseriesDataArray })
 
     log.debug('rendering and sending response now')
+    // res.send(timeseriesDataArray)
     res.format({
       'application/json': async function () {
         const forecastRepresentation = await config.jsonRenderer(
