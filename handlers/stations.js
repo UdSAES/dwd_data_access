@@ -375,13 +375,13 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     )
     log.trace({ timeseriesDataArray })
 
+    const timeseriesDataArrayFilteredPeriod = su.shortenTimeSeriesToPeriod(timeseriesDataArray, startTimestamp, endTimestamp)
     log.debug('rendering and sending response now')
-    // res.send(timeseriesDataArray)
     res.format({
       'application/json': async function () {
         const forecastRepresentation = await config.jsonRenderer(
           voiConfigs,
-          timeseriesDataArray,
+          timeseriesDataArrayFilteredPeriod,
           vois,
           stationId,
           model,
@@ -389,9 +389,9 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
           startTimestamp,
           endTimestamp
         )
+
         res.status(200).send(forecastRepresentation)
       },
-
       'text/csv': function () {
         const forecastRepresentation = config.csvRenderer(voiConfigs, timeseriesDataArray)
         res.status(200).send(forecastRepresentation)
