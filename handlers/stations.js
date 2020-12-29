@@ -16,9 +16,10 @@ const fu = require('../lib/forecast_utils.js')
 const gu = require('../lib/general_utils.js')
 const tsCsv = require('../lib/timeseries_as_csv')
 const tsJson = require('../lib/timeseries_as_json')
-
+const cd2u = require('../lib/cosmo-d2_utils.js')
 // Instantiate logger
 const log = require('../lib/logger.js')
+const { time } = require('console')
 
 // GET /weather-stations
 function getWeatherStations (stationCatalog) {
@@ -367,21 +368,20 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     )
 
     log.trace({ timeseriesDataCollection })
-
+    const timeseriesDataArrayFilteredPeriod = config.timeseriesShortener(timeseriesDataCollection, startTimestamp, endTimestamp)
     const timeseriesDataArray = await config.unitsConverter(
       voiConfigs,
-      timeseriesDataCollection,
+      timeseriesDataArrayFilteredPeriod,
       config.model
     )
     log.trace({ timeseriesDataArray })
 
-    const timeseriesDataArrayFilteredPeriod = su.shortenTimeSeriesToPeriod(timeseriesDataArray, startTimestamp, endTimestamp)
     log.debug('rendering and sending response now')
     res.format({
       'application/json': async function () {
         const forecastRepresentation = await config.jsonRenderer(
           voiConfigs,
-          timeseriesDataArrayFilteredPeriod,
+          timeseriesDataArray,
           vois,
           stationId,
           model,
