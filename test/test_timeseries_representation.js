@@ -86,13 +86,13 @@ describe('Validate correctness of functions that generate CSV-representation', a
   describe('Return timeseries in a period', async function () {
     it('should return the expected output', async function () {
       const expected = {
-        "t_2m": [
-          { "timestamp": 1603206000000, "value": 287.45 },
-          { "timestamp": 1603209600000, "value": 287.25 }
+        t_2m: [
+          { timestamp: 1603206000000, value: 287.45 },
+          { timestamp: 1603209600000, value: 287.25 }
         ],
-        "pmsl": [
-          { "timestamp": 1603206000000, "value": 100980 },
-          { "timestamp": 1603209600000, "value": 100960 }
+        pmsl: [
+          { timestamp: 1603206000000, value: 100980 },
+          { timestamp: 1603209600000, value: 100960 }
         ]
       }
       addContext(this, {
@@ -101,43 +101,43 @@ describe('Validate correctness of functions that generate CSV-representation', a
       })
 
       const testData = {
-        "t_2m": [
-            {
-                "timestamp": 1603202400000,
-                "value": 287.75
-            },
-            {
-                "timestamp": 1603206000000,
-                "value": 287.45
-            },
-            {
-                "timestamp": 1603209600000,
-                "value": 287.25
-            },
-            {
-                "timestamp": 1603213200000,
-                "value": 286.85
-            },
+        t_2m: [
+          {
+            timestamp: 1603202400000,
+            value: 287.75
+          },
+          {
+            timestamp: 1603206000000,
+            value: 287.45
+          },
+          {
+            timestamp: 1603209600000,
+            value: 287.25
+          },
+          {
+            timestamp: 1603213200000,
+            value: 286.85
+          }
         ],
-          "pmsl": [
-            {
-                "timestamp": 1603202400000,
-                "value": 100970
-            },
-            {
-                "timestamp": 1603206000000,
-                "value": 100980
-            },
-            {
-                "timestamp": 1603209600000,
-                "value": 100960
-            },
-            {
-                "timestamp": 1603213200000,
-                "value": 100950
-            },
-          ]
-    }
+        pmsl: [
+          {
+            timestamp: 1603202400000,
+            value: 100970
+          },
+          {
+            timestamp: 1603206000000,
+            value: 100980
+          },
+          {
+            timestamp: 1603209600000,
+            value: 100960
+          },
+          {
+            timestamp: 1603213200000,
+            value: 100950
+          }
+        ]
+      }
       const actual = su.shortenTimeSeriesToPeriod(testData)
       addContext(this, {
         title: 'actual output',
