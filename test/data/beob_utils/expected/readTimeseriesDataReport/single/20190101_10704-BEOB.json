@@ -1,0 +1,4020 @@
+{
+  "cloud_cover_total": [
+    {
+      "timestamp": 1546300800000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 87
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 87
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 87
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 87
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 87
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 87
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 87
+    }
+  ],
+  "daily_mean_of_temperature_previous_day": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 5.9
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "depth_of_new_snow": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "dew_point_temperature_at_2_meter_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": 6.2
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 6
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 5.6
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 5.1
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 3.9
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 4.2
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 4.7
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 4.8
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 3.9
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 2.5
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 1.4
+    }
+  ],
+  "diffuse_solar_radiation_last_hour": [
+    {
+      "timestamp": 1546300800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 30
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 35
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 52
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 75
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 35
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 12
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 1
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 0
+    }
+  ],
+  "direct_solar_radiation_last_24_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "direct_solar_radiation_last_hour": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "dry_bulb_temperature_at_2_meter_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": 6.4
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 6.3
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 5.7
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 5.1
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 3.9
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 4.2
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 4.8
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 4.7
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 4.6
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 4.8
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 4.9
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 3.9
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 2.8
+    }
+  ],
+  "evaporation/evapotranspiration_last_24_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "global_radiation_last_hour": [
+    {
+      "timestamp": 1546300800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 30
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 35
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 52
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 75
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 35
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 12
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 1
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 0
+    }
+  ],
+  "global_radiation_past_24_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": 2
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "height_of_base_of_lowest_cloud_above_station": [
+    {
+      "timestamp": 1546300800000,
+      "value": 1060
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 1050
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 1050
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 10
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 10
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 10
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 10
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 50
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 90
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 90
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 170
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 160
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 180
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 1080
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 220
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 110
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 90
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 90
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 110
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 120
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 1320
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 570
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 810
+    }
+  ],
+  "horizontal_visibility": [
+    {
+      "timestamp": 1546300800000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 6
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 5.6
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 0.1
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 0.1
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 0.2
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0.2
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 2
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 4.2
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 3.3
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 8.6
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 8.3
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 10.1
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 13.1
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 1.7
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 2.9
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 3.3
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 8.9
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 20.8
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 11.5
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 37.4
+    }
+  ],
+  "maximum_of_10_minutes_mean_of_wind_speed_for_previous_day": [
+    {
+      "timestamp": 1546300800000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 20
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 25
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "maximum_of_temperature_for_previous_day": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 7.1
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "maximum_temperature_last_12_hours_2_meters_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 6.7
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 4.8
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "maximum_wind_speed_as_10_minutes_mean_during_last_hour": [
+    {
+      "timestamp": 1546300800000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 12
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 12
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 18
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 18
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 17
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 20
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 20
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 23
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 25
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 21
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 20
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 24
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 23
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 20
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 17
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 17
+    }
+  ],
+  "maximum_wind_speed_during_last_6_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": 21
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 30
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 33
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 38
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "maximum_wind_speed_for_previous_day": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 26
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "maximum_wind_speed_last_hour": [
+    {
+      "timestamp": 1546300800000,
+      "value": 21
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 17
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 17
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 28
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 27
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 30
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 27
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 29
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 30
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 30
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 29
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 33
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 35
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 38
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 33
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 30
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 38
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 35
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 34
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 33
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 27
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 24
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 29
+    }
+  ],
+  "mean_wind_direction_during_last_10 min_at_10_meters_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": 290
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 280
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 270
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 280
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 260
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 270
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 250
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 250
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 250
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 250
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 260
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 260
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 260
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 260
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 250
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 240
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 240
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 250
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 250
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 260
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 280
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 280
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 300
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 320
+    }
+  ],
+  "mean_wind_speed_during last_10_min_at_10_meters_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": 11
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 12
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 10
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 12
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 18
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 16
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 18
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 18
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 23
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 17
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 18
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 21
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 19
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 17
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 16
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 9
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 14
+    }
+  ],
+  "minimum_of_temperature_at_5_cm_above_ground_for_previous_day": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 4.2
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "minimum_of_temperature_for_previous_day": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "minimum_temperature_last_12_hours_2_meters_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 3.9
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 3.9
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "minimum_temperature_last_12_hours_5_cm_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 3.5
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 3.5
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 3.8
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "past_weather_1": [
+    {
+      "timestamp": 1546300800000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 16
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 16
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 16
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 16
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "past_weather_2": [
+    {
+      "timestamp": 1546300800000,
+      "value": 11
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 11
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 13
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 11
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 15
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "precipitation_amount_last_24_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0.2
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "precipitation_amount_last_3_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0.2
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 0.1
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "precipitation_amount_last_6_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0.2
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "precipitation_amount_last_hour": [
+    {
+      "timestamp": 1546300800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 0.2
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 0.1
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 0.4
+    }
+  ],
+  "precipitation_last_12_hours": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0.2
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "present_weather": [
+    {
+      "timestamp": 1546300800000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 5
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 5
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 5
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 5
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 5
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 7
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 7
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 7
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 7
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 7
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 7
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 8
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 8
+    }
+  ],
+  "pressure_reduced_to_mean_sea_level": [
+    {
+      "timestamp": 1546300800000,
+      "value": 1034.3
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 1034.1
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 1034
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 1033.8
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 1033.2
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 1032.9
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 1032.8
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 1032.8
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 1032.6
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 1032.7
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 1032.5
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 1031.9
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 1031.3
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 1030.6
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 1031
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 1030.9
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 1031
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 1031
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 1031.2
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 1031.1
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 1031.5
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 1031.8
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 1031.8
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 1032.6
+    }
+  ],
+  "relative_humidity": [
+    {
+      "timestamp": 1546300800000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 98
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 98
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 95
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 97
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 100
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 99
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 96
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 91
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 90
+    }
+  ],
+  "sea/water_temperature": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ],
+  "temperature_at_5_cm_above_ground": [
+    {
+      "timestamp": 1546300800000,
+      "value": 5.8
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 5.6
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 4.9
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 4.2
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 4.1
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 3.9
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 4
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 4.2
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 4.6
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 4.9
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 4.6
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 4.4
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 4.3
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 4.5
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 4.7
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 3.7
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 3.1
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 1.9
+    }
+  ],
+  "total_snow_depth": [
+    {
+      "timestamp": 1546300800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 0
+    }
+  ],
+  "total_time_of_sunshine_during_last_hour": [
+    {
+      "timestamp": 1546300800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": 0
+    }
+  ],
+  "total_time_of_sunshine_past_day": [
+    {
+      "timestamp": 1546300800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546304400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546308000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546311600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546315200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546318800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546322400000,
+      "value": 0
+    },
+    {
+      "timestamp": 1546326000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546329600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546333200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546336800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546340400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546344000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546347600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546351200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546354800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546358400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546362000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546365600000,
+      "value": null
+    },
+    {
+      "timestamp": 1546369200000,
+      "value": null
+    },
+    {
+      "timestamp": 1546372800000,
+      "value": null
+    },
+    {
+      "timestamp": 1546376400000,
+      "value": null
+    },
+    {
+      "timestamp": 1546380000000,
+      "value": null
+    },
+    {
+      "timestamp": 1546383600000,
+      "value": null
+    }
+  ]
+}
