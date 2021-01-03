@@ -9,7 +9,7 @@
     "api-serve": "speccy serve ./docs/openapi_oas3.json",
     "test-unit": "mocha  --grep 'GET' --invert --reporter mochawesome --reporter-options reportDir=./local",
     "test-api": "mocha  --grep 'GET' --reporter mochawesome --reporter-options reportDir=./local",
-    "test-csv": "mocha --forbid-only ./test/test_beob_mosmix_utils.js",
+    "test-csv": "mocha --forbid-only ./test/test_beob_mosmix_utils.js --reporter mochawesome --reporter-options reportDir=./local",
     "test-all": "npm run test-unit && test-api && test-csv"
   },
   "repository": {
