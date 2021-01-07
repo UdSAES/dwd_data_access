@@ -18,7 +18,7 @@ describe('Test correct parsing of station catalogue(s)', function () {
   const dwdStationsBeobNaAsCSV = './test/data/dwd2018_stations_beob_na.csv'
 
   describe('Parse the list of major weather stations used by DWD', async function () {
-    const dwdStationsBeobHaAsJSON = './test/data/dwd2017_stations_beob_ha.json'
+    const dwdStationsBeobHaAsJSON = './test/expected/dwd2017_stations_beob_ha.json'
 
     it('should return the expected output', async function () {
       // Read expected result from .json-file
@@ -41,7 +41,7 @@ describe('Test correct parsing of station catalogue(s)', function () {
   })
 
   describe('Parse the list of additional weather stations used by DWD', async function () {
-    const dwdStationsBeobNaAsJSON = './test/data/dwd2018_stations_beob_na.json'
+    const dwdStationsBeobNaAsJSON = './test/expected/dwd2018_stations_beob_na.json'
 
     it('should return the expected output', async function () {
       // Read expected result from .json-file
@@ -64,7 +64,7 @@ describe('Test correct parsing of station catalogue(s)', function () {
   })
 
   describe('Merge all lists of stations into one', async function () {
-    const dwdStationsBeobAsJSON = './test/data/dwd2017_stations_beob.json'
+    const dwdStationsBeobAsJSON = './test/expected/dwd2017_stations_beob.json'
 
     it('should return the expected output', async function () {
       // Read expected result from .json-file
@@ -91,13 +91,13 @@ describe('Test correct filtering of station list', function () {
   let stations = null
   before(async function () {
     // stations = await si.getAllStations('./test/data') // from raw data
-    stations = await fs.readJson('./test/data/stations_utils/test_stations.json')
+    stations = await fs.readJson('./test/expected/stations_utils/test_stations.json')
   })
 
   describe('Return all stations sorted by name if coordinates, radius and limit are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_sorted_by_name.json'
+        './test/expected/stations_utils/test_stations_sorted_by_name.json'
       )
 
       addContext(this, {
@@ -124,7 +124,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return five stations from stations sorted by name if coordinates and radius are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_sorted_by_name_limited_to_five.json'
+        './test/expected/stations_utils/test_stations_sorted_by_name_limited_to_five.json'
       )
 
       addContext(this, {
@@ -151,7 +151,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by name if coordinates and limit are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_sorted_by_name.json'
+        './test/expected/stations_utils/test_stations_sorted_by_name.json'
       )
 
       addContext(this, {
@@ -178,7 +178,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return five stations from stations sorted by name if coordinates are absent', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_sorted_by_name_limited_to_five.json'
+        './test/expected/stations_utils/test_stations_sorted_by_name_limited_to_five.json'
       )
 
       addContext(this, {
@@ -200,7 +200,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when only coordinates specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_sorted_by_distance.json'
+        './test/expected/stations_utils/test_stations_sorted_by_distance.json'
       )
 
       addContext(this, {
@@ -227,7 +227,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when coordinates and limit specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_sorted_by_distance_limited_to_five.json'
+        './test/expected/stations_utils/test_stations_sorted_by_distance_limited_to_five.json'
       )
 
       addContext(this, {
@@ -255,7 +255,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when coordinates and radius specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_in_1000km_radius.json'
+        './test/expected/stations_utils/test_stations_in_1000km_radius.json'
       )
 
       addContext(this, {
@@ -282,7 +282,7 @@ describe('Test correct filtering of station list', function () {
   describe('Return stations sorted by distance when coordinates, radius and limit are specified', function () {
     it('should return the expected result', async function () {
       const expected = await fs.readJson(
-        './test/data/stations_utils/test_stations_in_1000km_limited_to_five.json'
+        './test/expected/stations_utils/test_stations_in_1000km_limited_to_five.json'
       )
 
       addContext(this, {

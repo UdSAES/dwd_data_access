@@ -20,8 +20,8 @@ const readTimeseriesDataMosmix = require('../lib/beob_mosmix_utils.js')
   .readTimeseriesDataMosmix
 
 // Configuration
-const TEST_DATA_BASE = path.join(__dirname, 'data', 'beob_utils', 'data')
-const REFERENCE_DATA_BASE = path.join(__dirname, 'data', 'beob_utils', 'expected')
+const TEST_DATA_BASE = path.join(__dirname, 'data', 'beob_utils')
+const REFERENCE_DATA_BASE = path.join(__dirname, 'expected')
 
 // Define unit tests
 describe('BEOB-CSV. Unit Tests', function () {
