@@ -6,10 +6,10 @@
 const url = require('url')
 const path = require('path')
 const moment = require('moment')
-const csv = require('dwd-csv-helper')
 const _ = require('lodash')
 const su = require('../lib/stations_utils.js')
 const mvu = require('../lib/measured_values_utils.js')
+const bmu = require('../lib/beob_mosmix_utils.js')
 const reqU = require('../lib/request_utils.js')
 const ru = require('../lib/response_utils.js')
 const fu = require('../lib/forecast_utils.js')
@@ -230,7 +230,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     log.debug('reading timeseries data from disk...')
-    const timeseriesDataCollection = await csv.readTimeseriesDataReport(
+    const timeseriesDataCollection = await bmu.readTimeseriesDataReport(
       REPORT_DATA_BASE_PATH,
       startTimestamp,
       endTimestamp,
