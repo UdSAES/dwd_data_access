@@ -7,7 +7,6 @@ const describe = require('mocha').describe
 const it = require('mocha').it
 const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
-const su = require('../lib/stations_utils')
 const fu = require('../lib/forecast_utils')
 
 const tsCsv = require('../lib/timeseries_as_csv')
