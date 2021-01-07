@@ -8,6 +8,7 @@ const it = require('mocha').it
 const assert = require('chai').assert
 const addContext = require('mochawesome/addContext')
 const su = require('../lib/stations_utils')
+const fu = require('../lib/forecast_utils')
 
 const tsCsv = require('../lib/timeseries_as_csv')
 
@@ -83,6 +84,7 @@ describe('Validate correctness of functions that generate CSV-representation', a
       assert.deepEqual(actual, expected, 'Result does not match expectations')
     })
   })
+
   describe('Return timeseries in a period', async function () {
     it('should return the expected output', async function () {
       const expected = {
@@ -138,7 +140,7 @@ describe('Validate correctness of functions that generate CSV-representation', a
           }
         ]
       }
-      const actual = su.shortenTimeSeriesToPeriod(testData)
+      const actual = fu.shortenTimeSeriesToPeriodCosmo(testData)
       addContext(this, {
         title: 'actual output',
         value: actual
