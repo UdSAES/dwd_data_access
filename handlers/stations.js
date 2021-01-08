@@ -250,12 +250,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       'see internal object `{ timeseriesDataArrayUnformatted }`'
     )
 
-    // const timeseriesDataArray = gu.convertUnits(
-    //   voiConfigs,
-    //   [timeseriesDataArrayUnformatted],
-    //   'report'
     // )
-    // log.trace({ timeseriesDataArray }, 'see internal object `{ timeseriesDataArray }`')
 
     log.debug('rendering and sending response now')
     res.format({
