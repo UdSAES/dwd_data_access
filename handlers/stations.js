@@ -249,19 +249,19 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       'see internal object `{ timeseriesDataArrayUnformatted }`'
     )
 
-    const timeseriesDataArray = gu.convertUnits(
-      voiConfigs,
-      [timeseriesDataArrayUnformatted],
-      'report'
-    )
-    log.trace({ timeseriesDataArray }, 'see internal object `{ timeseriesDataArray }`')
+    // const timeseriesDataArray = gu.convertUnits(
+    //   voiConfigs,
+    //   [timeseriesDataArrayUnformatted],
+    //   'report'
+    // )
+    // log.trace({ timeseriesDataArray }, 'see internal object `{ timeseriesDataArray }`')
 
     log.debug('rendering and sending response now')
     res.format({
       'application/json': function () {
         const measuredValues = tsJson.renderTimeseriesAsJSON(
           voiConfigs,
-          timeseriesDataArray,
+          timeseriesDataCollection,
           vois,
           stationId,
           'beob',
@@ -275,7 +275,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       'text/csv': function () {
         const measuredValues = tsCsv.renderTimeseriesAsCSV(
           voiConfigs,
-          timeseriesDataArray
+          timeseriesDataCollection
         )
         res.status(200).send(measuredValues)
       },
