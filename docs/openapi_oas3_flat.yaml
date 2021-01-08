@@ -1,0 +1,491 @@
+openapi: 3.0.3
+info:
+  title: dwd-data-access
+  version: 2.0.0-alpha.01
+  license:
+    name: MIT License
+    url: https://spdx.org/licenses/MIT.html
+paths:
+  /weather-stations:
+    get:
+      tags:
+        - Weather Stations
+      summary: Show list of weather stations that match criteria
+      description: Show the list of available weather stations, possibly limited to
+        those in a specified radius around the given coordinates. If no location
+        is given, the radius is ignored and the full list of stations is
+        returned. In case there is no weather station in the radius of the
+        specified location, an empty list will be returned with status code 200,
+        indicating success. The list is sorted by distance (nearest first) if
+        coordinates are supplied and alphabetically otherwise.
+      operationId: getFilteredListOfStations
+      parameters:
+        - name: in-vicinity-of
+          in: query
+          description: The coordinates at which to search for stations in the vicinity
+          schema:
+            $ref: "#/components/schemas/LatitudeLongitudePair"
+        - name: radius
+          in: query
+          description: The search radius for the given coordinates in kilometres
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: limit
+          in: query
+          description: The maximum number of stations to return (`0` means 'no limit')
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: The requested list of weather stations (may be empty)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListOfWeatherStationsAsJSON"
+              example:
+                - name: UFS Deutsche Bucht
+                  url: http://example.com/weather-stations/10007
+            text/csv:
+              schema:
+                $ref: "#/components/schemas/ListOfWeatherStationsAsCSV"
+              example: >
+                name,url,distance
+
+                "UFS Deutsche Bucht","http://example.com/weather-stations/10007",
+        "400":
+          $ref: "#/components/responses/SchemaValidationFailed"
+  "/weather-stations/{stationId}":
+    get:
+      tags:
+        - Weather Stations
+      summary: Show details about a single weather station
+      operationId: getStation
+      parameters:
+        - $ref: "#/components/parameters/StationId"
+      responses:
+        "200":
+          description: A representation of a single weather station
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeatherStationAsJSON"
+        "400":
+          $ref: "#/components/responses/SchemaValidationFailed"
+  "/weather-stations/{stationId}/measured-values":
+    get:
+      tags:
+        - Weather Stations
+      summary: Show measurement values taken at a specific weather station
+      operationId: getMeasuredValues
+      parameters:
+        - $ref: "#/components/parameters/StationId"
+        - $ref: "#/components/parameters/Quantities"
+        - $ref: "#/components/parameters/From"
+        - $ref: "#/components/parameters/To"
+      responses:
+        "200":
+          description: The requested measurement values
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MeasurementValuesAsJSON"
+            text/csv:
+              schema:
+                $ref: "#/components/schemas/MeasurementValuesAsCSV"
+              example: |-
+                timestamp / ms,asob_s / W/m2,t_2m / K
+                1595426400000,832,299.75
+        "400":
+          $ref: "#/components/responses/SchemaValidationFailed"
+  "/weather-stations/{stationId}/forecast":
+    get:
+      tags:
+        - Weather Stations
+      summary: Show weather forecasts for the location of a specific weather station
+      operationId: getForecastAtStation
+      parameters:
+        - $ref: "#/components/parameters/StationId"
+        - $ref: "#/components/parameters/ModelName"
+        - $ref: "#/components/parameters/ModelRun"
+        - $ref: "#/components/parameters/Quantities"
+        - $ref: "#/components/parameters/From"
+        - $ref: "#/components/parameters/To"
+      responses:
+        "200":
+          description: The requested weather forecast
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForecastValuesAsJSON"
+            text/csv:
+              schema:
+                $ref: "#/components/schemas/ForecastValuesAsCSV"
+              example: |-
+                timestamp / ms,asob_s / W/m2,t_2m / K
+                1595426400000,832,299.75
+        "400":
+          $ref: "#/components/responses/SchemaValidationFailed"
+components:
+  schemas:
+    ProblemDetail:
+      type: object
+      description: This schema attempts to formalize the guidelines on how to convey
+        details about problems of HTTP API interactions by means of a _problem
+        detail object_, as defined in [RFC
+        7807](https://tools.ietf.org/html/rfc7807). The descriptions of the
+        individual members of such objects are copied verbatim from the
+        RFC-document.
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference ([RFC3986](https://tools.ietf.org/html/rfc3986))
+            that identifies the problem type
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+            ([RFC7231](https://tools.ietf.org/html/rfc7231#section-6), Section
+            6) generated by the origin server for this occurrence of the problem
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the
+            problem
+        instance:
+          type: string
+          format: uri
+          description: A URI reference that identifies the specific occurrence of the
+            problem
+    LatitudeLongitudePair:
+      description: Location on earth as latitude/longitude-pair in [decimal
+        degrees](https://en.wikipedia.org/wiki/Decimal_degrees)
+      type: string
+      pattern: ^\d{1,2}.\d{1,8}/\d{1,2}.\d{1,8}$
+      example: 54.1663/7.451
+    ListOfWeatherStationsAsJSON:
+      description: List of weather stations serialized as JSON
+      type: array
+      items:
+        type: object
+        required:
+          - name
+          - url
+        properties:
+          name:
+            type: string
+            description: The human-readable name of the station
+          url:
+            type: string
+            format: uri
+            description: The full URL of the resource describing a specific weather station
+          distance:
+            type: number
+            format: float
+            description: The distance to the specified coordinates in kilometres
+    ListOfWeatherStationsAsCSV:
+      description: List of weather stations serialized as CSV
+      externalDocs:
+        description: CSV Schema or Table Schema specifying the `text/csv`-representation
+          of this resource
+        url: tbd
+    StationId:
+      type: string
+      description: The identifier of the station used by DWD
+      pattern: ^[A-Z\d]{4,5}$
+      example: "10708"
+    WeatherStationAsJSON:
+      type: object
+      required:
+        - name
+        - location
+        - stationId
+      properties:
+        name:
+          type: string
+          description: The human-readable name of the station
+        location:
+          type: object
+          description: A location on earth expressed as latitude, longitude and elevation
+          required:
+            - latitude
+            - longitude
+          properties:
+            latitude:
+              type: object
+              description: Latitude in [decimal
+                degrees](https://en.wikipedia.org/wiki/Decimal_degrees)
+              required:
+                - value
+              allOf:
+                - type: object
+                  required:
+                    - unit
+                  properties:
+                    unit:
+                      type: string
+                      description: Unit of the value, formatted as defined in the [Modelica
+                        Specification
+                        v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf),
+                        Chapter 19
+                - type: object
+                  required:
+                    - value
+                  properties:
+                    unit:
+                      pattern: ^deg$
+                    value:
+                      type: number
+                      format: double
+                      minimum: -90
+                      maximum: 90
+                      example: 49.2553
+            longitude:
+              type: object
+              description: Longitude in [decimal
+                degrees](https://en.wikipedia.org/wiki/Decimal_degrees)
+              required:
+                - value
+              allOf:
+                - $ref: "#/components/schemas/WeatherStationAsJSON/properties/location/properties\
+                    /latitude/allOf/0"
+                - type: object
+                  required:
+                    - value
+                  properties:
+                    unit:
+                      pattern: ^deg$
+                    value:
+                      type: number
+                      format: double
+                      minimum: -180
+                      maximum: 180
+                      example: 7.0405
+            elevation:
+              type: object
+              description: Height above sea level (elevation) in metres
+              required:
+                - value
+              allOf:
+                - $ref: "#/components/schemas/WeatherStationAsJSON/properties/location/properties\
+                    /latitude/allOf/0"
+                - type: object
+                  required:
+                    - value
+                  properties:
+                    unit:
+                      pattern: ^m$
+                    value:
+                      type: number
+                      format: double
+                      minimum: -424
+                      maximum: 8848
+                      example: 273
+          example:
+            latitude:
+              unit: deg
+              value: 49.2553
+            longitude:
+              unit: deg
+              value: 7.0405
+            elevation:
+              unit: m
+              value: 273
+        stationId:
+          $ref: "#/components/schemas/StationId"
+        measuredValues:
+          type: string
+          format: uri
+          description: A resource exposing climate data measured at this station
+          example: http://example.com/weather-stations/10708/measured-values
+        forecast:
+          type: string
+          format: uri
+          description: A resource exposing weather forecasts for this station's location
+          example: http://example.com/weather-stations/10708/forecast
+    QuantitiesOfInterest:
+      type: string
+      description: A comma-separated list of quantity identifiers
+      pattern: ^([a-z_0-9]+,?)+$
+      default: t_2m
+    Timestamp:
+      type: integer
+      format: int64
+      minimum: 0
+      description: A timestamp as [Unix
+        timestamp](https://en.wikipedia.org/wiki/Unix_time) in milliseconds
+      example: 1595502578837
+    MeasurementValuesAsJSON:
+      type: object
+      required:
+        - data
+      properties:
+        description:
+          type: string
+          example: Quantities t_2m, pmsl measured at station 10704
+        data:
+          type: array
+          items:
+            allOf:
+              - required:
+                  - label
+              - type: object
+                required:
+                  - unit
+                  - timeseries
+                properties:
+                  label:
+                    type: string
+                    description: Label of the timeseries
+                  unit:
+                    type: string
+                    description: Unit of the data, formatted as defined in the [Modelica
+                      Specification
+                      v3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf),
+                      Chapter 19
+                  timeseries:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - timestamp
+                        - value
+                      properties:
+                        timestamp:
+                          type: integer
+                          format: int64
+                          minimum: 0
+                          description: The timestamp (as [unix
+                            timestamp](https://en.wikipedia.org/wiki/Unix_time)
+                            in ms resolution) of the timeseries to which the
+                            value refers to
+                          example: 1526551590000
+                        value:
+                          type: number
+                          format: double
+                          description: The value of the timeseries at the timestamp (unit as specified
+                            above)
+    MeasurementValuesAsCSV:
+      description: Measurement data at a weather station serialized as CSV
+      externalDocs:
+        description: CSV Schema or Table Schema specifying the `text/csv`-representation
+          of this resource
+        url: tbd
+    ForecastValuesAsJSON:
+      type: object
+      description: Weather forecasts for the location of a specific weather station
+        serialized as JSON
+      required:
+        - data
+      properties:
+        description:
+          type: string
+          example: Forecast for quantities t_2m, pmsl at station 10704 based on the 06
+            o'clock run of the COSMO-D2 model from 2020-09-22T00:00 to
+            2020-09-23T23:59
+        data:
+          type: array
+          items:
+            allOf:
+              - required:
+                  - label
+              - $ref: "#/components/schemas/MeasurementValuesAsJSON/properties/data/items/allOf\
+                  /1"
+    ForecastValuesAsCSV:
+      description: Weather forecasts for the location of a specific weather station
+        serialized as CSV
+      externalDocs:
+        description: CSV Schema or Table Schema specifying the `text/csv`-representation
+          of this resource
+        url: tbd
+    ModelName:
+      type: string
+      description: The name of the weather prediction model to use; defaults to `cosmo-d2`
+      enum:
+        - cosmo-d2
+        - mosmix
+      default: cosmo-d2
+    ModelRun:
+      type: string
+      description: The hour at which the model was run in UTC; defaults to `21`.
+        MOSMIX-forecasts are only available every six hours (03/09/15/21);
+        COSMO-D2 forecasts are available every three hours.
+      enum:
+        - "00"
+        - "03"
+        - "06"
+        - "09"
+        - "12"
+        - "15"
+        - "18"
+        - "21"
+      default: "21"
+  responses:
+    SchemaValidationFailed:
+      description: The response for requests that were dropped because they were
+        syntactically invalid and failed schema validation
+      content:
+        application/problem+json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ProblemDetail"
+              - required:
+                  - title
+                  - status
+          examples:
+            application/problem+json:
+              summary: ...
+              value:
+                title: Schema Validation Failed
+                status: 400
+                detail: "Request validation failed: ..."
+  parameters:
+    ModelName:
+      name: model
+      in: query
+      schema:
+        $ref: "#/components/schemas/ModelName"
+      example: cosmo-d2
+    ModelRun:
+      name: model-run
+      in: query
+      schema:
+        $ref: "#/components/schemas/ModelRun"
+      example: "03"
+    StationId:
+      name: stationId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/StationId"
+    Quantities:
+      name: quantities
+      in: query
+      schema:
+        $ref: "#/components/schemas/QuantitiesOfInterest"
+      example: aswdir_s,aswdifd_s
+    From:
+      name: from
+      in: query
+      description: Start of period as inclusive [Unix
+        timestamp](https://en.wikipedia.org/wiki/Unix_time) in milliseconds;
+        defaults to the start of today (in timezone 'Europe/Berlin')
+      schema:
+        $ref: "#/components/schemas/Timestamp"
+    To:
+      name: to
+      in: query
+      description: End of period as inclusive [Unix
+        timestamp](https://en.wikipedia.org/wiki/Unix_time) in milliseconds;
+        defaults to the end of today (in timezone 'Europe/Berlin')
+      schema:
+        $ref: "#/components/schemas/Timestamp"
+tags:
+  - name: Weather Stations
+    description: All resources relating to specific weather stations.

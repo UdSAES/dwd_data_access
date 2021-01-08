@@ -3,10 +3,15 @@
   "version": "2.1.0",
   "description": "Microservice providing weather forecasts and -data based on raw files downloaded from DWD by dwd_data_crawler",
   "main": "index.js",
+  "config": {
+    "oas3": "./docs/openapi_oas3.json",
+    "oas3_flat": "./docs/openapi_oas3_flat.yaml"
+  },
   "scripts": {
     "lint": "standard",
     "format": "prettier-standard --lint '**/*.{js,json}'",
     "api-serve": "speccy serve ./docs/openapi_oas3.json",
+    "api-resolve": "speccy resolve $npm_package_config_oas3 > $npm_package_config_oas3_flat",
     "test-unit": "mocha --reporter mochawesome --reporter-options reportDir=./local test/test_!\\(*_api_*.js\\)",
     "test-api": "mocha --reporter mochawesome --reporter-options reportDir=./local test/test_*_api_*",
     "test-all": "npm run lint && npm run test-unit && test-api"
@@ -36,7 +41,6 @@
     "fs-extra": "^8.1.0",
     "geolib": "^3.3.1",
     "grib2-simple": "^1.1.1",
-    "json-schema-ref-parser": "^6.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",

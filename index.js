@@ -14,7 +14,6 @@ const sh = require('./handlers/stations')
 // const path = require('path')
 const { OpenAPIBackend } = require('openapi-backend')
 const fs = require('fs-extra')
-// const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
 const si = require('./lib/stations_import')
 const jwt = require('express-jwt')
@@ -47,7 +46,7 @@ const EXIT_CODE_PUBLIC_KEY_LOAD_ERROR = 11
 
 // const VOIS_JSON_FILE_PATH = './config/vois.json'
 const VOIS_DATA_ACCESS_CONFIGS_PATH = './config/vois_data_access.json'
-const API_SPECIFICATION_FILE_PATH = './docs/openapi_oas3.json'
+const API_SPECIFICATION_FILE_PATH = './docs/openapi_oas3_flat.yaml'
 
 // Instantiate logger
 const log = require('./lib/logger.js')
@@ -229,9 +228,6 @@ app.on('error', (error) => {
 async function init () {
   log.info('instantiation of service initiated, checking config...')
   await checkIfConfigIsValid()
-
-  // let api = await fs.readJson(API_SPECIFICATION_FILE_PATH)
-  // api = await $RefParser.dereference(api)
 
   // Read API-specification and initialize backend
   let backend = null
