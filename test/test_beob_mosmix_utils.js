@@ -13,8 +13,8 @@ const moment = require('moment')
 
 // Load functions to be tested
 const parseCsvFile = require('../lib/beob_mosmix_utils.js').parseCsvFile
-const readTimeseriesDataReport = require('../lib/beob_mosmix_utils.js')
-  .readTimeseriesDataReport
+const readTimeseriesDataBeob = require('../lib/beob_mosmix_utils.js')
+  .readTimeseriesDataBeob
 const extractKmlFile = require('../lib/beob_mosmix_utils.js').extractKmlFile
 const readTimeseriesDataMosmix = require('../lib/beob_mosmix_utils.js')
   .readTimeseriesDataMosmix
@@ -55,7 +55,7 @@ describe('BEOB-CSV. Unit Tests', function () {
 
   describe.skip('async function readTimeseriesDataReport', function () {
     it('should extract timeseries from single .csv-file', async function () {
-      const timeseries = await readTimeseriesDataReport(
+      const timeseries = await readTimeseriesDataBeob(
         path.join(TEST_DATA_BASE, 'weather_reports'),
         moment
           .utc([2019, 0, 1])
@@ -71,7 +71,7 @@ describe('BEOB-CSV. Unit Tests', function () {
       const expectedResult = await fs.readJson(
         path.join(
           REFERENCE_DATA_BASE,
-          'readTimeseriesDataReport',
+          'readTimeseriesDataBeob',
           'single',
           '20190101_10704-BEOB.json'
         ),
@@ -81,7 +81,7 @@ describe('BEOB-CSV. Unit Tests', function () {
       assert.deepEqual(timeseries, expectedResult)
     })
     it('should extract timeseries from multiple .csv-files', async function () {
-      const timeseries = await readTimeseriesDataReport(
+      const timeseries = await readTimeseriesDataBeob(
         path.join(TEST_DATA_BASE, 'weather_reports'),
         moment
           .utc('2018-11-19')

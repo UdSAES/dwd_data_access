@@ -230,7 +230,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     log.debug('reading timeseries data from disk...')
-    const timeseriesDataCollection = await bmu.readTimeseriesDataReport(
+    const timeseriesDataCollection = await bmu.readTimeseriesDataBeob(
       REPORT_DATA_BASE_PATH,
       startTimestamp,
       endTimestamp,
