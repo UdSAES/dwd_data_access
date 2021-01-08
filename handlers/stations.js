@@ -356,7 +356,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     }
 
     log.debug('reading BEOB data from disk...')
-    const timeseriesDataCollection = await config.functionToReadData(
+    let timeseriesDataCollection = await config.functionToReadData(
       config.MODEL_DATA_PATH,
       voiConfigs,
       startTimestamp,
@@ -365,26 +365,20 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       modelRun,
       stationCatalog
     )
-
     log.trace({ timeseriesDataCollection })
-    const timeseriesDataArrayFilteredPeriod = config.timeseriesShortener(
+
+    timeseriesDataCollection = config.timeseriesShortener(
       timeseriesDataCollection,
       startTimestamp,
       endTimestamp
     )
-    const timeseriesDataArray = await config.unitsConverter(
-      voiConfigs,
-      timeseriesDataArrayFilteredPeriod,
-      config.model
-    )
-    log.trace({ timeseriesDataArray })
 
     log.debug('rendering and sending response now')
     res.format({
       'application/json': async function () {
         const forecastRepresentation = await config.jsonRenderer(
           voiConfigs,
-          timeseriesDataArray,
+          timeseriesDataCollection,
           vois,
           stationId,
           model,
@@ -398,7 +392,7 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
       'text/csv': function () {
         const forecastRepresentation = config.csvRenderer(
           voiConfigs,
-          timeseriesDataArray
+          timeseriesDataCollection
         )
         res.status(200).send(forecastRepresentation)
       },
