@@ -229,13 +229,20 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     }
 
     log.debug('reading timeseries data from disk...')
-    const timeseriesDataCollection = await bmu.readTimeseriesDataBeob(
+    let timeseriesDataCollection = await bmu.readTimeseriesDataBeob(
       REPORT_DATA_BASE_PATH,
       startTimestamp,
       endTimestamp,
       voiConfigs,
       stationId
     )
+
+    timeseriesDataCollection = gu.shortenTimeseriesToPeriod(
+      timeseriesDataCollection,
+      startTimestamp,
+      endTimestamp
+    )
+
     log.trace(
       { timeseriesDataCollection },
       'see internal object `{ timeseriesDataCollection }`'
