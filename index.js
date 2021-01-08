@@ -17,7 +17,7 @@ const fs = require('fs-extra')
 // const $RefParser = require('json-schema-ref-parser')
 const cors = require('cors')
 const si = require('./lib/stations_import')
-var jwt = require('express-jwt')
+const jwt = require('express-jwt')
 const addRequestId = require('express-request-id')()
 const ru = require('./lib/response_utils.js')
 
@@ -157,7 +157,7 @@ app.use(function (req, res, next) {
   next()
 })
 
-var publicKey = null
+let publicKey = null
 try {
   publicKey = fs.readFileSync(JWT_PUBLIC_KEY_FILE_PATH)
 } catch (error) {
@@ -177,7 +177,7 @@ app.use((error, req, res, next) => {
 // Limit access based on subject-claim of JWT -- if invalid or no token is
 // provided, then the request is treated with user 'ANONYMOUS'
 app.use((req, res, next) => {
-  var sub = 'ANONYMOUS'
+  let sub = 'ANONYMOUS'
   if (req.user != null && req.user.sub != null) {
     sub = req.user.sub
   }
@@ -188,8 +188,8 @@ app.use((req, res, next) => {
     `received ${req.method}-request on ${req.originalUrl} from user ${sub}`
   )
 
-  var limitInterval = AUTHORIZATION_LIMIT_INTERVAL
-  var limitValue = AUTHORIZATION_LIMIT_VALUE
+  let limitInterval = AUTHORIZATION_LIMIT_INTERVAL
+  let limitValue = AUTHORIZATION_LIMIT_VALUE
 
   if (sub === 'ANONYMOUS') {
     limitInterval = ANONYMOUS_LIMIT_INTERVAL

@@ -13,8 +13,8 @@ const publicKey = './auth/sample_public_key.pem'
 // const privateKey = './local/jwt_private_key_nibbler.pem' // for deployment
 // const publicKey = './local/jwt_public_key_nibbler.pem' // for deployment
 
-var privateCert = fs.readFileSync(privateKey, { encoding: 'utf8' })
-var publicCert = fs.readFileSync(publicKey, { encoding: 'utf8' })
+const privateCert = fs.readFileSync(privateKey, { encoding: 'utf8' })
+const publicCert = fs.readFileSync(publicKey, { encoding: 'utf8' })
 
 // Create token and sign using the private key
 const token = jwt.sign(

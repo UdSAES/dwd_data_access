@@ -21,8 +21,8 @@ const GRIB_TEST_POSITION = { longitude: 7, latitude: 49 }
 const VALID_GRIB_START_TIMESTAMP = 1516244400
 
 describe.skip('./lib/grib2.js', () => {
-  var tmpDirObject
-  var tmpDirPath
+  let tmpDirObject
+  let tmpDirPath
 
   before(async function () {
     this.timeout(0)

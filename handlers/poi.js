@@ -5,11 +5,11 @@
 
 const fs = require('fs-extra')
 const processenv = require('processenv')
-var bunyan = require('bunyan')
+const bunyan = require('bunyan')
 
 // Instantiate logger
 const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
-var log = bunyan.createLogger({
+const log = bunyan.createLogger({
   name: 'handler_list_of_POIs',
   serializers: bunyan.stdSerializers,
   level: LOG_LEVEL

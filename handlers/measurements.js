@@ -10,11 +10,11 @@ const fs = require('fs-extra')
 const su = require('../lib/stations_utils')
 const assert = require('assert')
 const processenv = require('processenv')
-var bunyan = require('bunyan')
+const bunyan = require('bunyan')
 
 // Instantiate logger
 const LOG_LEVEL = String(processenv('LOG_LEVEL') || 'info')
-var log = bunyan.createLogger({
+const log = bunyan.createLogger({
   name: 'handler_measurement_data_access',
   serializers: bunyan.stdSerializers,
   level: LOG_LEVEL
@@ -22,7 +22,7 @@ var log = bunyan.createLogger({
 log.info('loaded module for handling requests for measurement data')
 
 function formatNumber (number, overAllDigits) {
-  var result = String(number)
+  let result = String(number)
 
   while (result.length < overAllDigits) {
     result = '0' + result
@@ -46,7 +46,7 @@ async function getAvailableStationIDs (searchDirectoryPath) {
   const directoryContentNames = await fs.readdir(searchDirectoryPath)
   const ids = []
   for (let i = 0; i < directoryContentNames.length; i++) {
-    var stationId = directoryContentNames[i].split('-')[0]
+    const stationId = directoryContentNames[i].split('-')[0]
     ids.push(stationId.replace('_', ''))
   }
 
@@ -101,7 +101,7 @@ function getNewestMeasurementDataPoi (
       .tz('UTC')
       .startOf('day')
       .subtract(2, 'days')
-    var closestStation = null
+    let closestStation = null
 
     try {
       const now = moment().tz('UTC')
@@ -140,7 +140,7 @@ function getNewestMeasurementDataPoi (
           const table = parseCSV(fileContentString)
 
           _.forEach(voisConfig, (voiConfig, voiName) => {
-            var columnIndex = null
+            let columnIndex = null
             _.forEach(table[0], (column, index) => {
               if (column === voiConfig.csvLabel) {
                 columnIndex = index
@@ -152,8 +152,8 @@ function getNewestMeasurementDataPoi (
               return
             }
 
-            var scalingOffset = voiConfig.csvScalingOffset || 0
-            var scalingFactor = voiConfig.csvScalingFactor || 1
+            const scalingOffset = voiConfig.csvScalingOffset || 0
+            const scalingFactor = voiConfig.csvScalingFactor || 1
 
             for (let i = 3; i < table.length; i++) {
               // we don't handle invalid values (--> marked as '---' in CSV files)
