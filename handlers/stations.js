@@ -234,6 +234,7 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       REPORT_DATA_BASE_PATH,
       startTimestamp,
       endTimestamp,
+      voiConfigs,
       stationId
     )
     log.trace(
