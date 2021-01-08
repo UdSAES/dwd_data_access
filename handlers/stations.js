@@ -252,7 +252,6 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
     res.format({
       'application/json': function () {
         const measuredValues = tsJson.renderTimeseriesAsJSON(
-          voiConfigs,
           timeseriesDataCollection,
           vois,
           stationId,
@@ -368,7 +367,6 @@ function getForecastAtStation (WEATHER_DATA_BASE_PATH, voisConfigs, stationCatal
     res.format({
       'application/json': async function () {
         const forecastRepresentation = await config.jsonRenderer(
-          voiConfigs,
           timeseriesDataCollection,
           vois,
           stationId,
