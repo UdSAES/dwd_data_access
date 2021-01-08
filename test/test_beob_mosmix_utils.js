@@ -24,11 +24,11 @@ const TEST_DATA_BASE = path.join(__dirname, 'data', 'beob_utils')
 const REFERENCE_DATA_BASE = path.join(__dirname, 'expected')
 
 // Define unit tests
-describe('BEOB-CSV. Unit Tests', function () {
+describe('Validate correctness of code for loading data of type `BEOB` and `MOSMIX`', function () {
   // Disable timeouts: https://mochajs.org/#timeouts
   this.timeout(0)
 
-  describe.skip('function parseCsvFile', function () {
+  describe('Parse a .csv-file', function () {
     it('should parse the specified .csv-file', async function () {
       const fileContent = await fs.readFile(
         path.join(
@@ -53,8 +53,8 @@ describe('BEOB-CSV. Unit Tests', function () {
     })
   })
 
-  describe.skip('async function readTimeseriesDataReport', function () {
-    it('should extract timeseries from single .csv-file', async function () {
+  describe('Read measurement data', function () {
+    it('should extract timeseries from a single .csv-file', async function () {
       const timeseries = await readTimeseriesDataBeob(
         path.join(TEST_DATA_BASE, 'weather_reports'),
         moment
@@ -80,6 +80,7 @@ describe('BEOB-CSV. Unit Tests', function () {
 
       assert.deepEqual(timeseries, expectedResult)
     })
+
     it('should extract timeseries from multiple .csv-files', async function () {
       const timeseries = await readTimeseriesDataBeob(
         path.join(TEST_DATA_BASE, 'weather_reports'),
@@ -98,7 +99,7 @@ describe('BEOB-CSV. Unit Tests', function () {
     })
   })
 
-  describe.skip('async function extractKmlFile', function () {
+  describe('async function extractKmlFile', function () {
     it('should extract .kml-file from .kmz-file', async function () {
       const fileContent = await extractKmlFile(
         path.join(
