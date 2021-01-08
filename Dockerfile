@@ -11,29 +11,44 @@ LABEL org.label-schema.description="Access to forecast/measurement data copied f
 LABEL org.label-schema.vendor="UdS AES"
 LABEL org.label-schema.vcs-url="https://github.com/UdSAES/dwd_data_access"
 
+# Install dependencies on the base image level
 RUN apk add --no-cache make gcc g++ python lz4
 
+# Prepare directories
 RUN mkdir /mnt/dwd_raw_data && chown node:node /mnt/dwd_raw_data
 RUN mkdir /mnt/forecast_cache && chown node:node /mnt/forecast_cache
 RUN mkdir /mnt/configuration && chown node:node /mnt/configuration
 RUN mkdir /mnt/keys && chown node:node /mnt/keys
 
+# Configure application according to directory structure created
 ENV LISTEN_PORT=3000
 ENV DATA_ROOT_PATH=/mnt/dwd_raw_data
 ENV NEWEST_FORECAST_ROOT_PATH=/mnt/forecast_cache
 ENV POIS_JSON_FILE_PATH=/mnt/configuration/pois.json
 ENV JWT_PUBLIC_KEY_FILE_PATH=/mnt/keys/public_key.pem
 
+ENV UI_URL_PATH=/ui
+ENV UI_STATIC_FILES_PATH=/home/node/app/handlers/redoc.html
+
+# Prepare for running actual code
 USER node
+ENV NODE_ENV production
 
 RUN mkdir /home/node/app
-
 WORKDIR /home/node/app
 
+# Install app-level dependencies
 COPY --chown=node:node ./package.json /home/node/app
-
 RUN npm install --production
 
+# Install application code by copy-pasting the source to the image
+# (subject to .dockerignore)
 COPY --chown=node:node ./ /home/node/app/
+COPY --chown=node:node ./docs/openapi_oas3_flat.yaml /home/node/app/docs/openapi_oas3_flat.yaml
 
+# Store reference to commit in version control system in image
+ARG VCS_REF
+LABEL org.label-schema.vcs-ref=$VCS_REF
+
+# Actually run this upon normal container start
 ENTRYPOINT node index.js

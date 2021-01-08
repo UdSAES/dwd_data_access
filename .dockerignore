@@ -1,7 +1,14 @@
-# Ignore the .git-subdirectory
-.git/
-.gitignore
-.dockerignore
+# Ignore everything
+*
 
-# # Ignore /sample_data
-# sample_data/
+# Only include specific files/directories
+!config/
+!docs/openapi_oas3_flat.yaml
+!handlers/
+!lib/
+!test/
+
+!index.js
+!package.json
+
+# Why? https://youknowfordevs.com/2018/12/07/getting-control-of-your-dockerignore-files.html
