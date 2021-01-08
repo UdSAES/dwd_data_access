@@ -23,7 +23,7 @@
   "dependencies": {
     "array-keyed-map": "^2.0.1",
     "async-parallel": "^1.2.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bunyan": "^1.8.14",
     "child-process-promise": "^2.2.1",
     "cors": "^2.8.5",
@@ -39,8 +39,8 @@
     "json-schema-ref-parser": "^6.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
-    "moment": "^2.29.0",
-    "openapi-backend": "^3.5.4",
+    "moment": "^2.29.1",
+    "openapi-backend": "^3.6.3",
     "processenv": "^1.1.0",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
@@ -52,12 +52,12 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-openapi-response-validator": "^0.9.4",
-    "got": "^11.7.0",
+    "got": "^11.8.1",
     "mocha": "^7.2.0",
-    "mochawesome": "^6.1.1",
+    "mochawesome": "^6.2.1",
     "prettier-standard": "^16.4.1",
     "speccy": "^0.11.0",
-    "standard": "^14.3.4"
+    "standard": "^16.0.3"
   },
   "standard": {
     "env": [
