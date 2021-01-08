@@ -14,7 +14,9 @@
     "api-resolve": "speccy resolve $npm_package_config_oas3 > $npm_package_config_oas3_flat",
     "test-unit": "mocha --reporter mochawesome --reporter-options reportDir=./local test/test_!\\(*_api_*.js\\)",
     "test-api": "mocha --reporter mochawesome --reporter-options reportDir=./local test/test_*_api_*",
-    "test-all": "npm run lint && npm run test-unit && test-api"
+    "test-all": "npm run lint && npm run test-unit && test-api",
+    "predocker-build": "npm run api-resolve",
+    "docker-build": "./scripts/docker-build.sh"
   },
   "repository": {
     "type": "git",
