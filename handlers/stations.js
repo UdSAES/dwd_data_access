@@ -8,7 +8,6 @@ const path = require('path')
 const moment = require('moment')
 const _ = require('lodash')
 const su = require('../lib/stations_utils.js')
-const mvu = require('../lib/measured_values_utils.js')
 const bmu = require('../lib/beob_mosmix_utils.js')
 const reqU = require('../lib/request_utils.js')
 const ru = require('../lib/response_utils.js')
@@ -241,16 +240,6 @@ function getMeasuredValues (WEATHER_DATA_BASE_PATH, voisConfigs) {
       { timeseriesDataCollection },
       'see internal object `{ timeseriesDataCollection }`'
     )
-
-    const timeseriesDataArrayUnformatted = mvu.dropNaN(
-      mvu.dropTimeseriesDataNotOfInterest(voiConfigs, timeseriesDataCollection)
-    )
-    log.trace(
-      { timeseriesDataArrayUnformatted },
-      'see internal object `{ timeseriesDataArrayUnformatted }`'
-    )
-
-    // )
 
     log.debug('rendering and sending response now')
     res.format({
