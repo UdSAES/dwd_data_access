@@ -30,6 +30,8 @@ ENV JWT_PUBLIC_KEY_FILE_PATH=/mnt/keys/public_key.pem
 ENV UI_URL_PATH=/ui
 ENV UI_STATIC_FILES_PATH=/home/node/app/handlers/redoc.html
 
+EXPOSE $LISTEN_PORT
+
 # Prepare for running actual code
 USER node
 ENV NODE_ENV production
