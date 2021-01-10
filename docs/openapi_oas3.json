@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "dwd-data-access",
-    "version": "2.0.0",
+    "version": "2.0.0-alpha.02",
     "license": {
       "name": "MIT License",
       "url": "https://spdx.org/licenses/MIT.html"
